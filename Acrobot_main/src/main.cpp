@@ -19,6 +19,8 @@ void setup()
   Serial.begin(115200);  // Initialize Serial for USB communication
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
   canHandler.setupCAN();
+  //pinMode(5, INPUT_PULLDOWN);
+  //digitalWrite(5, LOW);
 }
 
 void loop()
