@@ -2,16 +2,24 @@
 #include "Joystick.h"
 #include "CANHandler.h"
 #include "Motor.h"
+#include "EStop.h"
+
+#include "testFunctions.h" // for running tests.
+
+#define ESTOP_PIN 7
+
 
 Joystick joystick;
 CANHandler canHandler;
 Motor motor1(1);
 Motor motor2(2);
+EStop eStop(ESTOP_PIN);
 
 void updates()
 {
   // Update joystick and button states
   joystick.update();
+  eStop.update();
 }
 
 void setup()
@@ -25,6 +33,10 @@ void setup()
 
 void loop()
 {
+  // TESTS:
+  eStopTestLoop();
+
+  // END TESTS
 
   updates();
 
