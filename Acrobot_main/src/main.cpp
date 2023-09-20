@@ -4,7 +4,7 @@
 #include "Motor.h"
 #include "EStop.h"
 
-#include "testFunctions.h" // for running tests.
+// #include "testFunctions.h" // for running tests.
 
 #define ESTOP_PIN 5
 
@@ -33,10 +33,10 @@ void setup()
 
 void loop()
 {
-  // TESTS:
-  eStopTestLoop();
+  // // TESTS:
+  // eStopTestLoop();
 
-  // END TESTS
+  // // END TESTS
 
   updates();
 
