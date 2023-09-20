@@ -4,16 +4,13 @@
 #include <Arduino.h>
 #include "EStop.h"
 
-EStop eStopTest(7);
 
 void eStopTestLoop(){
 
-  if (millis() % 5000 < 50 && !eStopTest.getSet()){
-    eStopTest.set();
+  if (millis() % 5000 < 50 && !eStop.getSet()){
+    eStop.set();
     Serial.println("set");
   }
-
-  eStopTest.update();
   
 }
 

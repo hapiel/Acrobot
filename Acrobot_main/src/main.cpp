@@ -6,14 +6,14 @@
 
 #include "testFunctions.h" // for running tests.
 
-#define ESTOP_PIN 7
+#define ESTOP_PIN 5
 
 
 Joystick joystick;
 CANHandler canHandler;
 Motor motor1(1);
 Motor motor2(2);
-EStop eStop(ESTOP_PIN);
+EStop eStop(ESTOP_PIN); // global
 
 void updates()
 {
@@ -27,8 +27,8 @@ void setup()
   Serial.begin(115200);  // Initialize Serial for USB communication
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
   canHandler.setupCAN();
-  //pinMode(5, INPUT_PULLDOWN);
-  //digitalWrite(5, LOW);
+  eStop.init();
+
 }
 
 void loop()
@@ -87,6 +87,7 @@ void loop()
   if (millis() - previousPrintTime > 200)
   {
     previousPrintTime = millis(); // Update the last print time
+    Serial.println("test");
   }
 
   // Serial.print(joystick.getButtonCross());
