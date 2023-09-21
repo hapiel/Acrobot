@@ -43,7 +43,9 @@ void setup()
   canHandler.setupCAN();
   eStop.init();
   wire.begin(SDA_PIN, SCL_PIN);
-  ADS.begin();
+  if(!ADS.begin()){
+    Serial.println("ADS not connected");
+  }
   // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
   
 
@@ -59,6 +61,14 @@ void loop()
   if (millis() - previousPrintTime > 200)
   {
     previousPrintTime = millis(); // Update the last print time
-    Serial.println("test");
+
+    Serial.print("ADS: 0: ");
+    Serial.print(ADS.readADC(0));
+    Serial.print(" 1: ");
+    Serial.print(ADS.readADC(1));
+    Serial.print(" 2: ");
+    Serial.print(ADS.readADC(2));
+    Serial.print(" 3: ");
+    Serial.print(ADS.readADC(3));
   }
 }
