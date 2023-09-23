@@ -21,6 +21,4 @@ class EStop {
 
 };
 
-extern EStop eStop;
-
 #endif
