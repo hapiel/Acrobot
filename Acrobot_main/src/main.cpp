@@ -11,11 +11,18 @@
 #include "CANHandler.h"
 #include "Motor.h"
 #include "EStop.h"
+#include "Buzzer.h"
+#include "Button.h"
 
 
 #define ESTOP_PIN 5
 #define SDA_PIN 22 // double check this on board
 #define SCL_PIN 33
+#define BUZZER_PIN 26
+#define BUTTON_UP 34
+#define BUTTON_DOWN 35
+#define BUTTON_LEFT 39
+#define BUTTON_RIGHT 32
 
 // external libraries
 TwoWire wire(0);
@@ -27,25 +34,31 @@ CANHandler canHandler;
 Motor motor1(1);
 Motor motor2(2);
 EStop eStop(ESTOP_PIN); // global
+Buzzer buzzer(BUZZER_PIN);
 
 
-void updates()
-{
-  joystick.update();   // Update joystick and button states
-  eStop.update(); 
-}
-
-void setup()
+void inits()
 {
   Serial.begin(115200);  // Initialize Serial for USB communication
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
   canHandler.setupCAN();
   eStop.init();
   wire.begin(SDA_PIN, SCL_PIN);
-  ADS.begin();
-  // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
-  
+  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
+  buzzer.init();
+}
 
+void updates()
+{
+  joystick.update();   // Update joystick and button states
+  eStop.update(); 
+  buzzer.update();
+}
+
+void setup()
+{
+  inits();
+  
 }
 
 void loop()
