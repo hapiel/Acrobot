@@ -13,7 +13,6 @@
 #include "EStop.h"
 
 
-
 #define ESTOP_PIN 5
 #define SDA_PIN 22 // double check this on board
 #define SCL_PIN 33

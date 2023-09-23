@@ -185,9 +185,8 @@ void Motor::unpackCommand(const CANMessage &msg) {
   vOut = uintToFloat(velocityInt, V_MIN, V_MAX, 12);
   iOut = uintToFloat(torqueInt, -T_MAX, T_MAX, 12);
 
-  // needs to be interpreted
-  this->temperature = temperature;
-  this->errorCode = errorCode;
+  this->temperature = temperature - 40; // t-40 = celcius according to CubeMars discord
+  this->errorCode = errorCode; // needs to be interpreted?
 }
 
 void Motor::update() {
