@@ -18,6 +18,8 @@
 #include "Buzzer.h"
 #include "Button.h"
 
+#include "config.h" // needs to be made from config_sample.h, in /include
+
 #define ESTOP_PIN 5
 #define SDA_PIN 22 // double check this on board
 #define SCL_PIN 33
@@ -43,8 +45,6 @@ EStop eStop(ESTOP_PIN); // global
 Buzzer buzzer(BUZZER_PIN);
 
 // wifi
-const char *ssid = "networkname";
-const char *password = "password";
 bool wifiConnected = false;
 
 // Time
@@ -123,7 +123,7 @@ void setup()
 
   // Initialize WiFi
   Serial.println("**** Setup: initializing ...");
-  WiFi.begin(ssid, password);
+  WiFi.begin(wifiSsid, wifiPassword);
   Serial.println("");
 
 

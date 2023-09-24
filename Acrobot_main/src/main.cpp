@@ -1,3 +1,28 @@
+/*
+ACROBOT MAIN ESP
+Daniel Simu - 2023
+This is the code for the primary ESP32 of the Acrobot. It controls all of the hardware except the RGB led and the bluetooth, which are controlled by the secondary ESP. They communicate over UART.
+
+The project can be debugged over serial, telnet, websocket, thanks to RemoteDebug. Send '?' over any of these for commands.
+
+Hardware list: 
+- Motors over CAN bus
+- Hall sensors through ADC over I2C
+- SD card reader
+- Buzzer
+- Emergency stop latch (eStop)
+- IMU over I2C
+- Battery sensor
+- LCD display
+- Wifi
+- 4 buttons
+(currently not connected:)
+- ledstrip
+- IBUS
+
+The project should be built in platformio
+*/
+
 // external libraries
 #include <Arduino.h>
 #include "Wire.h"
@@ -18,6 +43,8 @@
 #include "Buzzer.h"
 #include "Button.h"
 
+#include "config.h" // needs to be made from config_sample.h, in /include
+
 #define ESTOP_PIN 5
 #define SDA_PIN 22 // double check this on board
 #define SCL_PIN 33
@@ -32,7 +59,7 @@
 // external libraries
 TwoWire wire(0);
 ADS1115 ADS(0x48, &wire);
-RemoteDebug Debug;
+RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error
 
 // custom libraries
 Joystick joystick;
@@ -43,34 +70,7 @@ EStop eStop(ESTOP_PIN); // global
 Buzzer buzzer(BUZZER_PIN);
 
 // wifi
-const char *ssid = "ssid";
-const char *password = "password";
 bool wifiConnected = false;
-
-void inits()
-{
-  Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
-  canHandler.setupCAN();
-  eStop.init();
-  wire.begin(SDA_PIN, SCL_PIN);
-  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
-  buzzer.init();
-}
-
-void initWifi()
-{
-
-  Serial.println("Initializing wifi");
-
-  WiFi.begin(ssid, password);
-  Serial.println("");
-
-      while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-
-}
 
 void initDebug()
 {
@@ -81,44 +81,54 @@ void initDebug()
   Debug.setSerialEnabled(true);   // All messages too send to serial too, and can be see in serial monitor
 }
 
-uint32_t mLastTime = 0;
-uint32_t mTimeSeconds = 0;
-
-void debugExample()
+void inits()
 {
-  if ((millis() - mLastTime) >= 1000)
+  Serial.begin(115200); // Initialize Serial for USB communication
+
+  Serial.println("Next init: wifi");
+  WiFi.begin(wifiSsid, wifiPassword); // from config.h
+
+  Serial.println("Next init: Debug");
+  initDebug(); // AFTER WIFI!
+
+  debugI("Next init: Serial2 with joystick");
+  Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
+
+  debugI("Next init: canHandler");
+  canHandler.setupCAN();
+
+  debugI("Next init: eStop");
+  eStop.init();
+
+  debugI("Next init: Wire");
+  wire.begin(SDA_PIN, SCL_PIN);
+
+  debugI("Next init: ADS");
+  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
+
+  debugI("Next init: Buzzer");
+  buzzer.init();
+
+  debugI("Inits Done.");
+}
+
+void wifiConnection(){
+  if (!wifiConnected)
   {
+    // Wait for connection
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      if (MDNS.begin(HOST_NAME))
+      {
+        debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
 
-    // Time
-
-    mLastTime = millis();
-
-    mTimeSeconds++;
-
-    // Blink the led
-
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-
-    // Debug the time (verbose level)
-
-    debugV("* Time: %u seconds (VERBOSE)", mTimeSeconds);
-
-    if (mTimeSeconds % 5 == 0)
-    { // Each 5 seconds
-
-      // Debug levels
-
-      debugV("* This is a message of debug level VERBOSE");
-      debugD("* This is a message of debug level DEBUG");
-      debugI("* This is a message of debug level INFO");
-      debugW("* This is a message of debug level WARNING");
-      debugE("* This is a message of debug level ERROR");
-
-      // RemoteDebug handle
-
+      }
+      MDNS.addService("telnet", "tcp", 23);
+      debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
 
     }
   }
+  wifiConnected = WiFi.status() == WL_CONNECTED;
 }
 
 void updates()
@@ -128,54 +138,34 @@ void updates()
   buzzer.update();
 }
 
+
+void runEvery(int interval){
+  static long nextExecutionMillis = 0;
+  long currentMillis = millis();
+  if (nextExecutionMillis - currentMillis >= 0) {
+    return;
+  }
+  nextExecutionMillis = ((currentMillis / interval) + 1) * interval;
+
+  debugV("* Time: %u:%.2u:%.2u", (currentMillis / 3600000) , (currentMillis / 60000) % 60, (currentMillis / 1000) % 60);
+  
+  if(!wifiConnected){
+    debugW("Wifi not connected");
+  }  
+}
+
 void setup()
 {
-  Serial.begin(115200); // Initialize Serial for USB communication
-  initWifi();
   inits();
 }
 
 void loop()
 {
   updates();
-
-  if (!wifiConnected)
-  {
-    // Wait for connection
-    if (WiFi.status() == WL_CONNECTED)
-    {
-      wifiConnected = true;
-
-      if (MDNS.begin(HOST_NAME))
-      {
-        Serial.print("* MDNS responder started. Hostname -> ");
-        Serial.println(HOST_NAME);
-      }
-
-      MDNS.addService("telnet", "tcp", 23);
-
-      initDebug();
-      Serial.println("");
-      Serial.print("Connected to IP address: ");
-      Serial.println(WiFi.localIP());
-    }
-  }
+  wifiConnection();
   
   
-  debugExample();
-
-
-
-
-
-  // print timer
-  static unsigned long previousPrintTime = 0;
-  if (millis() - previousPrintTime > 2000)
-  {
-    previousPrintTime = millis(); // Update the last print time
-    Serial.println("test");
-  }
-
+  runEvery(1000); // debug messages
   Debug.handle(); // needs to be in loop
   // yield(); // may be required for the debug library??? 
 }
