@@ -68,6 +68,11 @@ Motor motor1(1);
 Motor motor2(2);
 EStop eStop(ESTOP_PIN, Debug); 
 Buzzer buzzer(BUZZER_PIN, Debug);
+Button buttonUp(BUTTON_UP, Debug);
+Button buttonDown(BUTTON_DOWN, Debug);
+Button buttonLeft(BUTTON_LEFT, Debug);
+Button buttonRight(BUTTON_RIGHT, Debug);
+
 
 // wifi
 bool wifiConnected = false;
@@ -109,6 +114,12 @@ void inits()
   debugI("Next init: Buzzer");
   buzzer.init();
 
+  debugI("Next init: Buttons");
+  buttonUp.init();
+  buttonDown.init();
+  buttonLeft.init();
+  buttonRight.init();
+
   debugI("Inits Done.");
 }
 
@@ -136,6 +147,10 @@ void updates()
   joystick.update(); // Update joystick and button states
   eStop.update();
   buzzer.update();
+  buttonUp.update();
+  buttonDown.update();
+  buttonLeft.update();
+  buttonRight.update();
 }
 
 // for testing & sending periodical messages
@@ -157,11 +172,7 @@ void loop()
 {
   updates();
   wifiConnection();
-  
-  static long executionTimer2 = 0;
-  if (runEvery(3000, executionTimer2)){
-    eStop.set();
-  }
+
 
   // debug messages
   static long executionTimer1 = 0;

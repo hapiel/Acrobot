@@ -17,11 +17,11 @@ public:
 private:
   uint8_t pin;
   bool prevState;
-  unsigned long lastPressTime;
+  unsigned long lastActionTime;
   bool buttonDown;
   bool pressed;
   bool released;
-  int debounceTime = 25;
+  int debounceTime = 40;
   RemoteDebug& Debug;
 };
 
