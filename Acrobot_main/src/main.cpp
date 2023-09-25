@@ -27,13 +27,14 @@ The project should be built in platformio
 #include <Arduino.h>
 #include "Wire.h"
 #include "ADS1X15.h"
-#include <SPI.h>
+#include "SPI.h"
 #include "SdFat.h"
 #include "sdios.h"
 #include "RemoteDebug.h" //https://github.com/JoaoLopesF/RemoteDebug , using fork: https://github.com/karol-brejna-i/RemoteDebug
-#include <WiFi.h>
-#include <DNSServer.h>
+#include "WiFi.h"
+#include "DNSServer.h"
 #include "ESPmDNS.h"
+#include <LiquidCrystal_I2C.h>
 
 // custom libraries
 #include "Joystick.h"
@@ -42,6 +43,7 @@ The project should be built in platformio
 #include "EStop.h"
 #include "Buzzer.h"
 #include "Button.h"
+#include "BatterySensor.h"
 
 #include "config.h" // needs to be made from config_sample.h, in /include
 
@@ -53,6 +55,7 @@ The project should be built in platformio
 #define BUTTON_DOWN 35
 #define BUTTON_LEFT 39
 #define BUTTON_RIGHT 32
+#define BATTERY_SENSOR 36
 
 #define HOST_NAME "Acrobot"
 
@@ -72,6 +75,8 @@ Button buttonUp(BUTTON_UP, Debug);
 Button buttonDown(BUTTON_DOWN, Debug);
 Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
+BatterySensor batterySensor(BATTERY_SENSOR);
+LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4
 
 
 // wifi
@@ -98,6 +103,9 @@ void inits()
 
   debugI("Next init: Serial2 with joystick");
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
+
+  debugI("Next init: Battery sensor");
+  batterySensor.init();
 
   debugI("Next init: canHandler");
   canHandler.setupCAN();
@@ -151,6 +159,7 @@ void updates()
   buttonDown.update();
   buttonLeft.update();
   buttonRight.update();
+  batterySensor.update();
 }
 
 // for testing & sending periodical messages
@@ -171,8 +180,12 @@ void setup()
 void loop()
 {
   updates();
-  wifiConnection();
+  wifiConnection(); // restore wifi variables
 
+  static long executionTimer2 = 0;
+  if (runEvery(1000, executionTimer2)){
+    debugI("Battery level: %u", batterySensor.getPercentage());
+  }
 
   // debug messages
   static long executionTimer1 = 0;
@@ -184,5 +197,4 @@ void loop()
     }  
   } 
   Debug.handle(); // needs to be in loop
-  // yield(); // may be required for the debug library??? 
 }
