@@ -94,6 +94,7 @@ void setDebugLed(int red, int green, int blue)
 // Arduino setup function. Runs in CPU 1
 void setup()
 {
+  initDebugLed();
   Serial.begin(115200);
   Serial2.begin(115200);
   Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
