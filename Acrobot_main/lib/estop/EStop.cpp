@@ -1,7 +1,6 @@
 #include "EStop.h"
 
-
-EStop::EStop(int pin) : pin(pin) {
+EStop::EStop(int pin, RemoteDebug& Debug) : pin(pin), Debug(Debug) {
 }
 
 void EStop::set() {
@@ -9,14 +8,14 @@ void EStop::set() {
       pinMode(pin, OUTPUT);
       isSet = true;
       lastTimeSet = millis();
-      Serial.println("set");
+      debugW("ESTOP: set");
     }
 
 void EStop::unSet(){
       digitalWrite(pin, HIGH);
       pinMode(pin, INPUT);
       isSet = false;
-      Serial.println("unset");
+      debugD("ESTOP: unset");
     }
 
 void EStop::init(){

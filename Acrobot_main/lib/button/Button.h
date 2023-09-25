@@ -2,10 +2,11 @@
 #define BUTTON_H
 
 #include <Arduino.h>
+#include "RemoteDebug.h"
 
 class Button {
 public:
-  Button(uint8_t pin);
+  Button(uint8_t pin, RemoteDebug& Debug);
   void init();
   void update();
   bool isDown();
@@ -21,6 +22,7 @@ private:
   bool pressed;
   bool released;
   int debounceTime = 25;
+  RemoteDebug& Debug;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(uint8_t _pin) : pin(_pin), prevState(LOW), lastPressTime(0), buttonDown(false) {}
+Button::Button(uint8_t _pin, RemoteDebug& Debug) : pin(_pin), Debug(Debug), prevState(LOW), lastPressTime(0), buttonDown(false)  {}
 
 void Button::init() {
   pinMode(pin, INPUT);
