@@ -193,19 +193,10 @@ void loop()
   updates();
   wifiConnection(); // restore wifi variables
 
-  static bool backlightOn = true;
   static long executionTimer2 = 0;
-  if (runEvery(1000, executionTimer2)){
-    
-    if(backlightOn){
-      lcd.backlight();
-      debugI("on");
-    } else {
-      lcd.noBacklight();
-      debugI("off");
-    }
-    backlightOn = !backlightOn;
+  if (runEvery(200, executionTimer2)){
 
+    debugI("ADS: 0: %d 1: %d 2: %d 3: %d", ADS.readADC(0), ADS.readADC(1), ADS.readADC(2), ADS.readADC(3));
   }
 
   // debug messages
