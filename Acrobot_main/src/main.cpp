@@ -27,13 +27,14 @@ The project should be built in platformio
 #include <Arduino.h>
 #include "Wire.h"
 #include "ADS1X15.h"
-#include <SPI.h>
+#include "SPI.h"
 #include "SdFat.h"
 #include "sdios.h"
 #include "RemoteDebug.h" //https://github.com/JoaoLopesF/RemoteDebug , using fork: https://github.com/karol-brejna-i/RemoteDebug
-#include <WiFi.h>
-#include <DNSServer.h>
+#include "WiFi.h"
+#include "DNSServer.h"
 #include "ESPmDNS.h"
+#include <LiquidCrystal_I2C.h>
 
 // custom libraries
 #include "Joystick.h"
@@ -42,32 +43,41 @@ The project should be built in platformio
 #include "EStop.h"
 #include "Buzzer.h"
 #include "Button.h"
+#include "BatterySensor.h"
 
 #include "config.h" // needs to be made from config_sample.h, in /include
 
 #define ESTOP_PIN 5
-#define SDA_PIN 22 // double check this on board
+#define SDA_PIN 25 
 #define SCL_PIN 33
 #define BUZZER_PIN 26
 #define BUTTON_UP 34
 #define BUTTON_DOWN 35
 #define BUTTON_LEFT 39
 #define BUTTON_RIGHT 32
+#define BATTERY_SENSOR 36
 
 #define HOST_NAME "Acrobot"
 
 // external libraries
 TwoWire wire(0);
 ADS1115 ADS(0x48, &wire);
-RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error
+RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
-Motor motor1(1);
-Motor motor2(2);
+Motor motor1(1, Debug);
+Motor motor2(2, Debug);
 EStop eStop(ESTOP_PIN, Debug); 
 Buzzer buzzer(BUZZER_PIN, Debug);
+Button buttonUp(BUTTON_UP, Debug);
+Button buttonDown(BUTTON_DOWN, Debug);
+Button buttonLeft(BUTTON_LEFT, Debug);
+Button buttonRight(BUTTON_RIGHT, Debug);
+BatterySensor batterySensor(BATTERY_SENSOR);
+LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
+
 
 // wifi
 bool wifiConnected = false;
@@ -94,6 +104,9 @@ void inits()
   debugI("Next init: Serial2 with joystick");
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
 
+  debugI("Next init: Battery sensor");
+  batterySensor.init();
+
   debugI("Next init: canHandler");
   canHandler.setupCAN();
 
@@ -108,6 +121,18 @@ void inits()
 
   debugI("Next init: Buzzer");
   buzzer.init();
+
+  debugI("Next init: Buttons");
+  buttonUp.init();
+  buttonDown.init();
+  buttonLeft.init();
+  buttonRight.init();
+
+  debugI("Next init: LCD");
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+
 
   debugI("Inits Done.");
 }
@@ -136,6 +161,11 @@ void updates()
   joystick.update(); // Update joystick and button states
   eStop.update();
   buzzer.update();
+  buttonUp.update();
+  buttonDown.update();
+  buttonLeft.update();
+  buttonRight.update();
+  batterySensor.update();
 }
 
 // for testing & sending periodical messages
@@ -151,16 +181,22 @@ bool runEvery(int interval, long &nextExecutionMillis){
 void setup()
 {
   inits();
+
+  lcd.setCursor(0,0);
+  lcd.print("Jona is awake!");
+  lcd.setCursor(2, 3);
+  lcd.print("Testy testy :)");
 }
 
 void loop()
 {
   updates();
-  wifiConnection();
-  
+  wifiConnection(); // restore wifi variables
+
   static long executionTimer2 = 0;
-  if (runEvery(3000, executionTimer2)){
-    eStop.set();
+  if (runEvery(200, executionTimer2)){
+
+    debugI("ADS: 0: %d 1: %d 2: %d 3: %d", ADS.readADC(0), ADS.readADC(1), ADS.readADC(2), ADS.readADC(3));
   }
 
   // debug messages
@@ -173,5 +209,4 @@ void loop()
     }  
   } 
   Debug.handle(); // needs to be in loop
-  // yield(); // may be required for the debug library??? 
 }

@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(uint8_t _pin, RemoteDebug& Debug) : pin(_pin), Debug(Debug), prevState(LOW), lastPressTime(0), buttonDown(false)  {}
+Button::Button(uint8_t _pin, RemoteDebug& Debug) : pin(_pin), Debug(Debug), prevState(LOW), lastActionTime(0), buttonDown(false)  {}
 
 void Button::init() {
   pinMode(pin, INPUT);
@@ -13,15 +13,17 @@ void Button::update() {
   released = false;
 
   // Check if the button was changed and debounce
-  if (buttonState != prevState && millis() - lastPressTime >= debounceTime)
+  if (buttonState != prevState && millis() - lastActionTime >= debounceTime)
   {
+    lastActionTime = millis();
     if (buttonState){
-      lastPressTime = millis();
       buttonDown = true;
       pressed = true;
+      debugI("BUTTON: pressed, pin: %u", pin);
     } else {
       buttonDown = false;
       released = true;
+      debugD("BUTTON: released, pin: %u", pin);
     }
   }
 
@@ -40,5 +42,5 @@ bool Button::isReleased() {
 }
 
 bool Button::isHeldFor(unsigned long time) {
-  return isDown() && (millis() - lastPressTime >= time);
+  return isDown() && (millis() - lastActionTime >= time);
 }
