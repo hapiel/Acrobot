@@ -1,60 +1,60 @@
 #include "DebugLed.h"
 
-DebugLed::DebugLed(){}
+DebugLed::DebugLed() {}
 
-void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue) {
+void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue)
+{
   red = _red;
   green = _green;
   blue = _blue;
-  sendMostRecentColors = false;
+  colorsChanged = true;
 }
 
-void DebugLed::setR(uint8_t _red){
+void DebugLed::setR(uint8_t _red)
+{
   red = _red;
-  sendMostRecentColors = false;
+  colorsChanged = true;
 }
 
-void DebugLed::setG(uint8_t _green){
+void DebugLed::setG(uint8_t _green)
+{
   green = _green;
-  sendMostRecentColors = false;
+  colorsChanged = true;
 }
 
-void DebugLed::setB(uint8_t _blue){
+void DebugLed::setB(uint8_t _blue)
+{
   blue = _blue;
-  sendMostRecentColors = false;
+  colorsChanged = true;
 }
 
-void DebugLed::enableFlicker(){
-    flicker = true;
-    sendMostRecentColors = false;
+void DebugLed::flicker(int time)
+{
+  flickerTimer = millis() + time;
+  colorsChanged = true;
+  flickerOn = true;
 }
 
-void DebugLed::disableFlicker(){
-    flicker = false;
-    sendMostRecentColors = false;
-}
+void DebugLed::update()
+{
+  // reset flicker
+  if (flickerOn && flickerTimer < millis())
+  {
+    flickerOn = false;
+    colorsChanged = true;
+  }
 
-void DebugLed::update(){
-    if(flicker == false){
-        if(sendMostRecentColors == false){
-            Serial2.printf("set_debug_led=%u,%u,%u\n", red, green, blue);
-            sendMostRecentColors = true;
-        }
+  // update colors
+  if (colorsChanged)
+  {
+    colorsChanged = false;
+    if (flickerOn)
+    {
+      Serial2.printf("set_debug_led=%u,%u,%u\n", red / brightnessDivider, green / brightnessDivider, blue / brightnessDivider);
     }
-    else{
-        if((millis()%flickerPeriod)==0){
-            sendMostRecentColors = false;
-        }
-        if(sendMostRecentColors == false){
-            if((millis()%flickerPeriod)<=flickerDutycycle){
-                Serial2.printf("set_debug_led=%u,%u,%u\n", red, green, blue);
-                sendMostRecentColors = true;
-            }
-            else{
-                Serial2.printf("set_debug_led=%u,%u,%u\n", red/brightnessDevider, green/brightnessDevider, blue/brightnessDevider);
-                sendMostRecentColors = true;
-            }
-        }
+    else
+    {
+      Serial2.printf("set_debug_led=%u,%u,%u\n", red, green, blue);
     }
-
+  }
 }

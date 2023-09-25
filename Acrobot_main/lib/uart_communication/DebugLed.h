@@ -10,19 +10,17 @@ class DebugLed {
     void setR(uint8_t red);
     void setG(uint8_t green);
     void setB(uint8_t blue);
-    void update(void);
-    void enableFlicker(void);
-    void disableFlicker(void);
+    void update();
+    void flicker(int time = 100);
 
   private:
-    bool sendMostRecentColors = true;
-    bool flicker = false;
+    bool colorsChanged = false;
+    bool flickerOn = false;
     uint8_t red = 0;
     uint8_t blue = 0;
     uint8_t green = 0;
-    uint8_t brightnessDevider = 2;
-    uint16_t flickerDutycycle = 1000;
-    uint16_t flickerPeriod = 2000;
+    uint8_t brightnessDivider = 2; // brightness = brightness / brightnessDivider during flicker
+    long flickerTimer = 0;
 };
 
 #endif
