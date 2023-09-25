@@ -104,7 +104,7 @@ void inits()
   wire.begin(SDA_PIN, SCL_PIN);
 
   debugI("Next init: ADS");
-  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain
+  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain esmee: gain should be 1 to use full single ended input range
 
   debugI("Next init: Buzzer");
   buzzer.init();

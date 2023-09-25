@@ -86,9 +86,9 @@ void initDebugLed(void)
 
 void setDebugLed(int red, int green, int blue)
 {
-  analogWrite(DEBUG_LED_RED, red);
-  analogWrite(DEBUG_LED_GREEN, green);
-  analogWrite(DEBUG_LED_BLUE, blue);
+  analogWrite(DEBUG_LED_RED, 255-red);
+  analogWrite(DEBUG_LED_GREEN, 255-green);
+  analogWrite(DEBUG_LED_BLUE, 255-blue);
 }
 
 // Arduino setup function. Runs in CPU 1
