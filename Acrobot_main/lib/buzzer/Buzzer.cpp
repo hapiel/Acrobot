@@ -1,8 +1,6 @@
 #include <buzzer.h>
 
-Buzzer::Buzzer(uint8_t pin) : pin(pin)
-{
-  
+Buzzer::Buzzer(uint8_t pin, RemoteDebug& Debug) : pin(pin), Debug(Debug){
 }
 
 void Buzzer::init()
@@ -18,4 +16,5 @@ void Buzzer::update()
 void Buzzer::buzz(uint16_t ms)
 {
   timer = millis() + ms;
+  debugD("BUZZER: beep %u", ms);
 }

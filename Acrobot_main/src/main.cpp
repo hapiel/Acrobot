@@ -66,8 +66,8 @@ Joystick joystick;
 CANHandler canHandler;
 Motor motor1(1);
 Motor motor2(2);
-EStop eStop(ESTOP_PIN); // global
-Buzzer buzzer(BUZZER_PIN);
+EStop eStop(ESTOP_PIN, Debug); 
+Buzzer buzzer(BUZZER_PIN, Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -138,17 +138,14 @@ void updates()
   buzzer.update();
 }
 
-
+// for testing & sending periodical messages
 bool runEvery(int interval, long &nextExecutionMillis){
-  
   long currentMillis = millis();
   if (nextExecutionMillis - currentMillis >= 0) {
     return false;
   }
   nextExecutionMillis = ((currentMillis / interval) + 1) * interval;
-
   return true;
-
 }
 
 void setup()
@@ -162,8 +159,8 @@ void loop()
   wifiConnection();
   
   static long executionTimer2 = 0;
-  if (runEvery(300, executionTimer2)){
-    buzzer.buzz(random(1, 250));
+  if (runEvery(3000, executionTimer2)){
+    eStop.set();
   }
 
   // debug messages
