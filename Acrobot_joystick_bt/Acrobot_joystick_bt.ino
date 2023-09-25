@@ -162,7 +162,7 @@ void loop()
           int red = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
           int green = command.substring(command.indexOf(',') + 1, command.lastIndexOf(',')).toInt();
           int blue = command.substring(command.lastIndexOf(',') + 1).toInt();
-          setDebugLED(red, green, blue);
+          setDebugLed(red, green, blue);
         }
       }
 
