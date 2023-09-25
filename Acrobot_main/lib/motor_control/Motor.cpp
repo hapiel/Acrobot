@@ -1,6 +1,6 @@
 #include "Motor.h"
 
-Motor::Motor(uint16_t ID) : canID(ID) {
+Motor::Motor(uint16_t ID, RemoteDebug& Debug) : canID(ID), Debug(Debug) {
 
 }
 
@@ -20,8 +20,7 @@ void Motor::start() {
   startFrame.data[7] = 0xFC;
 
   if (ACAN_ESP32::can.tryToSend(startFrame)) {
-    Serial.print("Started MIT mode on ID: ");
-    Serial.println(canID);
+    debugI("MOTOR: Started MIT mode on ID: %d", canID);
   }
 }
 
@@ -41,9 +40,7 @@ void Motor::stop() {
   EndFrame.data[7] = 0xFD;
 
   if (ACAN_ESP32::can.tryToSend(EndFrame)) {
-    Serial.print("Motor with ID ");
-    Serial.print(canID);
-    Serial.println(" stopped.");
+    debugI("MOTOR: Motor with ID %d stopped", canID);
   }
 }
 
@@ -68,10 +65,10 @@ void Motor::sendCommand(float p_des, float v_des, float kp, float kd, float t_ff
   packCommand(Frame, p_des, v_des, kp, kd, t_ff);
 
   if (ACAN_ESP32::can.tryToSend(Frame)) {
-    Serial.printf("Sent command to Motor with ID %d - Pos: %.2f Vel: %.2f Torq: %.2f kP: %.2f kD: %.2f\n",
+    debugV("MOTOR: Sent command to Motor with ID %d - Pos: %.2f Vel: %.2f Torq: %.2f kP: %.2f kD: %.2f\n",
                   canID, p_des, v_des, t_ff, kp, kd);
   } else {
-    Serial.printf("CAN command failed, ID: %d", canID);
+    debugW("MOTOR: CAN command failed, ID: %d", canID);
   }
 }
 
@@ -91,9 +88,7 @@ void Motor::reZero() {
   ResetFrame.data[7] = 0xFE;
 
   if (ACAN_ESP32::can.tryToSend(ResetFrame)) {
-    Serial.print("Motor with ID ");
-    Serial.print(canID);
-    Serial.println(" re-zeroed.");
+    debugI("MOTOR: Motor with ID %d re-zeroed", canID);
   }
 }
 

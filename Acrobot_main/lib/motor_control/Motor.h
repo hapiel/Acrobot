@@ -2,10 +2,11 @@
 #define MOTOR_H
 
 #include "ACAN_ESP32.h"
+#include "RemoteDebug.h"
 
 class Motor {
 public:
-  Motor(uint16_t ID);
+  Motor(uint16_t ID, RemoteDebug& Debug);
 
   void start();
   void stop();
@@ -48,6 +49,7 @@ private:
   void packCommand(CANMessage &msg, float p_des, float v_des, float kp, float kd, float t_ff);
 
   void unpackCommand(const CANMessage &msg);
+  RemoteDebug& Debug;
 };
 
 #endif

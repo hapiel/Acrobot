@@ -62,13 +62,13 @@ The project should be built in platformio
 // external libraries
 TwoWire wire(0);
 ADS1115 ADS(0x48, &wire);
-RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error
+RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
-Motor motor1(1);
-Motor motor2(2);
+Motor motor1(1, Debug);
+Motor motor2(2, Debug);
 EStop eStop(ESTOP_PIN, Debug); 
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
