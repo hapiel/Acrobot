@@ -17,14 +17,22 @@ We're controlling this project with a PS5 controller
 
 #include <Bluepad32.h>
 
+#define DEBUG_LED_RED 35
+#define DEBUG_LED_GREEN 32
+#define DEBUG_LED_BLUE 33
+
+
 GamepadPtr myGamepads[BP32_MAX_GAMEPADS];
 
 // This callback gets called any time a new gamepad is connected.
 // Up to 4 gamepads can be connected at the same time.
-void onConnectedGamepad(GamepadPtr gp) {
+void onConnectedGamepad(GamepadPtr gp)
+{
   bool foundEmptySlot = false;
-  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
-    if (myGamepads[i] == nullptr) {
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++)
+  {
+    if (myGamepads[i] == nullptr)
+    {
       Serial.printf("CALLBACK: Gamepad is connected, index=%d\n", i);
       // Additionally, you can get certain gamepad properties like:
       // Model, VID, PID, BTAddr, flags, etc.
@@ -37,17 +45,21 @@ void onConnectedGamepad(GamepadPtr gp) {
       break;
     }
   }
-  if (!foundEmptySlot) {
+  if (!foundEmptySlot)
+  {
     Serial.println(
         "CALLBACK: Gamepad connected, but could not found empty slot");
   }
 }
 
-void onDisconnectedGamepad(GamepadPtr gp) {
+void onDisconnectedGamepad(GamepadPtr gp)
+{
   bool foundGamepad = false;
 
-  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
-    if (myGamepads[i] == gp) {
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++)
+  {
+    if (myGamepads[i] == gp)
+    {
       Serial.printf("CALLBACK: Gamepad is disconnected from index=%d\n", i);
       myGamepads[i] = nullptr;
       foundGamepad = true;
@@ -55,14 +67,33 @@ void onDisconnectedGamepad(GamepadPtr gp) {
     }
   }
 
-  if (!foundGamepad) {
+  if (!foundGamepad)
+  {
     Serial.println(
         "CALLBACK: Gamepad disconnected, but not found in myGamepads");
   }
 }
 
+void initDebugLed(void)
+{
+  pinMode(DEBUG_LED_RED, OUTPUT);
+  pinMode(DEBUG_LED_GREEN, OUTPUT);
+  pinMode(DEBUG_LED_BLUE, OUTPUT);
+  analogWrite(DEBUG_LED_RED, 255);
+  analogWrite(DEBUG_LED_GREEN, 255);
+  analogWrite(DEBUG_LED_BLUE, 255);
+}
+
+void setDebugLed(int red, int green, int blue)
+{
+  analogWrite(DEBUG_LED_RED, red);
+  analogWrite(DEBUG_LED_GREEN, green);
+  analogWrite(DEBUG_LED_BLUE, blue);
+}
+
 // Arduino setup function. Runs in CPU 1
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   Serial2.begin(115200);
   Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
@@ -85,7 +116,8 @@ int rumbleForce = 0;
 int rumbleDuration = 0;
 
 // Arduino loop function. Runs in CPU 1
-void loop() {
+void loop()
+{
   // This call fetches all the gamepad info from the NINA (ESP32) module.
   // Just call this function in your main loop.
   // The gamepads pointer (the ones received in the callbacks) gets updated
@@ -95,32 +127,45 @@ void loop() {
   // It is safe to always do this before using the gamepad API.
   // This guarantees that the gamepad is valid and connected.
 
-  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++)
+  {
     GamepadPtr myGamepad = myGamepads[i];
 
-    if (myGamepad && myGamepad->isConnected()) {
+    if (myGamepad && myGamepad->isConnected())
+    {
 
       // read commands
-      if (Serial2.available()) {
+      if (Serial2.available())
+      {
         String command = Serial2.readStringUntil('\n');
         Serial.println(command);
-        if (command.startsWith("set_color_led")) {
+        if (command.startsWith("set_joystick_color_led"))
+        {
           int red = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
           int green = command.substring(command.indexOf(',') + 1, command.lastIndexOf(',')).toInt();
           int blue = command.substring(command.lastIndexOf(',') + 1).toInt();
           setColorLED(myGamepad, red, green, blue);
         }
-        else if (command.startsWith("set_player_leds")) {
-            int ledValue = command.substring(command.indexOf('=') + 1).toInt();
-            setPlayerLEDs(myGamepad, ledValue);
+        else if (command.startsWith("set_joystick_player_leds"))
+        {
+          int ledValue = command.substring(command.indexOf('=') + 1).toInt();
+          setPlayerLEDs(myGamepad, ledValue);
         }
-        else if (command.startsWith("set_rumble")) {
-            rumbleForce = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
-            rumbleDuration = command.substring(command.lastIndexOf('=') + 1).toInt();
-            setRumble(myGamepad, rumbleForce, rumbleDuration);
+        else if (command.startsWith("set_rumble"))
+        {
+          rumbleForce = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
+          rumbleDuration = command.substring(command.lastIndexOf('=') + 1).toInt();
+          setRumble(myGamepad, rumbleForce, rumbleDuration);
         }
-    }
-    
+        else if (command.startsWith("set_debug_led"))
+        {
+          int red = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
+          int green = command.substring(command.indexOf(',') + 1, command.lastIndexOf(',')).toInt();
+          int blue = command.substring(command.lastIndexOf(',') + 1).toInt();
+          setDebugLED(red, green, blue);
+        }
+      }
+
       // Another way to query the buttons, is by calling buttons(), or
       // miscButtons() which return a bitmask.
       // Some gamepads also have DPAD, axis and more.
@@ -166,9 +211,8 @@ void loop() {
           myGamepad->gyroZ(),       // Gyro Z
           myGamepad->accelX(),      // Accelerometer X
           myGamepad->accelY(),      // Accelerometer Y
-          myGamepad->accelZ(),       // Accelerometer Z
-          myGamepad->battery()
-      );
+          myGamepad->accelZ(),      // Accelerometer Z
+          myGamepad->battery());
 
       // You can query the axis and other properties as well. See Gamepad.h
       // For all the available functions.
@@ -185,15 +229,18 @@ void loop() {
   delay(1);
 }
 
-void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {
-    gamepad->setColorLED(red, green, blue);
+void setColorLED(GamepadPtr gamepad, int red, int green, int blue)
+{
+  gamepad->setColorLED(red, green, blue);
 }
 
-void setPlayerLEDs(GamepadPtr gamepad, int ledValue) {
-    gamepad->setPlayerLEDs(ledValue & 0x0F);
-    Serial.println(ledValue);
+void setPlayerLEDs(GamepadPtr gamepad, int ledValue)
+{
+  gamepad->setPlayerLEDs(ledValue & 0x0F);
+  Serial.println(ledValue);
 }
 
-void setRumble(GamepadPtr gamepad, unsigned int force, unsigned int duration) {
-    gamepad->setRumble(force, duration);
+void setRumble(GamepadPtr gamepad, unsigned int force, unsigned int duration)
+{
+  gamepad->setRumble(force, duration);
 }

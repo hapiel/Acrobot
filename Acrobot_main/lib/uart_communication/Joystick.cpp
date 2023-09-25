@@ -294,12 +294,12 @@ void Joystick::setRumble(int force, int duration)
 
 void Joystick::setColorLED(int red, int green, int blue)
 {
-  Serial2.printf("set_color_led=%d,%d,%d\n", red, green, blue);
+  Serial2.printf("set_joystick_color_led=%d,%d,%d\n", red, green, blue);
 }
 
 void Joystick::setPlayerLEDs(int ledMask)
 {
-  Serial2.printf("set_player_leds=%d\n", ledMask);
+  Serial2.printf("set_joystick_player_leds=%d\n", ledMask);
 }
 
 void Joystick::update()
