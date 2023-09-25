@@ -139,19 +139,16 @@ void updates()
 }
 
 
-void runEvery(int interval){
-  static long nextExecutionMillis = 0;
+bool runEvery(int interval, long &nextExecutionMillis){
+  
   long currentMillis = millis();
   if (nextExecutionMillis - currentMillis >= 0) {
-    return;
+    return false;
   }
   nextExecutionMillis = ((currentMillis / interval) + 1) * interval;
 
-  debugV("* Time: %u:%.2u:%.2u", (currentMillis / 3600000) , (currentMillis / 60000) % 60, (currentMillis / 1000) % 60);
-  
-  if(!wifiConnected){
-    debugW("Wifi not connected");
-  }  
+  return true;
+
 }
 
 void setup()
@@ -164,8 +161,20 @@ void loop()
   updates();
   wifiConnection();
   
-  
-  runEvery(1000); // debug messages
+  static long executionTimer2 = 0;
+  if (runEvery(200, executionTimer2)){
+    Serial.println(random(0, 100));
+  }
+
+  // debug messages
+  static long executionTimer1 = 0;
+  if (runEvery(1000, executionTimer1)){
+    debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000) , (millis() / 60000) % 60, (millis() / 1000) % 60);
+    
+    if(!wifiConnected){
+      debugW("Wifi not connected");
+    }  
+  } 
   Debug.handle(); // needs to be in loop
   // yield(); // may be required for the debug library??? 
 }
