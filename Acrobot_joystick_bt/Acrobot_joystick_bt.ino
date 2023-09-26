@@ -157,51 +157,58 @@ void loop() {
           rumbleDuration = command.substring(command.lastIndexOf('=') + 1).toInt();
           setRumble(myGamepad, rumbleForce, rumbleDuration);
         }
-
-        Serial2.printf(
-          "idx=%d, dpad: 0x%02x, buttons: 0x%04x, axis L: %4d, %4d, axis R: "
-          "%4d, %4d, brake: %4d, throttle: %4d, misc: 0x%02x, gyro x:%6d y:%6d "
-          "z:%6d, accel x:%6d y:%6d z:%6d bat:%3d\n",
-          i,                         // Gamepad Index
-          myGamepad->dpad(),         // DPAD
-          myGamepad->buttons(),      // bitmask of pressed buttons
-          myGamepad->axisX(),        // (-511 - 512) left X Axis
-          myGamepad->axisY(),        // (-511 - 512) left Y axis
-          myGamepad->axisRX(),       // (-511 - 512) right X axis
-          myGamepad->axisRY(),       // (-511 - 512) right Y axis
-          myGamepad->brake(),        // (0 - 1023): brake button
-          myGamepad->throttle(),     // (0 - 1023): throttle (AKA gas) button
-          myGamepad->miscButtons(),  // bitmak of pressed "misc" buttons
-          myGamepad->gyroX(),        // Gyro X
-          myGamepad->gyroY(),        // Gyro Y
-          myGamepad->gyroZ(),        // Gyro Z
-          myGamepad->accelX(),       // Accelerometer X
-          myGamepad->accelY(),       // Accelerometer Y
-          myGamepad->accelZ(),       // Accelerometer Z
-          myGamepad->battery());
-        }
       }
     }
-
-    // The main loop must have some kind of "yield to lower priority task" event.
-    // Otherwise the watchdog will get triggered.
-    // If your main loop doesn't have one, just add a simple `vTaskDelay(1)`.
-    // Detailed info here:
-    // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
-
-    // vTaskDelay(1);
-    delay(1);
   }
 
-  void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {
-    gamepad->setColorLED(red, green, blue);
+  // send data
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+    GamepadPtr myGamepad = myGamepads[i];
+
+    if (myGamepad && myGamepad->isConnected()) {
+      Serial2.printf(
+        "idx=%d, dpad: 0x%02x, buttons: 0x%04x, axis L: %4d, %4d, axis R: "
+        "%4d, %4d, brake: %4d, throttle: %4d, misc: 0x%02x, gyro x:%6d y:%6d "
+        "z:%6d, accel x:%6d y:%6d z:%6d bat:%3d\n",
+        i,                         // Gamepad Index
+        myGamepad->dpad(),         // DPAD
+        myGamepad->buttons(),      // bitmask of pressed buttons
+        myGamepad->axisX(),        // (-511 - 512) left X Axis
+        myGamepad->axisY(),        // (-511 - 512) left Y axis
+        myGamepad->axisRX(),       // (-511 - 512) right X axis
+        myGamepad->axisRY(),       // (-511 - 512) right Y axis
+        myGamepad->brake(),        // (0 - 1023): brake button
+        myGamepad->throttle(),     // (0 - 1023): throttle (AKA gas) button
+        myGamepad->miscButtons(),  // bitmak of pressed "misc" buttons
+        myGamepad->gyroX(),        // Gyro X
+        myGamepad->gyroY(),        // Gyro Y
+        myGamepad->gyroZ(),        // Gyro Z
+        myGamepad->accelX(),       // Accelerometer X
+        myGamepad->accelY(),       // Accelerometer Y
+        myGamepad->accelZ(),       // Accelerometer Z
+        myGamepad->battery());
+    }
   }
 
-  void setPlayerLEDs(GamepadPtr gamepad, int ledValue) {
-    gamepad->setPlayerLEDs(ledValue & 0x0F);
-    Serial.println(ledValue);
-  }
+  // The main loop must have some kind of "yield to lower priority task" event.
+  // Otherwise the watchdog will get triggered.
+  // If your main loop doesn't have one, just add a simple `vTaskDelay(1)`.
+  // Detailed info here:
+  // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
-  void setRumble(GamepadPtr gamepad, unsigned int force, unsigned int duration) {
-    gamepad->setRumble(force, duration);
-  }
+  // vTaskDelay(1);
+  delay(1);
+}
+
+void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {
+  gamepad->setColorLED(red, green, blue);
+}
+
+void setPlayerLEDs(GamepadPtr gamepad, int ledValue) {
+  gamepad->setPlayerLEDs(ledValue & 0x0F);
+  Serial.println(ledValue);
+}
+
+void setRumble(GamepadPtr gamepad, unsigned int force, unsigned int duration) {
+  gamepad->setRumble(force, duration);
+}

@@ -14,7 +14,7 @@ class DebugLed {
     void flicker(int time = 100);
 
   private:
-    bool colorsChanged = false;
+    bool colorsChanged = true; // send first command in case second esp didn't reboot
     bool flickerOn = false;
     uint8_t red = 0;
     uint8_t blue = 0;

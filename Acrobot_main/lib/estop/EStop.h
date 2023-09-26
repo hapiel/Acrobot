@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "RemoteDebug.h"
 
+
 class EStop {
   public:
     EStop(int pin, RemoteDebug& Debug);

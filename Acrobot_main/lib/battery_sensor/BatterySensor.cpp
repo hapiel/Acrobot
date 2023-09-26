@@ -10,7 +10,7 @@ void BatterySensor::init()
 
 int BatterySensor::getPercentage()
 {
-  return map(batterySamples.getAverage(), 0, 4096, 0, 100);
+  return map(batterySamples.getAverage(), 0, 4096, 0, 99);
 }
 
 void BatterySensor::update(){

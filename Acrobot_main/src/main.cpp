@@ -34,7 +34,7 @@ The project should be built in platformio
 #include "WiFi.h"
 #include "DNSServer.h"
 #include "ESPmDNS.h"
-#include <LiquidCrystal_I2C.h>
+
 
 // custom libraries
 #include "Joystick.h"
@@ -45,6 +45,7 @@ The project should be built in platformio
 #include "Button.h"
 #include "BatterySensor.h"
 #include "DebugLed.h"
+#include "menu.h"
 
 #include "config.h" // needs to be made from config_sample.h, in /include
 
@@ -77,9 +78,7 @@ Button buttonDown(BUTTON_DOWN, Debug);
 Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
-LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 DebugLed debugLed;
-
 
 // wifi
 bool wifiConnected = false;
@@ -130,11 +129,8 @@ void inits()
   buttonLeft.init();
   buttonRight.init();
 
-  debugI("Next init: LCD");
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();
-
+  debugI("Next init: Menu");
+  menuInit();
 
   debugI("Inits Done.");
 }
@@ -169,6 +165,7 @@ void updates()
   buttonRight.update();
   batterySensor.update();
   debugLed.update();
+  menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
 }
 
 // for testing & sending periodical messages
@@ -184,33 +181,12 @@ bool runEvery(int interval, long &nextExecutionMillis){
 void setup()
 {
   inits();
-
-  lcd.setCursor(0,0);
-  lcd.print("Jona is awake!");
-  lcd.setCursor(2, 3);
-  lcd.print("Testy testy :)");
-
-  debugLed.setG(255);
 }
 
 void loop()
 {
   updates();
   wifiConnection(); // restore wifi variables
-
-  static long executionTimer2 = 0;
-  if (runEvery(3000, executionTimer2)){
-
-    debugLed.setRGB(random(0,50), random(0,50), random(0,50));
-
-  }
-
-  static long executionTimer3 = 0;
-  if (runEvery(1000, executionTimer3)){
-
-    debugLed.flicker();
-
-  }
 
   // debug messages
   static long executionTimer1 = 0;
@@ -220,6 +196,10 @@ void loop()
     if(!wifiConnected){
       debugW("Wifi not connected");
     }  
+
+    lcdBatteryValue(batterySensor.getPercentage());
   } 
   Debug.handle(); // needs to be in loop
+
+
 }
