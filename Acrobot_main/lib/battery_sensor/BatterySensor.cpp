@@ -10,7 +10,44 @@ void BatterySensor::init()
 
 int BatterySensor::getPercentage()
 {
-  return map(batterySamples.getAverage(), 0, 4096, 0, 99);
+  int avg = batterySamples.getAverage();
+
+  if (avg < chart[0][1]){
+    return 0;
+  }
+
+  for (int i = 1; i < chartSize; i++){
+    if (avg < chart[i][1]){
+      return map(avg, chart[i - 1][1] + 1, chart[i][1], chart[i - 1][2], chart[i][2]);
+    }
+  }
+  return 99;
+}
+
+int BatterySensor::getAdc()
+{
+  return batterySamples.getAverage();
+}
+
+float BatterySensor::getVoltage()
+{
+  int avg = batterySamples.getAverage();
+
+  if (avg < chart[0][1]){
+    return 0;
+  }
+
+  for (int i = 1; i < chartSize; i++){
+    if (avg < chart[i][1]){
+      return fmap(avg, chart[i - 1][1] + 1, chart[i][1], chart[i - 1][0], chart[i][0]);
+    }
+  }
+  return 99;
+}
+
+float BatterySensor::fmap(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void BatterySensor::update(){

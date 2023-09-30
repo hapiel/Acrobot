@@ -121,11 +121,23 @@ void lcdMessage(const String &message, Buzzer& buzzer){
 }
 
 void lcdBatteryValue(int value){
-  lcd.setCursor(18, 3);
+  lcd.setCursor(16, 3);
 
-  char twoDigits[3]; // amount of characters in string + 1
-  sprintf(twoDigits, "%02d", value);
+  char twoDigits[5]; // amount of characters in string + 1
+  sprintf(twoDigits, "%04d", value);
   lcd.print(twoDigits);
+}
+
+void lcdBatteryAll(int _adc, float _voltage, int _percentage){
+  
+
+  lcd.setCursor(0, 3);
+  lcd.print("A:");
+  lcd.print(_adc);
+  lcd.print(" V:");
+  lcd.print(_voltage);
+  lcd.print(" P:");
+  lcd.print(_percentage);
 }
 
 #endif
