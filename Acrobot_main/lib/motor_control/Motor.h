@@ -27,8 +27,8 @@ public:
 
 private:
   uint16_t canID;
-  float P_MIN = -12.5;
-  float P_MAX = 12.5;
+  float P_MIN = -40;
+  float P_MAX = 40;
   float V_MIN = -50;
   float V_MAX = 50;
   float T_MIN = -25;
@@ -49,6 +49,9 @@ private:
   void packCommand(CANMessage &msg, float p_des, float v_des, float kp, float kd, float t_ff);
 
   void unpackCommand(const CANMessage &msg);
+  CANMessage latestFrame;
+  uint32_t lastSendTime = 0;
+  uint32_t sendInterval = 1; // ms
   RemoteDebug& Debug;
 };
 

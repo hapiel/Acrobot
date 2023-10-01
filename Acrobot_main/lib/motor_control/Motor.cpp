@@ -1,47 +1,37 @@
 #include "Motor.h"
 
 Motor::Motor(uint16_t ID, RemoteDebug& Debug) : canID(ID), Debug(Debug) {
-
+  latestFrame.id = canID;
+  latestFrame.ext = false;
+  latestFrame.rtr = false;
+  latestFrame.len = 8;
+  packCommand(latestFrame, 0, 0, 0, 0, 0);
 }
 
 void Motor::start() {
-  CANMessage startFrame;
-  startFrame.id = canID;
-  startFrame.ext = false;
-  startFrame.rtr = false;
-  startFrame.len = 8;
-  startFrame.data[0] = 0xFF;
-  startFrame.data[1] = 0xFF;
-  startFrame.data[2] = 0xFF;
-  startFrame.data[3] = 0xFF;
-  startFrame.data[4] = 0xFF;
-  startFrame.data[5] = 0xFF;
-  startFrame.data[6] = 0xFF;
-  startFrame.data[7] = 0xFC;
 
-  if (ACAN_ESP32::can.tryToSend(startFrame)) {
-    debugI("MOTOR: Started MIT mode on ID: %d", canID);
-  }
+  latestFrame.data[0] = 0xFF;
+  latestFrame.data[1] = 0xFF;
+  latestFrame.data[2] = 0xFF;
+  latestFrame.data[3] = 0xFF;
+  latestFrame.data[4] = 0xFF;
+  latestFrame.data[5] = 0xFF;
+  latestFrame.data[6] = 0xFF;
+  latestFrame.data[7] = 0xFC;
+
 }
 
 void Motor::stop() {
-  CANMessage EndFrame;
-  EndFrame.id = canID;
-  EndFrame.ext = false;
-  EndFrame.rtr = false;
-  EndFrame.len = 8;
-  EndFrame.data[0] = 0xFF;
-  EndFrame.data[1] = 0xFF;
-  EndFrame.data[2] = 0xFF;
-  EndFrame.data[3] = 0xFF;
-  EndFrame.data[4] = 0xFF;
-  EndFrame.data[5] = 0xFF;
-  EndFrame.data[6] = 0xFF;
-  EndFrame.data[7] = 0xFD;
 
-  if (ACAN_ESP32::can.tryToSend(EndFrame)) {
-    debugI("MOTOR: Motor with ID %d stopped", canID);
-  }
+  latestFrame.data[0] = 0xFF;
+  latestFrame.data[1] = 0xFF;
+  latestFrame.data[2] = 0xFF;
+  latestFrame.data[3] = 0xFF;
+  latestFrame.data[4] = 0xFF;
+  latestFrame.data[5] = 0xFF;
+  latestFrame.data[6] = 0xFF;
+  latestFrame.data[7] = 0xFD;
+
 }
 
 void Motor::setPosition(float pos, float kp, float kd) {
@@ -57,39 +47,23 @@ void Motor::setTorque(float torque) {
 }
 
 void Motor::sendCommand(float p_des, float v_des, float kp, float kd, float t_ff) {
-  CANMessage Frame;
-  Frame.id = canID;
-  Frame.ext = false;
-  Frame.rtr = false;
-  Frame.len = 8;
-  packCommand(Frame, p_des, v_des, kp, kd, t_ff);
 
-  if (ACAN_ESP32::can.tryToSend(Frame)) {
-    debugV("MOTOR: Sent command to Motor with ID %d - Pos: %.2f Vel: %.2f Torq: %.2f kP: %.2f kD: %.2f\n",
-                  canID, p_des, v_des, t_ff, kp, kd);
-  } else {
-    debugW("MOTOR: CAN command failed, ID: %d", canID);
-  }
+  packCommand(latestFrame, p_des, v_des, kp, kd, t_ff);
+
+
 }
 
 void Motor::reZero() {
-  CANMessage ResetFrame;
-  ResetFrame.id = canID;
-  ResetFrame.ext = false;
-  ResetFrame.rtr = false;
-  ResetFrame.len = 8;
-  ResetFrame.data[0] = 0xFF;
-  ResetFrame.data[1] = 0xFF;
-  ResetFrame.data[2] = 0xFF;
-  ResetFrame.data[3] = 0xFF;
-  ResetFrame.data[4] = 0xFF;
-  ResetFrame.data[5] = 0xFF;
-  ResetFrame.data[6] = 0xFF;
-  ResetFrame.data[7] = 0xFE;
 
-  if (ACAN_ESP32::can.tryToSend(ResetFrame)) {
-    debugI("MOTOR: Motor with ID %d re-zeroed", canID);
-  }
+  latestFrame.data[0] = 0xFF;
+  latestFrame.data[1] = 0xFF;
+  latestFrame.data[2] = 0xFF;
+  latestFrame.data[3] = 0xFF;
+  latestFrame.data[4] = 0xFF;
+  latestFrame.data[5] = 0xFF;
+  latestFrame.data[6] = 0xFF;
+  latestFrame.data[7] = 0xFE;
+
 }
 
 int Motor::floatToUInt(float x, float x_min, float x_max, unsigned int bits) {
@@ -185,6 +159,15 @@ void Motor::unpackCommand(const CANMessage &msg) {
 }
 
 void Motor::update() {
+
+  if (millis() - lastSendTime > sendInterval) {
+    lastSendTime = millis();
+    if (!ACAN_ESP32::can.tryToSend(latestFrame)) 
+    {
+      debugW("MOTOR: CAN command failed, ID: %d", canID);
+    }
+  }
+
   CANMessage receivedFrame;
   if (ACAN_ESP32::can.receive(receivedFrame)) {
     if (receivedFrame.id == canID) {
@@ -192,4 +175,6 @@ void Motor::update() {
       
     }
   }
+
+  
 }

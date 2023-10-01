@@ -15,12 +15,31 @@ extern MenuItem* motorPage[];
 extern MenuItem* hardwarePage[];
 extern MenuItem* adsPage[];
 extern MenuItem* aboutPage[];
+extern MenuItem* bootPage[];
+
+char bootAdc[19] = "A: 234 234 234 234";
+char bootReady[19] = "NO ArL ArR LeL LeR"; // or "ready ready ready
+char bootPos[19] = "P: 123 123 123 123"; // position
+char bootRelais[19] = "Relais: Set       "; // or relais unset
+
+char statusTemp[19] = "Temp: 00 00 XX 00 ";
+char statusWifi[19] = "Wifi-Y BT-.       ";
+char statusMem[19] = "Mem %20 R: 0:00:00";
+
 
 MAIN_MENU(
+  ITEM_SUBMENU("Boot motors", bootPage),
   ITEM_SUBMENU("Status", statusPage),
   ITEM_SUBMENU("Motors", motorPage),
   ITEM_SUBMENU("Hardware", hardwarePage),
   ITEM_SUBMENU("About", aboutPage)
+);
+
+SUB_MENU(bootPage, mainMenu,
+  ITEM_BASIC(bootAdc), // adc
+  ITEM_BASIC(bootReady), // or "ready ready ready"
+  ITEM_BASIC(bootPos), 
+  ITEM_BASIC(bootRelais)
 );
 
 SUB_MENU(statusPage, mainMenu,
@@ -121,10 +140,10 @@ void lcdMessage(const String &message, Buzzer& buzzer){
 }
 
 void lcdBatteryValue(int value){
-  lcd.setCursor(16, 3);
+  lcd.setCursor(18, 3);
 
-  char twoDigits[5]; // amount of characters in string + 1
-  sprintf(twoDigits, "%04d", value);
+  char twoDigits[3]; // amount of characters in string + 1
+  sprintf(twoDigits, "%02d", value);
   lcd.print(twoDigits);
 }
 

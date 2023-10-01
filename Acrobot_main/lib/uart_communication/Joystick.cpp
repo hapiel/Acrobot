@@ -260,22 +260,22 @@ int Joystick::remapAxisValue(int value)
   return remappedValue;
 }
 
-int Joystick::getAxisLXMapped()
+int Joystick::getAxisLXCorrected()
 {
   return remapAxisValue(axisLX);
 }
 
-int Joystick::getAxisLYMapped()
+int Joystick::getAxisLYCorrected()
 {
   return remapAxisValue(axisLY);
 }
 
-int Joystick::getAxisRXMapped()
+int Joystick::getAxisRXCorrected()
 {
   return remapAxisValue(axisRX);
 }
 
-int Joystick::getAxisRYMapped()
+int Joystick::getAxisRYCorrected()
 {
   return remapAxisValue(axisRY);
 }

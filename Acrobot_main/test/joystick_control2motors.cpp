@@ -75,11 +75,11 @@ void loop()
 
   if (joystick.getButtonR1())
   {
-    motor1.setPosition(joystick.getAxisRXMapped() / 50.0, 2, 0.7);
+    motor1.setPosition(joystick.getAxisRXCorrected() / 50.0, 2, 0.7);
   }
   if (joystick.getButtonL1())
   {
-    motor2.setVelocity(joystick.getAxisLXMapped() / 20.0, 1);
+    motor2.setVelocity(joystick.getAxisLXCorrected() / 20.0, 1);
   }
 
   // print timer

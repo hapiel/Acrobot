@@ -60,10 +60,10 @@ public:
   bool getButtonL3Pressed();
   bool getButtonR3Pressed();
 
-  int getAxisLXMapped();
-  int getAxisLYMapped();
-  int getAxisRXMapped();
-  int getAxisRYMapped();
+  int getAxisLXCorrected();
+  int getAxisLYCorrected();
+  int getAxisRXCorrected();
+  int getAxisRYCorrected();
 
   bool getMiscPSPressed();
   bool getMiscCreatePressed();

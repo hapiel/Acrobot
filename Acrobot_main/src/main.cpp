@@ -26,7 +26,6 @@ The project should be built in platformio
 // external libraries
 #include <Arduino.h>
 #include "Wire.h"
-#include "ADS1X15.h"
 #include "SPI.h"
 #include "SdFat.h"
 #include "sdios.h"
@@ -46,6 +45,8 @@ The project should be built in platformio
 #include "BatterySensor.h"
 #include "DebugLed.h"
 #include "menu.h"
+#include "HallSensor.h"
+#include "Leg.h"
 
 #include "config.h" // needs to be made from config_sample.h, in /include
 
@@ -63,14 +64,15 @@ The project should be built in platformio
 
 // external libraries
 TwoWire wire(0);
-ADS1115 ADS(0x48, &wire);
 RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
-Motor motor1(1, Debug);
-Motor motor2(2, Debug);
+Motor motorLegL(4, Debug);
+Motor motorLegR(3, Debug);
+Leg legL(motorLegL);
+Leg legR(motorLegR);
 EStop eStop(ESTOP_PIN, Debug); 
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -79,6 +81,7 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
+HallSensor hallSensor(wire, Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -88,7 +91,6 @@ void initDebug()
   Debug.begin(HOST_NAME);         // Initialize the WiFi server
   Debug.setResetCmdEnabled(true); // Enable the reset command
   Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
-  Debug.showColors(true);         // Colors
   Debug.setSerialEnabled(true);   // All messages too send to serial too, and can be see in serial monitor
 }
 
@@ -117,8 +119,8 @@ void inits()
   debugI("Next init: Wire");
   wire.begin(SDA_PIN, SCL_PIN);
 
-  debugI("Next init: ADS");
-  ADS.begin(); // @Esmee, should we set the ADS gain? https://github.com/RobTillaart/ADS1X15#programmable-gain esmee: gain should be 1 to use full single ended input range
+  debugI("Next init: ADS & HallSensor");
+  hallSensor.init();
 
   debugI("Next init: Buzzer");
   buzzer.init();
@@ -154,6 +156,16 @@ void wifiConnection(){
   wifiConnected = WiFi.status() == WL_CONNECTED;
 }
 
+void updateMenuText(){
+
+  debugD("start ADC time: %u", micros());
+  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL()/100, hallSensor.getArmR()/100, hallSensor.getLegL()/100, hallSensor.getLegR()/100);
+  debugD("end ADC time: %u", micros());
+
+  sprintf(bootPos, "P: %03d %03d", int(legL.getPosition()), int(legR.getPosition()));
+}
+
+
 void updates()
 {
   joystick.update(); // Update joystick and button states
@@ -166,6 +178,8 @@ void updates()
   batterySensor.update();
   debugLed.update();
   menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
+  legL.update();
+  legR.update();
 }
 
 // for testing & sending periodical messages
@@ -188,6 +202,46 @@ void loop()
   updates();
   wifiConnection(); // restore wifi variables
 
+  if (joystick.getButtonR1()){
+    if (joystick.getButtonTrianglePressed()){
+      legR.start();
+    }
+
+    legR.setPosition(map(joystick.getAxisRYCorrected(), -127, 128, 270, 90),10, 2);
+
+  }
+
+  if (joystick.getButtonL1()){
+    if (joystick.getButtonTrianglePressed()){
+      legL.start();
+    }
+
+    float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 270, 90);
+    legL.setPosition(legPos, 10, 2);
+    debugD("L pos set: %f", legPos);
+  }
+
+  if (joystick.getButtonCrossPressed()){
+
+    legR.stop();
+    legL.stop();
+  }
+
+  if (joystick.getButtonSquarePressed()){
+
+    legR.setPosition(0, 0, 0);
+    legL.setPosition(0, 0, 0);
+  }
+
+  // menu updater
+  static long executionTimer2 = 0;
+  if (runEvery(1000, executionTimer2)){
+
+    updateMenuText();
+    menu.show();
+    // menu.drawMenuNoClear();
+  } 
+
   // debug messages
   static long executionTimer1 = 0;
   if (runEvery(1000, executionTimer1)){
@@ -197,8 +251,9 @@ void loop()
       debugW("Wifi not connected");
     }  
 
-    // lcdBatteryValue(batterySensor.getPercentage());
-    lcdBatteryAll(batterySensor.getAdc(), batterySensor.getVoltage(), batterySensor.getPercentage());
+    debugD("LegL pos: %f" , legL.getPosition());
+
+    lcdBatteryValue(batterySensor.getPercentage());
   } 
   Debug.handle(); // needs to be in loop
 
