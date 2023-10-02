@@ -9,6 +9,7 @@ public:
   Joystick();
 
   // Getter functions
+  bool getConnected();
   int getIdx();
   int getAxisLX();
   int getAxisLY();
@@ -85,6 +86,9 @@ private:
   unsigned int dpad, buttons;
   long gyroX, gyroY, gyroZ, accelX, accelY, accelZ;
 
+  bool connected;
+  uint32_t lastSeen = 0;
+  int timeOut = 300;
   unsigned int prevButtons;
   unsigned int pressedButtons;
   unsigned int prevPressedButtons;

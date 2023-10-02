@@ -68,8 +68,8 @@ RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be n
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
-Motor motorLegL(4, Debug);
-Motor motorLegR(3, Debug);
+Motor motorLegL(4, canHandler, Debug);
+Motor motorLegR(3, canHandler, Debug);
 Leg legL(motorLegL, 4.79, true);
 Leg legR(motorLegR, 37.45, false);
 EStop eStop(ESTOP_PIN, Debug);
@@ -160,11 +160,26 @@ void updateMenuText()
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL() / 100, hallSensor.getArmR() / 100, hallSensor.getLegL() / 100, hallSensor.getLegR() / 100);
 
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
+
+  sprintf(statusTemp, "Temp: 00 00 %0d %0d", legL.getTemperature(), legR.getTemperature());
+
+  sprintf(statusWifi, "Wifi-%s BT-%s J:%d%%", wifiConnected ? "Y" : ".", joystick.getConnected() ? "Y" : ".", joystick.getBatteryPercentage());
+
+  sprintf(statusMem, "Mem: %2d%% R-%u:%.2u:%.2u", (int)(100 * (1 - ((float)ESP.getFreeHeap() / (float)ESP.getHeapSize()))), (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
+
+  sprintf(motorTemp, "Tem %02d %02d %02d %02d", 0, 0 ,legL.getTemperature(), legR.getTemperature());
+
+  sprintf(motorAmp, "Amp %02d %02d %02d %02d", 0, 0, (int)legL.getTorque(), (int)legR.getTorque());
+
+  sprintf(motorPosL, "PL %06.1f %06.1f", legL.getPosition(), legR.getPosition());
+
+  sprintf(motorTargL, "TL %06.1f %06.1f", legL.getTarget(), legR.getTarget());
 }
 
 void updates()
 {
   joystick.update(); // Update joystick and button states
+  canHandler.update();
   eStop.update();
   buzzer.update();
   buttonUp.update();
@@ -210,7 +225,7 @@ void taskMain(void *parameter)
         legR.start();
       }
       float position = map(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-      legR.setPosition(position, 10, 2);
+      legR.setTarget(position, 10, 2);
     }
 
     if (joystick.getButtonL1())
@@ -221,7 +236,7 @@ void taskMain(void *parameter)
       }
 
       float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 90, 270);
-      legL.setPosition(legPos, 10, 2);
+      legL.setTarget(legPos, 10, 2);
     }
 
     if (joystick.getButtonCrossPressed())
@@ -234,8 +249,8 @@ void taskMain(void *parameter)
     if (joystick.getButtonSquarePressed())
     {
 
-      legR.setPosition(0, 0, 0);
-      legL.setPosition(0, 0, 0);
+      legR.setTarget(0, 0, 0);
+      legL.setTarget(0, 0, 0);
     }
 
     Debug.handle(); // needs to be in bottom of loop

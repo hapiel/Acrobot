@@ -2,8 +2,9 @@
 
 Leg::Leg(Motor &motor, float offset180, bool inverted) : motor(motor), offset180(offset180), inverted(inverted) {}
 
-void Leg::setPosition(float posDegrees, float kp, float kd) {
+void Leg::setTarget(float posDegrees, float kp, float kd) {
 
+  target = posDegrees;
   if (inverted) {
     posDegrees = 360 - posDegrees;
   }
@@ -14,6 +15,10 @@ void Leg::setPosition(float posDegrees, float kp, float kd) {
   float kdToSend = constrain(kd, kdMinimum, 5);
 
   motor.setPosition(posToSend, kpToSend, kd);
+}
+
+float Leg::getTarget(){
+  return target;
 }
 
 void Leg::start() {
@@ -49,11 +54,11 @@ float Leg::getTorque() {
   return motor.getTorque();
 }
 
-float Leg::getTemperature() {
+uint8_t Leg::getTemperature() {
   return motor.getTemperature();
 }
 
-float Leg::getErrorCode() {
+uint8_t Leg::getErrorCode() {
   return motor.getErrorCode();
 }
 

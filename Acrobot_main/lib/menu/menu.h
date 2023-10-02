@@ -22,10 +22,17 @@ char bootReady[19] = "NO ArL ArR LeL LeR"; // or "ready ready ready
 char bootPos[19] = "P: 123 123 123 123"; // position
 char bootRelais[19] = "Relais: Set       "; // or relais unset
 
-char statusTemp[19] = "Temp: 00 00 XX 00 ";
-char statusWifi[19] = "Wifi-Y BT-.       ";
-char statusMem[19] = "Mem %20 R: 0:00:00";
+char statusTemp[19] = "Temp: 00 00 XX 00 "; // XX = missing motor
+char statusWifi[19] = "Wifi-. BT-.    J";
+char statusMem[19] = "Mem %20 R: 0:00:00"; // runtime
 
+
+char motorTemp[19] = "Tem 00 00 00 00";
+char motorAmp[19]  = "Amp 00 00 00 00 ";
+char motorPosL[19]  = "PL -0000.0 -0000.0";
+char motorTargL[19] = "TL -0000.0 -0000.0";
+char motorPosA[19]  = "PA -0000.0 -0000.0";
+char motorTargA[19] = "TA -0000.0 -0000.0";
 
 MAIN_MENU(
   ITEM_SUBMENU("Boot motors", bootPage),
@@ -43,17 +50,19 @@ SUB_MENU(bootPage, mainMenu,
 );
 
 SUB_MENU(statusPage, mainMenu,
-  ITEM_BASIC("Temp: 00 00 XX 00 "), // XX = missing motor
-  ITEM_BASIC("Wifi-Y BT-.       "),
-  ITEM_BASIC("Mem %20 R: 0:00:00") // runtime
+  ITEM_BASIC(statusTemp), // XX = missing motor
+  ITEM_BASIC(statusWifi),
+  ITEM_BASIC(statusMem) 
 );
 
 SUB_MENU(motorPage, mainMenu,
-  ITEM_BASIC("Temp 00 00 00 00"),
-  ITEM_BASIC("Amp  00 00 00 00"),
-  ITEM_BASIC("Pos  00 00 00 00"),
-  ITEM_BASIC("Targ 00 00 00 00"),
-  ITEM_BASIC("   ArL ArR LeL LeR")
+  ITEM_BASIC("   ArL ArR LeL LeR"),
+  ITEM_BASIC(motorTemp),
+  ITEM_BASIC(motorAmp),
+  ITEM_BASIC(motorPosL), // should later be swapped with arms
+  ITEM_BASIC(motorTargL),
+  ITEM_BASIC(motorPosA),
+  ITEM_BASIC(motorTargA)
 );
 
 SUB_MENU(hardwarePage, mainMenu,

@@ -1,6 +1,6 @@
 #include "Motor.h"
 
-Motor::Motor(uint16_t ID, RemoteDebug &Debug) : canID(ID), Debug(Debug)
+Motor::Motor(uint16_t ID, CANHandler &canHandler, RemoteDebug &Debug) : canID(ID), canHandler(canHandler), Debug(Debug)
 {
   latestFrame.id = canID;
   latestFrame.ext = false;
@@ -215,15 +215,9 @@ void Motor::update()
     {
       // debugW("MOTOR: CAN command failed, ID: %d", canID);
       // TODO: Warning message that does not overflow the debug 
-    }
+    } 
   }
 
-  CANMessage receivedFrame;
-  if (ACAN_ESP32::can.receive(receivedFrame))
-  {
-    if (receivedFrame.id == canID)
-    {
-      unpackCommand(receivedFrame);
-    }
-  }
+  unpackCommand(canHandler.getLatestFrame(canID));
+
 }

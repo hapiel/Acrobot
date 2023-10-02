@@ -3,10 +3,11 @@
 
 #include "ACAN_ESP32.h"
 #include "RemoteDebug.h"
+#include "CANHandler.h"
 
 class Motor {
 public:
-  Motor(uint16_t ID, RemoteDebug& Debug);
+  Motor(uint16_t ID, CANHandler &canHandler,RemoteDebug& Debug);
 
   void start();
   void stop();
@@ -50,8 +51,10 @@ private:
 
   void unpackCommand(const CANMessage &msg);
   CANMessage latestFrame;
+  CANMessage latestRecievedFrame;
+  CANHandler &canHandler;
   uint32_t lastSendTime = 0;
-  uint32_t sendInterval = 1; // ms
+  int sendInterval = 1; // ms
   RemoteDebug& Debug;
 };
 

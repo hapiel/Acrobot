@@ -5,6 +5,11 @@ Joystick::Joystick()
   // Initialize your variables here if needed
 }
 
+bool Joystick::getConnected()
+{
+  return connected;
+}
+
 // Implement the getter functions
 int Joystick::getIdx()
 {
@@ -282,8 +287,8 @@ int Joystick::getAxisRYCorrected()
 
 int Joystick::getBatteryPercentage()
 {
-  // Remap battery value from 0-255 to 0-100
-  return map(battery, 0, 255, 0, 100);
+  // Remap battery value from 0-255 to 0-99
+  return map(battery, 0, 255, 0, 99);
 }
 
 void Joystick::setRumble(int force, int duration)
@@ -314,8 +319,6 @@ void Joystick::update()
   {
 
     receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
-    Serial.println(receivedData.length());
-
     if (receivedData.length() == 190) // check for corruption
     {
       // Interpret the received data 
@@ -323,6 +326,9 @@ void Joystick::update()
           "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
           &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
           &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
+
+      lastSeen = millis();
+      connected = true;
     }
     
   }
@@ -336,5 +342,10 @@ void Joystick::update()
   prevPressedButtons = buttons & ~prevButtons;
   prevPressedMisc = misc & ~prevMisc;
   prevPressedDpad = dpad & ~prevDpad;
+
+  if (lastSeen + timeOut < millis())
+  {
+    connected = false;
+  }
 
 }

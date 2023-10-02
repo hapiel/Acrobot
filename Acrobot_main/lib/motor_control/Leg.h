@@ -7,16 +7,17 @@ class Leg
 {
 public:
   Leg(Motor &motor, float offset180, bool inverted);
-  void setPosition(float posDegrees, float kp, float kd);
+  void setTarget(float posDegrees, float kp, float kd);
   void start();
   void stop();
   void update();
 
+  float getTarget();
   float getPosition();
   float getVelocity();
   float getTorque();
-  float getTemperature();
-  float getErrorCode();
+  uint8_t getTemperature();
+  uint8_t getErrorCode();
 
 private:
   Motor &motor;
@@ -25,6 +26,7 @@ private:
   float posMin = 90;
   float posMax = 270;
   float offset180;
+  float target;
   bool inverted;
 
   float radToDegrees(float rad);

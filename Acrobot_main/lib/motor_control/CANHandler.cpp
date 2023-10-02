@@ -24,3 +24,17 @@ void CANHandler::sendCANMessage(const CANMessage &message) {
         // Failed to send the message
     }
 }
+
+void CANHandler::update() {
+
+    CANMessage message;
+    uint8_t count = 0;
+    while (ACAN_ESP32::can.receive(message) && count < 4) {
+        latestFrame[message.id - 1] = message;
+        count++; // run max 4 times
+    }
+}
+
+CANMessage CANHandler::getLatestFrame(uint8_t id) {
+    return latestFrame[id - 1];
+}
