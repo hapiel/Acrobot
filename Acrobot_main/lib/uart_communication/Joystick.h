@@ -87,10 +87,13 @@ private:
 
   unsigned int prevButtons;
   unsigned int pressedButtons;
+  unsigned int prevPressedButtons;
   unsigned int prevMisc;
   unsigned int pressedMisc;
+  unsigned int prevPressedMisc;
   unsigned int prevDpad;
   unsigned int pressedDpad;
+  unsigned int prevPressedDpad;
   int deadzoneSize = 20; // default size, can be altered
 
   int remapAxisValue(int value);

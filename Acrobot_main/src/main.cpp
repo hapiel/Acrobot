@@ -157,9 +157,7 @@ void wifiConnection()
 void updateMenuText()
 {
 
-  debugD("start ADC time: %u", micros());
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL() / 100, hallSensor.getArmR() / 100, hallSensor.getLegL() / 100, hallSensor.getLegR() / 100);
-  debugD("end ADC time: %u", micros());
 
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
 }
@@ -201,9 +199,6 @@ void taskMain(void *parameter)
   for (;;)
   {
 
-    Serial.printf("FAST start: %u \n", micros());
-
-
     updates();
     wifiConnection(); // restore wifi variables
 
@@ -214,12 +209,8 @@ void taskMain(void *parameter)
       {
         legR.start();
       }
-      debugD("Time before set: %u", micros());
-
       float position = map(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-      debugD("Time after map:  %u", micros());
       legR.setPosition(position, 10, 2);
-      debugD("Time after set:  %u, position %2f", micros(), position);
     }
 
     if (joystick.getButtonL1())
@@ -231,7 +222,6 @@ void taskMain(void *parameter)
 
       float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 90, 270);
       legL.setPosition(legPos, 10, 2);
-      debugD("L pos set: %f", legPos);
     }
 
     if (joystick.getButtonCrossPressed())
@@ -248,8 +238,9 @@ void taskMain(void *parameter)
       legL.setPosition(0, 0, 0);
     }
 
-    Serial.printf("FAST end:   %u \n", micros());
     Debug.handle(); // needs to be in bottom of loop
+
+    vTaskDelay(10);
   }
 }
 
@@ -258,7 +249,6 @@ void taskI2C(void *parameter)
   for (;;)
   {
 
-    Serial.printf("SLOW start: %u \n", micros());
     updatesI2C();
 
     // menu updater
@@ -286,7 +276,6 @@ void taskI2C(void *parameter)
     }
     
 
-    Serial.printf("SLOW end:   %u \n", micros());
 
     vTaskDelay(10);
 
@@ -296,12 +285,11 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-
   vTaskDelete(NULL);
 }

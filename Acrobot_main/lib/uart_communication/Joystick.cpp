@@ -312,17 +312,29 @@ void Joystick::update()
   // read the new button states
   if (Serial2.available())
   {
-    receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
 
-    // Interpret the received data
-    sscanf(receivedData.c_str(),
+    receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
+    Serial.println(receivedData.length());
+
+    if (receivedData.length() == 190) // check for corruption
+    {
+      // Interpret the received data 
+      sscanf(receivedData.c_str(),
           "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
           &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
           &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
+    }
+    
   }
 
-  // Update pressed states based on changes from previous states
-  pressedButtons = buttons & ~prevButtons;
-  pressedMisc = misc & ~prevMisc;
-  pressedDpad = dpad & ~prevDpad;
+  // current state matches previous state?
+  pressedButtons = prevPressedButtons & buttons;
+  pressedMisc = prevPressedMisc & misc;
+  pressedDpad = prevPressedDpad & dpad;
+
+  // Update for next round
+  prevPressedButtons = buttons & ~prevButtons;
+  prevPressedMisc = misc & ~prevMisc;
+  prevPressedDpad = dpad & ~prevDpad;
+
 }
