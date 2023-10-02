@@ -250,7 +250,6 @@ void taskMain(void *parameter)
 
     Serial.printf("FAST end:   %u \n", micros());
     Debug.handle(); // needs to be in bottom of loop
-
   }
 }
 
@@ -297,11 +296,12 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  // xTaskCreatePinnedToCore(taskMain, "taskMain", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 10000, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-  taskMain(NULL);
+
+  vTaskDelete(NULL);
 }
