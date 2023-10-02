@@ -316,9 +316,9 @@ void Joystick::update()
 
     // Interpret the received data
     sscanf(receivedData.c_str(),
-           "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
-           &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
-           &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
+          "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
+          &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
+          &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
   }
 
   // Update pressed states based on changes from previous states

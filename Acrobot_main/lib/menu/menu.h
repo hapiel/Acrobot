@@ -102,34 +102,69 @@ void printLastMessage(){
   lcd.print(lastMessage);
 }
 
+bool upPressed = false;
+bool downPressed = false;
+bool leftPressed = false;
+bool rightPressed = false;
+bool backPressed = false;
+bool enterPressed = false;
+
 void menuInput(Button buttonUp, Button buttonDown, Button buttonLeft, Button buttonRight,Joystick &joystick){
 
   if (buttonUp.isPressed() || joystick.getDpadUpPressed()){
-    menu.up();
-    printLastMessage();
+    upPressed = true;
   }
   if (buttonDown.isPressed() || joystick.getDpadDownPressed()){
-    menu.down();
-    printLastMessage();
+    downPressed = true;
   }
   if (buttonLeft.isPressed() || joystick.getButtonCrossPressed()){
-    menu.back();
-    printLastMessage();
+    backPressed = true;
   }
   if (buttonRight.isPressed() || joystick.getButtonCirclePressed()){
-    menu.enter();
-    printLastMessage();
+    enterPressed = true;
   }
-
   if (joystick.getDpadRightPressed()){
     menu.right();
     printLastMessage();
+    rightPressed = true;
   }
   if (joystick.getDpadLeftPressed()){
+    leftPressed = true;
+  }
+
+}
+
+void menuApplyInput(){
+  if (upPressed){
+    upPressed = false;
+    menu.up();
+    printLastMessage();
+  }
+  if (downPressed){
+    downPressed = false;
+    menu.down();
+    printLastMessage();
+  }
+  if (leftPressed){
+    leftPressed = false;
     menu.left();
     printLastMessage();
   }
-
+  if (rightPressed){
+    rightPressed = false;
+    menu.right();
+    printLastMessage();
+  }
+  if (backPressed){
+    backPressed = false;
+    menu.back();
+    printLastMessage();
+  }
+  if (enterPressed){
+    enterPressed = false;
+    menu.enter();
+    printLastMessage();
+  }
 }
 
 

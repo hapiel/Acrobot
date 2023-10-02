@@ -5,7 +5,7 @@ This is the code for the primary ESP32 of the Acrobot. It controls all of the ha
 
 The project can be debugged over serial, telnet, websocket, thanks to RemoteDebug. Send '?' over any of these for commands.
 
-Hardware list: 
+Hardware list:
 - Motors over CAN bus
 - Hall sensors through ADC over I2C
 - SD card reader
@@ -34,7 +34,6 @@ The project should be built in platformio
 #include "DNSServer.h"
 #include "ESPmDNS.h"
 
-
 // custom libraries
 #include "Joystick.h"
 #include "CANHandler.h"
@@ -51,7 +50,7 @@ The project should be built in platformio
 #include "config.h" // needs to be made from config_sample.h, in /include
 
 #define ESTOP_PIN 5
-#define SDA_PIN 25 
+#define SDA_PIN 25
 #define SCL_PIN 33
 #define BUZZER_PIN 26
 #define BUTTON_UP 34
@@ -71,9 +70,9 @@ Joystick joystick;
 CANHandler canHandler;
 Motor motorLegL(4, Debug);
 Motor motorLegR(3, Debug);
-Leg legL(motorLegL);
-Leg legR(motorLegR);
-EStop eStop(ESTOP_PIN, Debug); 
+Leg legL(motorLegL, 4.79, true);
+Leg legR(motorLegR, 37.45, false);
+EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
 Button buttonDown(BUTTON_DOWN, Debug);
@@ -137,7 +136,8 @@ void inits()
   debugI("Inits Done.");
 }
 
-void wifiConnection(){
+void wifiConnection()
+{
   if (!wifiConnected)
   {
     // Wait for connection
@@ -146,25 +146,23 @@ void wifiConnection(){
       if (MDNS.begin(HOST_NAME))
       {
         debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
-
       }
       MDNS.addService("telnet", "tcp", 23);
       debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
-
     }
   }
   wifiConnected = WiFi.status() == WL_CONNECTED;
 }
 
-void updateMenuText(){
+void updateMenuText()
+{
 
   debugD("start ADC time: %u", micros());
-  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL()/100, hallSensor.getArmR()/100, hallSensor.getLegL()/100, hallSensor.getLegR()/100);
+  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL() / 100, hallSensor.getArmR() / 100, hallSensor.getLegL() / 100, hallSensor.getLegR() / 100);
   debugD("end ADC time: %u", micros());
 
-  sprintf(bootPos, "P: %03d %03d", int(legL.getPosition()), int(legR.getPosition()));
+  sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
 }
-
 
 void updates()
 {
@@ -177,85 +175,133 @@ void updates()
   buttonRight.update();
   batterySensor.update();
   debugLed.update();
-  menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
   legL.update();
   legR.update();
+  menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
+}
+
+void updatesI2C(){
+  menuApplyInput();
 }
 
 // for testing & sending periodical messages
-bool runEvery(int interval, long &nextExecutionMillis){
+bool runEvery(int interval, long &nextExecutionMillis)
+{
   long currentMillis = millis();
-  if (nextExecutionMillis - currentMillis >= 0) {
+  if (nextExecutionMillis - currentMillis >= 0)
+  {
     return false;
   }
   nextExecutionMillis = ((currentMillis / interval) + 1) * interval;
   return true;
 }
 
+void taskMain(void *parameter)
+{
+  for (;;)
+  {
+
+    Serial.printf("FAST start: %u \n", micros());
+
+
+    updates();
+    wifiConnection(); // restore wifi variables
+
+
+    if (joystick.getButtonR1())
+    {
+      if (joystick.getButtonTrianglePressed())
+      {
+        legR.start();
+      }
+      debugD("Time before set: %u", micros());
+
+      float position = map(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
+      debugD("Time after map:  %u", micros());
+      legR.setPosition(position, 10, 2);
+      debugD("Time after set:  %u, position %2f", micros(), position);
+    }
+
+    if (joystick.getButtonL1())
+    {
+      if (joystick.getButtonTrianglePressed())
+      {
+        legL.start();
+      }
+
+      float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 90, 270);
+      legL.setPosition(legPos, 10, 2);
+      debugD("L pos set: %f", legPos);
+    }
+
+    if (joystick.getButtonCrossPressed())
+    {
+
+      legR.stop();
+      legL.stop();
+    }
+
+    if (joystick.getButtonSquarePressed())
+    {
+
+      legR.setPosition(0, 0, 0);
+      legL.setPosition(0, 0, 0);
+    }
+
+    Serial.printf("FAST end:   %u \n", micros());
+    Debug.handle(); // needs to be in bottom of loop
+
+  }
+}
+
+void taskI2C(void *parameter)
+{
+  for (;;)
+  {
+
+    Serial.printf("SLOW start: %u \n", micros());
+    updatesI2C();
+
+    // menu updater
+    static long executionTimer2 = 0;
+    if (runEvery(200, executionTimer2))
+    {
+
+      updateMenuText();
+      // menu.show();
+      menu.drawMenuNoClear();
+    }
+
+    // debug messages
+    static long executionTimer1 = 0;
+    if (runEvery(1000, executionTimer1))
+    {
+      debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
+
+      if (!wifiConnected)
+      {
+        debugW("Wifi not connected");
+      }
+
+      lcdBatteryValue(batterySensor.getPercentage());
+    }
+    
+
+    Serial.printf("SLOW end:   %u \n", micros());
+
+    vTaskDelay(10);
+
+  }
+}
+
 void setup()
 {
   inits();
+  // xTaskCreatePinnedToCore(taskMain, "taskMain", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-  updates();
-  wifiConnection(); // restore wifi variables
-
-  if (joystick.getButtonR1()){
-    if (joystick.getButtonTrianglePressed()){
-      legR.start();
-    }
-
-    legR.setPosition(map(joystick.getAxisRYCorrected(), -127, 128, 270, 90),10, 2);
-
-  }
-
-  if (joystick.getButtonL1()){
-    if (joystick.getButtonTrianglePressed()){
-      legL.start();
-    }
-
-    float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 270, 90);
-    legL.setPosition(legPos, 10, 2);
-    debugD("L pos set: %f", legPos);
-  }
-
-  if (joystick.getButtonCrossPressed()){
-
-    legR.stop();
-    legL.stop();
-  }
-
-  if (joystick.getButtonSquarePressed()){
-
-    legR.setPosition(0, 0, 0);
-    legL.setPosition(0, 0, 0);
-  }
-
-  // menu updater
-  static long executionTimer2 = 0;
-  if (runEvery(1000, executionTimer2)){
-
-    updateMenuText();
-    menu.show();
-    // menu.drawMenuNoClear();
-  } 
-
-  // debug messages
-  static long executionTimer1 = 0;
-  if (runEvery(1000, executionTimer1)){
-    debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000) , (millis() / 60000) % 60, (millis() / 1000) % 60);
-    
-    if(!wifiConnected){
-      debugW("Wifi not connected");
-    }  
-
-    debugD("LegL pos: %f" , legL.getPosition());
-
-    lcdBatteryValue(batterySensor.getPercentage());
-  } 
-  Debug.handle(); // needs to be in loop
-
-
+  taskMain(NULL);
 }

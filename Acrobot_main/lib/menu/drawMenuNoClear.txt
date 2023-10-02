@@ -1,9 +1,5 @@
   void drawMenuNoClear()
   {
-    uint8_t top = lcdMenuWrapper.getTop();
-    uint8_t bottom = lcdMenuWrapper.getBottom();
-    MenuItem** currentMenuTable = lcdMenuWrapper.getCurrentMenuTable();
-    uint8_t maxRows = lcdMenuWrapper.getMaxRows();
     
     for (uint8_t i = top; i <= bottom; i++)
     {

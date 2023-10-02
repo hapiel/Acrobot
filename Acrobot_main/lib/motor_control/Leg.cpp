@@ -1,10 +1,15 @@
 #include "Leg.h"
 
-Leg::Leg(Motor &motor) : motor(motor) {}
+Leg::Leg(Motor &motor, float offset180, bool inverted) : motor(motor), offset180(offset180), inverted(inverted) {}
 
 void Leg::setPosition(float posDegrees, float kp, float kd) {
 
-  float posToSend = degreesToRad(constrain(posDegrees, posMin, posMax));
+  if (inverted) {
+    posDegrees = 360 - posDegrees;
+  }
+
+  float posOffsetCorrected = correctOffsetShaftToMotor(constrain(posDegrees, posMin, posMax));
+  float posToSend = degreesToRad(posOffsetCorrected);
   float kpToSend = constrain(kp, 0, kpLimit);
   float kdToSend = constrain(kd, kdMinimum, 5);
 
@@ -24,7 +29,16 @@ void Leg::update() {
 }
 
 float Leg::getPosition() {
-  return radToDegrees(motor.getPosition());
+
+
+  float posDegrees = radToDegrees(motor.getPosition());
+  float posOffsetCorrected = correctOffsetMotorToShaft(posDegrees);
+
+  if (inverted) {
+    posOffsetCorrected = 360 - posOffsetCorrected;
+  }
+
+  return posOffsetCorrected;
 }
 
 float Leg::getVelocity() {
@@ -49,4 +63,12 @@ float Leg::radToDegrees(float rad) {
 
 float Leg::degreesToRad(float degrees) {
   return degrees * PI / 180.0;
+}
+
+float Leg::correctOffsetShaftToMotor(float shaftDegrees) {
+  return shaftDegrees - 180 + offset180;
+}
+
+float Leg::correctOffsetMotorToShaft(float motorDegrees) {
+  return motorDegrees + 180 - offset180;
 }
