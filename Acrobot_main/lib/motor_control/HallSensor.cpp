@@ -1,6 +1,6 @@
 #include "HallSensor.h"
 
-HallSensor::HallSensor(TwoWire& wire, RemoteDebug& Debug) : wire(wire), Debug(Debug)
+HallSensor::HallSensor(TwoWire &wire, RemoteDebug &Debug) : wire(wire), Debug(Debug)
 {
   ADS = new ADS1115(address, &wire);
 }

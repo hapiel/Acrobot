@@ -167,7 +167,7 @@ void updateMenuText()
 
   sprintf(statusMem, "Mem: %2d%% R-%u:%.2u:%.2u", (int)(100 * (1 - ((float)ESP.getFreeHeap() / (float)ESP.getHeapSize()))), (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
 
-  sprintf(motorTemp, "Tem %02d %02d %02d %02d", 0, 0 ,legL.getTemperature(), legR.getTemperature());
+  sprintf(motorTemp, "Tem %02d %02d %02d %02d", 0, 0, legL.getTemperature(), legR.getTemperature());
 
   sprintf(motorAmp, "Amp %02d %02d %02d %02d", 0, 0, (int)legL.getTorque(), (int)legR.getTorque());
 
@@ -193,7 +193,8 @@ void updates()
   menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
 }
 
-void updatesI2C(){
+void updatesI2C()
+{
   menuApplyInput();
 }
 
@@ -216,7 +217,6 @@ void taskMain(void *parameter)
 
     updates();
     wifiConnection(); // restore wifi variables
-
 
     if (joystick.getButtonR1())
     {
@@ -289,11 +289,8 @@ void taskI2C(void *parameter)
 
       lcdBatteryValue(batterySensor.getPercentage());
     }
-    
-
 
     vTaskDelay(10);
-
   }
 }
 

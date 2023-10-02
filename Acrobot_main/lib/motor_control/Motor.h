@@ -5,9 +5,10 @@
 #include "RemoteDebug.h"
 #include "CANHandler.h"
 
-class Motor {
+class Motor
+{
 public:
-  Motor(uint16_t ID, CANHandler &canHandler,RemoteDebug& Debug);
+  Motor(uint16_t ID, CANHandler &canHandler, RemoteDebug &Debug);
 
   void start();
   void stop();
@@ -39,11 +40,11 @@ private:
   float Kd_MIN = 0;
   float Kd_MAX = 5;
 
-  float pOut;
-  float vOut;
-  float iOut;
-  uint8_t temperature;
-  uint8_t errorCode;
+  float pOut = 0;
+  float vOut = 0;
+  float iOut = 0;
+  uint8_t temperature = 0;
+  uint8_t errorCode = 0;
 
   int floatToUInt(float x, float x_min, float x_max, unsigned int bits);
   float uintToFloat(int x_int, float x_min, float x_max, int bits);
@@ -55,7 +56,7 @@ private:
   CANHandler &canHandler;
   uint32_t lastSendTime = 0;
   int sendInterval = 1; // ms
-  RemoteDebug& Debug;
+  RemoteDebug &Debug;
 };
 
 #endif

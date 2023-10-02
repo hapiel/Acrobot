@@ -214,10 +214,13 @@ void Motor::update()
     if (!ACAN_ESP32::can.tryToSend(latestFrame))
     {
       // debugW("MOTOR: CAN command failed, ID: %d", canID);
-      // TODO: Warning message that does not overflow the debug 
-    } 
+      // TODO: Warning message that does not overflow the debug
+    }
   }
 
-  unpackCommand(canHandler.getLatestFrame(canID));
-
+  // check if valid message exists
+  if (canHandler.getLatestFrame(canID).id == canID)
+  {
+    unpackCommand(canHandler.getLatestFrame(canID));
+  }
 }

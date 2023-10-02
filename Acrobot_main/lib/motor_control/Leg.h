@@ -33,7 +33,6 @@ private:
   float degreesToRad(float degrees);
   float correctOffsetShaftToMotor(float degrees);
   float correctOffsetMotorToShaft(float degrees);
-
 };
 
-#endif // LEG_H 
+#endif // LEG_H

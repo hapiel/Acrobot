@@ -3,7 +3,8 @@
 
 #include <ACAN_ESP32.h>
 
-class CANHandler {
+class CANHandler
+{
 public:
     CANHandler();
     void setupCAN();
@@ -14,7 +15,6 @@ public:
 
 private:
     static const uint32_t DESIRED_BIT_RATE = 1000UL * 1000UL; // Example desired bit rate
-
 };
 
 #endif // CAN_HANDLER_H

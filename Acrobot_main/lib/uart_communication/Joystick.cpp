@@ -319,18 +319,17 @@ void Joystick::update()
   {
 
     receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
-    if (receivedData.length() == 190) // check for corruption
+    if (receivedData.length() == 190)             // check for corruption
     {
-      // Interpret the received data 
+      // Interpret the received data
       sscanf(receivedData.c_str(),
-          "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
-          &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
-          &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
+             "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",
+             &idx, &dpad, &buttons, &axisLX, &axisLY, &axisRX, &axisRY, &brake, &throttle, &misc,
+             &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
 
       lastSeen = millis();
       connected = true;
     }
-    
   }
 
   // current state matches previous state?
@@ -347,5 +346,4 @@ void Joystick::update()
   {
     connected = false;
   }
-
 }
