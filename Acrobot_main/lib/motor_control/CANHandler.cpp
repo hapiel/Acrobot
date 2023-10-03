@@ -33,6 +33,15 @@ void CANHandler::sendCANMessage(const CANMessage &message)
   }
 }
 
+bool CANHandler::getIsOnline(uint8_t id)
+{
+  if (millis() - lastRecievedTime[id - 1] > recieveTimeout)
+  {
+    return false;
+  }
+  return true;
+}
+
 void CANHandler::update()
 {
 
@@ -41,6 +50,7 @@ void CANHandler::update()
   while (ACAN_ESP32::can.receive(message) && count < 4)
   {
     latestFrame[message.id - 1] = message;
+    lastRecievedTime[message.id - 1] = millis();
     count++; // run max 4 times
   }
 }

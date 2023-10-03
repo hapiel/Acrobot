@@ -47,7 +47,9 @@ The project should be built in platformio
 #include "HallSensor.h"
 #include "Leg.h"
 
-#include "config.h" // needs to be made from config_sample.h, in /include
+// parameters
+#include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
+#include "motorIDs.h"
 
 #define ESTOP_PIN 5
 #define SDA_PIN 25
@@ -68,10 +70,11 @@ RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be n
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
-Motor motorLegL(4, canHandler, Debug);
-Motor motorLegR(3, canHandler, Debug);
-Leg legL(motorLegL, 4.79, true);
-Leg legR(motorLegR, 37.45, false);
+Motor motorLegL(LEG_L_ID, canHandler, Debug);
+Motor motorLegR(LEG_R_ID, canHandler, Debug);
+HallSensor hallSensor(wire, Debug);
+Leg legL(motorLegL, hallSensor, LEG_L_ID, 4.79, true); // offset values
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 37.45, false);
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -80,7 +83,6 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
-HallSensor hallSensor(wire, Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -157,7 +159,7 @@ void wifiConnection()
 void updateMenuText()
 {
 
-  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getArmL() / 100, hallSensor.getArmR() / 100, hallSensor.getLegL() / 100, hallSensor.getLegR() / 100);
+  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
 
@@ -196,6 +198,7 @@ void updates()
 void updatesI2C()
 {
   menuApplyInput();
+  hallSensor.update();
 }
 
 // for testing & sending periodical messages
@@ -222,21 +225,21 @@ void taskMain(void *parameter)
     {
       if (joystick.getButtonTrianglePressed())
       {
-        legR.start();
+        legR.startCalibration();
       }
       float position = map(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-      legR.setTarget(position, 10, 2);
+      legR.setTarget(position, 8, 1);
     }
 
     if (joystick.getButtonL1())
     {
       if (joystick.getButtonTrianglePressed())
       {
-        legL.start();
+        legL.startCalibration();
       }
 
       float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 90, 270);
-      legL.setTarget(legPos, 10, 2);
+      legL.setTarget(legPos, 8, 1);
     }
 
     if (joystick.getButtonCrossPressed())

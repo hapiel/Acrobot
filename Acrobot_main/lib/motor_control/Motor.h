@@ -24,6 +24,7 @@ public:
   float getTorque();
   uint8_t getTemperature();
   uint8_t getErrorCode();
+  bool isOnline();
 
   void update();
 

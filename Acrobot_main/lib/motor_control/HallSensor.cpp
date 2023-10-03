@@ -3,6 +3,10 @@
 HallSensor::HallSensor(TwoWire &wire, RemoteDebug &Debug) : wire(wire), Debug(Debug)
 {
   ADS = new ADS1115(address, &wire);
+  motorIDToSensorTable[ARM_L_ID - 1] = 2;
+  motorIDToSensorTable[ARM_R_ID - 1] = 0;
+  motorIDToSensorTable[LEG_L_ID - 1] = 2;  // temp value, needs to be corrected when legs are moved.
+  motorIDToSensorTable[LEG_R_ID - 1] = 0;
 }
 
 void HallSensor::init()
@@ -11,22 +15,23 @@ void HallSensor::init()
   ADS->setGain(1);
 }
 
-int16_t HallSensor::getArmL()
+int16_t HallSensor::getValFromID(int motorID)
 {
-  return ADS->readADC(2);
+  return sensorValueOfId[motorID -1];
 }
 
-int16_t HallSensor::getArmR()
+
+bool HallSensor::getReadyFromID(int motorID)
 {
-  return ADS->readADC(0);
+  return sensorValueOfId[motorID -1] < calibrationTreshold;
 }
 
-int16_t HallSensor::getLegL()
+// TODO: Needs mutex
+void HallSensor::update()
 {
-  return ADS->readADC(1);
-}
-
-int16_t HallSensor::getLegR()
-{
-  return ADS->readADC(3);
+  for (int i = 0; i < 4; i++)
+  {
+    sensorValueOfId[i] = ADS->readADC(motorIDToSensorTable[i]);
+    // TODO: Slow function, could be rewritten to ADS continuous mode?
+  }
 }

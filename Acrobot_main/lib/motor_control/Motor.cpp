@@ -186,6 +186,11 @@ uint8_t Motor::getErrorCode()
   return errorCode;
 }
 
+bool Motor::isOnline()
+{
+  return canHandler.getIsOnline(canID);
+}
+
 void Motor::unpackCommand(const CANMessage &msg)
 {
   // Unpack ints from the CAN buffer
