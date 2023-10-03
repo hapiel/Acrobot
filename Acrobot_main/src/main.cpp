@@ -46,6 +46,7 @@ The project should be built in platformio
 #include "menu.h"
 #include "HallSensor.h"
 #include "Leg.h"
+#include "StatusChecker.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -83,6 +84,7 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
+StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 
 // wifi
 bool wifiConnected = false;
@@ -161,6 +163,10 @@ void updateMenuText()
 
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
+  sprintf(bootState, "S: %3s %3s xxx xxx", 
+    legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL" : "ON",
+    legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL" : "ON");
+
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
 
   sprintf(statusTemp, "Temp: 00 00 %0d %0d", legL.getTemperature(), legR.getTemperature());
@@ -193,6 +199,7 @@ void updates()
   legL.update();
   legR.update();
   menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
+  statusChecker.update();
 }
 
 void updatesI2C()
@@ -221,6 +228,8 @@ void taskMain(void *parameter)
     updates();
     wifiConnection(); // restore wifi variables
 
+
+    // control legs, temp system
     if (joystick.getButtonR1())
     {
       if (joystick.getButtonTrianglePressed())
@@ -256,6 +265,14 @@ void taskMain(void *parameter)
       legL.setTarget(0, 0, 0);
     }
 
+    // debug messages
+    static long executionTimer1 = 0;
+    if (runEvery(1000, executionTimer1))
+    {
+      debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
+
+    }
+
     Debug.handle(); // needs to be in bottom of loop
 
     vTaskDelay(10);
@@ -275,22 +292,8 @@ void taskI2C(void *parameter)
     {
 
       updateMenuText();
-      // menu.show();
-      menu.drawMenuNoClear();
-    }
-
-    // debug messages
-    static long executionTimer1 = 0;
-    if (runEvery(1000, executionTimer1))
-    {
-      debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
-
-      if (!wifiConnected)
-      {
-        debugW("Wifi not connected");
-      }
-
       lcdBatteryValue(batterySensor.getPercentage());
+      menu.drawMenuNoClear();
     }
 
     vTaskDelay(10);

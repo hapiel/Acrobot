@@ -12,18 +12,31 @@ void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue)
 
 void DebugLed::setR(uint8_t _red)
 {
+  if (red == _red)
+  {
+    return;
+  }
+
   red = _red;
   colorsChanged = true;
 }
 
 void DebugLed::setG(uint8_t _green)
 {
+  if (green == _green)
+  {
+    return;
+  }
   green = _green;
   colorsChanged = true;
 }
 
 void DebugLed::setB(uint8_t _blue)
 {
+  if (blue == _blue)
+  {
+    return;
+  }
   blue = _blue;
   colorsChanged = true;
 }
@@ -50,7 +63,7 @@ void DebugLed::update()
     colorsChanged = false;
     if (flickerOn)
     {
-      Serial2.printf("set_debug_led=%u,%u,%u\n", red / brightnessDivider, green / brightnessDivider, blue / brightnessDivider);
+      Serial2.printf("set_debug_led=%u,%u,%u\n", (int)((float)red * brightnessMultiplier), (int)((float)green * brightnessMultiplier), (int)((float)blue * brightnessMultiplier));
     }
     else
     {

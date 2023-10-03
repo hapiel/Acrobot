@@ -18,9 +18,9 @@ extern MenuItem *aboutPage[];
 extern MenuItem *bootPage[];
 
 char bootAdc[19] = "A: 234 234 234 234";
-char bootReady[19] = "NO ArL ArR LeL LeR";  // or "ready ready ready
+char bootState[19] = "S: off on cal xxx";  // or "ready ready ready
 char bootPos[19] = "P: 123 123 123 123";    // position
-char bootRelais[19] = "Relais: Set       "; // or relais unset
+char bootRelais[19] = "Relais: Set EXAMPL"; // or relais unset
 
 char statusTemp[19] = "Temp: 00 00 XX 00 "; // XX = missing motor
 char statusWifi[19] = "Wifi-. BT-.    J";
@@ -42,7 +42,7 @@ MAIN_MENU(
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_BASIC(bootAdc),   // adc
-         ITEM_BASIC(bootReady), // or "ready ready ready"
+         ITEM_BASIC(bootState), // or "ready ready ready"
          ITEM_BASIC(bootPos),
          ITEM_BASIC(bootRelais));
 
