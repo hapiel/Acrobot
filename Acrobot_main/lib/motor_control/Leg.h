@@ -36,7 +36,10 @@ private:
   HallSensor &hallSensor;
   int motorID;
   float kpLimit = 100; // safety feature, can be removed later
+  float kPLimitStart = 0.1; // during calibration this value is ramped up to 10, then 500.
   float kdMinimum = 0.2; // safety feature, can be removed later
+  float kDMinimumStart = 5; // after starting this value is ramped down to 0
+  int startRampTime = 2000; // time in ms to ramp kp and kd
   float posMin = 90;
   float posMax = 270;
   float offset180;

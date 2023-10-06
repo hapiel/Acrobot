@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <RunningMedian.h>
+#include "utilsAcrobot.h"
 
 class BatterySensor
 {
@@ -13,7 +14,6 @@ public:
   int getAdc();
   float getVoltage();
   void update();
-  float fmap(float x, float in_min, float in_max, float out_min, float out_max);
 
 private:
   RunningMedian batterySamples = RunningMedian(64);

@@ -227,17 +227,17 @@ bool Joystick::getButtonR3Pressed()
 
 bool Joystick::getMiscPSPressed()
 {
-  return pressedMisc & 0x01;
+  return pressedMisc & 0x0001;
 }
 
 bool Joystick::getMiscCreatePressed()
 {
-  return pressedMisc & 0x02;
+  return pressedMisc & 0x0002;
 }
 
 bool Joystick::getMiscOptionsPressed()
 {
-  return pressedMisc & 0x04;
+  return pressedMisc & 0x0004;
 }
 
 void Joystick::setDeadzoneSize(unsigned int size)
@@ -322,6 +322,7 @@ void Joystick::update()
     receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
     if (receivedData.length() == 190)             // check for corruption
     {
+      // Serial.println(receivedData.c_str());
       // Interpret the received data
       sscanf(receivedData.c_str(),
              "idx=%d, dpad:%x, buttons:%x, axis L: %d, %d, axis R: %d, %d, brake: %d, throttle: %d, misc: %x, gyro x:%ld y:%ld z:%ld, accel x:%ld y:%ld z:%ld bat:%ld",

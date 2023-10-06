@@ -75,8 +75,8 @@ CANHandler canHandler;
 Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
-Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.45, false); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.79, true); 
+Leg legL(motorLegL, hallSensor, LEG_L_ID, 39.45, true); // offset values
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.79, false); 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -227,7 +227,7 @@ void taskMain(void *parameter)
       {
         legR.startCalibration();
       }
-      float position = map(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
+      float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
       legR.setTarget(position, 8, 1);
     }
 
@@ -238,7 +238,7 @@ void taskMain(void *parameter)
         legL.startCalibration();
       }
 
-      float legPos = map(joystick.getAxisLYCorrected(), -127, 128, 90, 270);
+      float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
       legL.setTarget(legPos, 8, 1);
     }
 

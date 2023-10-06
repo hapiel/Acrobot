@@ -39,16 +39,13 @@ float BatterySensor::getVoltage()
 
   for (int i = 1; i < chartSize; i++){
     if (avg < chart[i][1]){
-      return fmap(avg, chart[i - 1][1] + 1, chart[i][1], chart[i - 1][0], chart[i][0]);
+      return fMap(avg, chart[i - 1][1] + 1, chart[i][1], chart[i - 1][0], chart[i][0]);
     }
   }
   return 99;
 }
 
-float BatterySensor::fmap(float x, float in_min, float in_max, float out_min, float out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
+
 
 void BatterySensor::update(){
   batterySamples.add(analogRead(pin));
