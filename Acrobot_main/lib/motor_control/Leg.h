@@ -3,6 +3,7 @@
 
 #include "Motor.h"
 #include "HallSensor.h"
+#include "utilsAcrobot.h"
 
 enum State {
     OFF,
@@ -35,11 +36,13 @@ private:
   Motor &motor;
   HallSensor &hallSensor;
   int motorID;
-  float kpLimit = 100; // safety feature, can be removed later
-  float kPLimitStart = 0.1; // during calibration this value is ramped up to 10, then 500.
-  float kdMinimum = 0.2; // safety feature, can be removed later
-  float kDMinimumStart = 5; // after starting this value is ramped down to 0
-  int startRampTime = 2000; // time in ms to ramp kp and kd
+  float kpLimit = 100; // safety feature, can be increased later to 500
+  float kPLimitStart = 0.1; // during calibration this value is ramped up to end, then limit.
+  float kPlimitRampEnd = 8;
+  float kdMinimum = 0.2; // safety feature, can be decreased later to 0
+  float kDMinimumStart = 5; // after starting this value is ramped down to kpMinimum
+  int startRampDuration = 2000; // duration in ms to ramp kp and kd
+  uint32_t startTime = 0; // moment the motor starts. Used to ramp
   float posMin = 90;
   float posMax = 270;
   float offset180;

@@ -17,10 +17,20 @@ void Leg::setTarget(float posDegrees, float kp, float kd) {
 
 
   float posToSend = degreesToRad(posOffsetCorrected);
-  float kpToSend = constrain(kp, 0, kpLimit);
-  float kdToSend = constrain(kd, kdMinimum, 5);
 
-  motor.setPosition(posToSend, kpToSend, kd);
+  float kpToSend = constrain(kp, 0, kpLimit);
+  // ramp up kp after start
+  if (millis() - startTime < startRampDuration) {
+    kpToSend = min(kpToSend, fMap(millis() - startTime, 0, startRampDuration, kPLimitStart, kPlimitRampEnd));
+  }
+
+  float kdToSend = constrain(kd, kdMinimum, 5);
+  // ramp down kd
+  if (millis() - startTime < startRampDuration) {
+    kdToSend = max(kdToSend, fMap(millis() - startTime, 0, startRampDuration, kDMinimumStart, kdMinimum));
+  }
+
+  motor.setPosition(posToSend, kpToSend, kdToSend);
 }
 
 float Leg::getTarget(){
@@ -30,6 +40,8 @@ float Leg::getTarget(){
 void Leg::start() {
   motor.start();
   state = ON;
+  startTime = millis();
+  motor.setPosition(0, 0, 0);
 }
 
 void Leg::stop() {
@@ -52,9 +64,7 @@ void Leg::tryCalibration() {
       } else {
         offsetGearbox = (offsetSteps * -1) * offsetDegrees;
       }
-      motor.setPosition(0, 0, 0);
-      motor.start();
-      state = ON;
+      start();
     }
   }
 }
