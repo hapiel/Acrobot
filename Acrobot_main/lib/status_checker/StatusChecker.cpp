@@ -23,7 +23,7 @@ void StatusChecker::checkBattery()
       debugI("battery low, pecentage: %d", batterySensor.getPercentage());
       lastInfoTime = millis();
     }
-  
+
     debugLed.setR(128); // doesn't reset, so other functions can trigger red too.
     if (batterySensor.getPercentage() <= 15)
     {
@@ -46,21 +46,52 @@ void StatusChecker::checkBattery()
   }
 }
 
-
 void StatusChecker::update()
 {
-  
+
   checkBattery();
 
-  if ( WiFi.status() == WL_CONNECTED){
+  if (WiFi.status() == WL_CONNECTED)
+  {
     debugLed.setG(10);
-  } else {
+  }
+  else
+  {
     debugLed.setG(0);
   }
 
-  if (joystick.getConnected()){
+  if (joystick.getConnected())
+  {
     debugLed.setB(10);
-  } else {
+
+    // display joystick battery level on joystick
+    static long executionTimer = 0;
+    if (runEvery(1000, executionTimer))
+    {
+      if (joystick.getBatteryPercentage() <= 20)
+      {
+        joystick.setPlayerLEDs(0);
+      }
+      if(joystick.getBatteryPercentage() > 20 && joystick.getBatteryPercentage() <= 40)
+      {
+        joystick.setPlayerLEDs(1);
+      }
+      if(joystick.getBatteryPercentage() > 40 && joystick.getBatteryPercentage() <= 60)
+      {
+        joystick.setPlayerLEDs(2);
+      }
+      if(joystick.getBatteryPercentage() > 60 && joystick.getBatteryPercentage() <= 80)
+      {
+        joystick.setPlayerLEDs(3);
+      }
+      if(joystick.getBatteryPercentage() > 80 )
+      {
+        joystick.setPlayerLEDs(4);
+      }
+    }
+  }
+  else
+  {
     debugLed.setB(0);
   }
 
@@ -69,5 +100,4 @@ void StatusChecker::update()
     debugLed.flicker(50);
     lastFlickerTime = millis();
   }
-
 }

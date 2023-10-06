@@ -5,8 +5,8 @@ HallSensor::HallSensor(TwoWire &wire, RemoteDebug &Debug) : wire(wire), Debug(De
   ADS = new ADS1115(address, &wire);
   motorIDToSensorTable[ARM_L_ID - 1] = 2;
   motorIDToSensorTable[ARM_R_ID - 1] = 0;
-  motorIDToSensorTable[LEG_L_ID - 1] = 2;  // temp value, needs to be corrected when legs are moved.
-  motorIDToSensorTable[LEG_R_ID - 1] = 0;
+  motorIDToSensorTable[LEG_L_ID - 1] = 3;  // temp value, needs to be corrected when legs are moved.
+  motorIDToSensorTable[LEG_R_ID - 1] = 1;
 }
 
 void HallSensor::init()

@@ -2,6 +2,7 @@
 #define STATUS_CHECKER_H
 
 #include <Arduino.h>
+#include "utilsAcrobot.h"
 #include "WiFi.h"
 #include "RemoteDebug.h"
 #include "BatterySensor.h"

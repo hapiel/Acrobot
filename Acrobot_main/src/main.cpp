@@ -35,6 +35,7 @@ The project should be built in platformio
 #include "ESPmDNS.h"
 
 // custom libraries
+#include "utilsAcrobot.h"
 #include "Joystick.h"
 #include "CANHandler.h"
 #include "Motor.h"
@@ -74,8 +75,8 @@ CANHandler canHandler;
 Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
-Leg legL(motorLegL, hallSensor, LEG_L_ID, 4.79, true); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 37.45, false);
+Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.45, false); // offset values
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.79, true); 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -208,17 +209,7 @@ void updatesI2C()
   hallSensor.update();
 }
 
-// for testing & sending periodical messages
-bool runEvery(int interval, long &nextExecutionMillis)
-{
-  long currentMillis = millis();
-  if (nextExecutionMillis - currentMillis >= 0)
-  {
-    return false;
-  }
-  nextExecutionMillis = ((currentMillis / interval) + 1) * interval;
-  return true;
-}
+
 
 void taskMain(void *parameter)
 {
@@ -232,7 +223,7 @@ void taskMain(void *parameter)
     // control legs, temp system
     if (joystick.getButtonR1())
     {
-      if (joystick.getButtonTrianglePressed())
+      if (joystick.getMiscPSPressed())
       {
         legR.startCalibration();
       }
@@ -242,7 +233,7 @@ void taskMain(void *parameter)
 
     if (joystick.getButtonL1())
     {
-      if (joystick.getButtonTrianglePressed())
+      if (joystick.getMiscPSPressed())
       {
         legL.startCalibration();
       }

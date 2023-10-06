@@ -25,7 +25,7 @@ private:
   uint8_t address = 0x48;
   int motorIDToSensorTable[4]; // ID-1, so motor ID 1 is stored in array[0]. Values are set in constructor
   int16_t sensorValueOfId[4] ;
-  int16_t calibrationTreshold = 7500; // 7500 for sleevless, 9000 for sleeved
+  int16_t calibrationTreshold = 7900; // 7500 for sleevless (arms), 7900 for sleevles legs, 9000 for sleeved
 
 };
 

@@ -304,6 +304,7 @@ void Joystick::setColorLED(int red, int green, int blue)
 
 void Joystick::setPlayerLEDs(int ledMask)
 {
+  // 0 is off, 1 - 4 sets leds.
   Serial2.printf("set_joystick_player_leds=%d\n", ledMask);
 }
 
