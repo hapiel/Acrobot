@@ -25,7 +25,16 @@ public:
   Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug);
   void init(MenuItem **mainMenu);
   void lcdMessage(const String &message);
+
   void callbackBeep();
+  void callbackBacklight(uint16_t isOff);
+  void PUp();
+  void PDown();
+  void DUp();
+  void DDown();
+
+  float getP(); // for testing different P/D values that are settable
+  float getD();
   
   void update();
   void updateI2C();
@@ -47,6 +56,9 @@ public:
   char motorPosA[19] = "PA -0000.0 -0000.0";
   char motorTargA[19] = "TA -0000.0 -0000.0";
 
+  char PUpText[19] = "P UP, val: X";
+  char DUpText[19] = "D UP, val: X";
+
 private:
   LiquidCrystal_I2C &lcd;
   LcdMenu &lcdMenu;
@@ -63,6 +75,9 @@ private:
   EStop &eStop;
   BatterySensor &batterySensor;
   RemoteDebug &Debug;
+
+  float P = 6;
+  float D = 1;
 
 
   bool upPressed = false;

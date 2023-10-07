@@ -74,6 +74,8 @@ The project should be built in platformio
 TwoWire wire(0);
 RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
+LcdMenu lcdMenu(3, 20);
+
 
 
 // custom libraries
@@ -93,6 +95,7 @@ Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
+Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -108,16 +111,15 @@ extern MenuItem *hardwarePage[];
 extern MenuItem *adsPage[];
 extern MenuItem *aboutPage[];
 extern MenuItem *bootPage[];
+extern MenuItem *PIPage[];
 
 
-
-LcdMenu lcdMenu(3, 20);
-Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
+    ITEM_SUBMENU("Change PI value", PIPage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
@@ -141,15 +143,18 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorPosA),
          ITEM_BASIC(menu.motorTargA));
 
+SUB_MENU(PIPage, mainMenu,
+         ITEM_COMMAND(menu.PUpText, []() {menu.PUp();}),
+         ITEM_COMMAND("P DOWN step: (1)", []() {menu.PDown();}),
+         ITEM_COMMAND(menu.DUpText, []() {menu.DUp();}),
+         ITEM_COMMAND("D DOWN step: (0.2)", []() {menu.DDown();}));
 
 
 SUB_MENU(hardwarePage, mainMenu,
-         ITEM_BASIC("Set eStop"),
-         ITEM_BASIC("Toggle backlight"), // enable again on button press
+         ITEM_COMMAND("Set eStop", []() { eStop.set(); }),
+         ITEM_TOGGLE("LCD backlight", "off", "on", [](uint16_t isOff) { menu.callbackBacklight(isOff); }), // enable again on button press
          ITEM_COMMAND("Buzzer beep",  []() { menu.callbackBeep(); }), // lambda because non static
-         ITEM_BASIC("Flash led"),
          ITEM_SUBMENU("Show ADS", adsPage));
-
 
 
 SUB_MENU(adsPage, hardwarePage,
@@ -288,7 +293,7 @@ void taskMain(void *parameter)
         legR.startCalibration();
       }
       float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-      legR.setTarget(position, 8, 1);
+      legR.setTarget(position, menu.getP(), menu.getD());
     }
 
     if (joystick.getButtonL1())
@@ -299,7 +304,7 @@ void taskMain(void *parameter)
       }
 
       float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
-      legL.setTarget(legPos, 8, 1);
+      legL.setTarget(legPos,menu.getP(), menu.getD());
     }
 
     if (joystick.getButtonCrossPressed())

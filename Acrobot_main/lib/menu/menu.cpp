@@ -11,6 +11,18 @@ void Menu::callbackBeep()
   debugD("Beep");
 }
 
+void Menu::callbackBacklight(uint16_t  isOff)
+{
+  // receives inverse value on isOn
+  if (!isOff){
+    lcd.backlight();
+  } else {
+    lcd.noBacklight();
+  }
+
+  lcdMenu.setBacklight(!isOff);
+}
+
 void Menu::init(MenuItem **mainMenu)
 {
   lcd.init();
@@ -148,4 +160,31 @@ void Menu::updateText(){
   sprintf(motorPosL, "PL %06.1f %06.1f", legL.getPosition(), legR.getPosition());
 
   sprintf(motorTargL, "TL %06.1f %06.1f", legL.getTarget(), legR.getTarget());
+
+  sprintf(PUpText, "P UP, val: %.1f", P);
+  sprintf(DUpText, "D UP, val: %.1f", D);
+}
+
+
+void Menu::PUp(){
+  P += 1;
+}
+
+void Menu::PDown(){
+  P -= 1;
+}
+void Menu::DUp(){
+  D += 0.2; 
+}
+
+void Menu::DDown(){
+  D -= 0.2; 
+}
+
+float Menu::getP(){
+  return P;
+}
+
+float Menu::getD(){
+  return D;
 }
