@@ -33,6 +33,11 @@ The project should be built in platformio
 #include "WiFi.h"
 #include "DNSServer.h"
 #include "ESPmDNS.h"
+#include "LiquidCrystal_I2C.h"
+#include <ItemSubMenu.h>
+#include "ItemToggle.h"
+#include "ItemCommand.h"
+#include "LcdMenu.h" // needs to be after item-imports!!!
 
 // custom libraries
 #include "utilsAcrobot.h"
@@ -44,10 +49,10 @@ The project should be built in platformio
 #include "Button.h"
 #include "BatterySensor.h"
 #include "DebugLed.h"
-#include "menu.h"
 #include "HallSensor.h"
 #include "Leg.h"
 #include "StatusChecker.h"
+#include "menu.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -68,6 +73,8 @@ The project should be built in platformio
 // external libraries
 TwoWire wire(0);
 RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
+LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
+
 
 // custom libraries
 Joystick joystick;
@@ -89,6 +96,83 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 
 // wifi
 bool wifiConnected = false;
+
+// MENU SECTION START
+// ---------
+
+// This section needs to be in the same file that inits the lcdMenu.
+
+extern MenuItem *statusPage[];
+extern MenuItem *motorPage[];
+extern MenuItem *hardwarePage[];
+extern MenuItem *adsPage[];
+extern MenuItem *aboutPage[];
+extern MenuItem *bootPage[];
+
+
+
+LcdMenu lcdMenu(3, 20);
+Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
+
+MAIN_MENU(
+    ITEM_SUBMENU("Boot motors", bootPage),
+    ITEM_SUBMENU("Status", statusPage),
+    ITEM_SUBMENU("Motors", motorPage),
+    ITEM_SUBMENU("Hardware", hardwarePage),
+    ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(bootPage, mainMenu,
+         ITEM_BASIC(menu.bootAdc),   // adc
+         ITEM_BASIC(menu.bootState), // or "ready ready ready"
+         ITEM_BASIC(menu.bootPos),
+         ITEM_BASIC(menu.bootRelais));
+
+SUB_MENU(statusPage, mainMenu,
+         ITEM_BASIC(menu.statusTemp), // XX = missing motor
+         ITEM_BASIC(menu.statusWifi),
+         ITEM_BASIC(menu.statusMem));
+
+SUB_MENU(motorPage, mainMenu,
+         ITEM_BASIC("   ArL ArR LeL LeR"),
+         ITEM_BASIC(menu.motorTemp),
+         ITEM_BASIC(menu.motorAmp),
+         ITEM_BASIC(menu.motorPosL), // should later be swapped with arms
+         ITEM_BASIC(menu.motorTargL),
+         ITEM_BASIC(menu.motorPosA),
+         ITEM_BASIC(menu.motorTargA));
+
+
+
+SUB_MENU(hardwarePage, mainMenu,
+         ITEM_BASIC("Set eStop"),
+         ITEM_BASIC("Toggle backlight"), // enable again on button press
+         ITEM_COMMAND("Buzzer beep",  []() { menu.callbackBeep(); }), // lambda because non static
+         ITEM_BASIC("Flash led"),
+         ITEM_SUBMENU("Show ADS", adsPage));
+
+
+
+SUB_MENU(adsPage, hardwarePage,
+         ITEM_BASIC(" - ADS values - "),
+         ITEM_BASIC("AL 00000 AR 00000"),
+         ITEM_BASIC("LL 00000 LR 00000"));
+
+SUB_MENU(aboutPage, mainMenu,
+         ITEM_BASIC("Acrobot v3 Jona"),
+         ITEM_BASIC("By Daniel Simu"),
+         ITEM_BASIC("::Supported by::"),
+         ITEM_BASIC("V2_ Unstable"),
+         ITEM_BASIC("Circusstad Festival"),
+         ITEM_BASIC("Amarte"),
+         ITEM_BASIC("::Collaborators::"),
+         ITEM_BASIC("Basti Kuhz"),
+         ITEM_BASIC("Esmee v/d Ster"),
+         ITEM_BASIC("Mila Baumann"),
+         ITEM_BASIC("Marit Adriaanse"),
+         ITEM_BASIC("Ricard Lopez"));
+
+// ---------
+// MENU SECTION END
 
 void initDebug()
 {
@@ -136,7 +220,7 @@ void inits()
   buttonRight.init();
 
   debugI("Next init: Menu");
-  menuInit();
+  menu.init(mainMenu);
 
   debugI("Inits Done.");
 }
@@ -159,31 +243,7 @@ void wifiConnection()
   wifiConnected = WiFi.status() == WL_CONNECTED;
 }
 
-void updateMenuText()
-{
 
-  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
-
-  sprintf(bootState, "S: %3s %3s xxx xxx", 
-    legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL" : "ON",
-    legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL" : "ON");
-
-  sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
-
-  sprintf(statusTemp, "Temp: 00 00 %0d %0d", legL.getTemperature(), legR.getTemperature());
-
-  sprintf(statusWifi, "Wifi-%s BT-%s J:%d%%", wifiConnected ? "Y" : ".", joystick.getConnected() ? "Y" : ".", joystick.getBatteryPercentage());
-
-  sprintf(statusMem, "Mem: %2d%% R-%u:%.2u:%.2u", (int)(100 * (1 - ((float)ESP.getFreeHeap() / (float)ESP.getHeapSize()))), (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
-
-  sprintf(motorTemp, "Tem %02d %02d %02d %02d", 0, 0, legL.getTemperature(), legR.getTemperature());
-
-  sprintf(motorAmp, "Amp %02d %02d %02d %02d", 0, 0, (int)legL.getTorque(), (int)legR.getTorque());
-
-  sprintf(motorPosL, "PL %06.1f %06.1f", legL.getPosition(), legR.getPosition());
-
-  sprintf(motorTargL, "TL %06.1f %06.1f", legL.getTarget(), legR.getTarget());
-}
 
 void updates()
 {
@@ -199,13 +259,13 @@ void updates()
   debugLed.update();
   legL.update();
   legR.update();
-  menuInput(buttonUp, buttonDown, buttonLeft, buttonRight, joystick);
+  menu.update();
   statusChecker.update();
 }
 
 void updatesI2C()
 {
-  menuApplyInput();
+  menu.updateI2C();
   hallSensor.update();
 }
 
@@ -277,16 +337,6 @@ void taskI2C(void *parameter)
 
     updatesI2C();
 
-    // menu updater
-    static long executionTimer2 = 0;
-    if (runEvery(200, executionTimer2))
-    {
-
-      updateMenuText();
-      lcdBatteryValue(batterySensor.getPercentage());
-      menu.drawMenuNoClear();
-    }
-
     vTaskDelay(10);
   }
 }
@@ -302,3 +352,5 @@ void loop()
 {
   vTaskDelete(NULL);
 }
+
+
