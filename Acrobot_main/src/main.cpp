@@ -53,6 +53,7 @@ The project should be built in platformio
 #include "Leg.h"
 #include "StatusChecker.h"
 #include "menu.h"
+#include "ChoreoPlayer.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -84,8 +85,8 @@ CANHandler canHandler;
 Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
-Leg legL(motorLegL, hallSensor, LEG_L_ID, 39.45, true); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.79, false); 
+Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false); 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -94,6 +95,7 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
+ChoreoPlayer choreoPlayer(legL, legR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 
@@ -266,6 +268,7 @@ void updates()
   legR.update();
   menu.update();
   statusChecker.update();
+  choreoPlayer.update();
 }
 
 void updatesI2C()
@@ -312,13 +315,22 @@ void taskMain(void *parameter)
 
       legR.stop();
       legL.stop();
+      choreoPlayer.stopChoreo();
     }
 
     if (joystick.getButtonSquarePressed())
     {
 
-      legR.setTarget(0, 0, 0);
-      legL.setTarget(0, 0, 0);
+      choreoPlayer.startChoreo(STANDING);
+    }
+
+    if (joystick.getButtonTrianglePressed())
+    {
+      choreoPlayer.startChoreo(WALK_CONT);
+    }
+    if (joystick.getButtonCirclePressed())
+    {
+      choreoPlayer.startChoreo(WALK_CONT_FORCE);
     }
 
     // debug messages
