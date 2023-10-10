@@ -73,11 +73,9 @@ The project should be built in platformio
 
 // external libraries
 TwoWire wire(0);
-RemoteDebug Debug; // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
+RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
-
-
 
 // custom libraries
 Joystick joystick;
@@ -86,7 +84,7 @@ Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false); 
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -95,7 +93,7 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
-ChoreoPlayer choreoPlayer(legL, legR);
+ChoreoPlayer choreoPlayer(Debug, legL, legR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 
@@ -114,8 +112,6 @@ extern MenuItem *adsPage[];
 extern MenuItem *aboutPage[];
 extern MenuItem *bootPage[];
 extern MenuItem *PIPage[];
-
-
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
@@ -146,18 +142,23 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorTargA));
 
 SUB_MENU(PIPage, mainMenu,
-         ITEM_COMMAND(menu.PUpText, []() {menu.PUp();}),
-         ITEM_COMMAND("P DOWN step: (1)", []() {menu.PDown();}),
-         ITEM_COMMAND(menu.DUpText, []() {menu.DUp();}),
-         ITEM_COMMAND("D DOWN step: (0.2)", []() {menu.DDown();}));
-
+         ITEM_COMMAND(menu.PUpText, []()
+                      { menu.PUp(); }),
+         ITEM_COMMAND("P DOWN step: (1)", []()
+                      { menu.PDown(); }),
+         ITEM_COMMAND(menu.DUpText, []()
+                      { menu.DUp(); }),
+         ITEM_COMMAND("D DOWN step: (0.2)", []()
+                      { menu.DDown(); }));
 
 SUB_MENU(hardwarePage, mainMenu,
-         ITEM_COMMAND("Set eStop", []() { eStop.set(); }),
-         ITEM_TOGGLE("LCD backlight", "off", "on", [](uint16_t isOff) { menu.callbackBacklight(isOff); }), // enable again on button press
-         ITEM_COMMAND("Buzzer beep",  []() { menu.callbackBeep(); }), // lambda because non static
+         ITEM_COMMAND("Set eStop", []()
+                      { eStop.set(); }),
+         ITEM_TOGGLE("LCD backlight", "off", "on", [](uint16_t isOff)
+                     { menu.callbackBacklight(isOff); }), // enable again on button press
+         ITEM_COMMAND("Buzzer beep", []()
+                      { menu.callbackBeep(); }), // lambda because non static
          ITEM_SUBMENU("Show ADS", adsPage));
-
 
 SUB_MENU(adsPage, hardwarePage,
          ITEM_BASIC(" - ADS values - "),
@@ -250,8 +251,6 @@ void wifiConnection()
   wifiConnected = WiFi.status() == WL_CONNECTED;
 }
 
-
-
 void updates()
 {
   joystick.update(); // Update joystick and button states
@@ -277,8 +276,6 @@ void updatesI2C()
   hallSensor.update();
 }
 
-
-
 void taskMain(void *parameter)
 {
   for (;;)
@@ -287,10 +284,10 @@ void taskMain(void *parameter)
     updates();
     wifiConnection(); // restore wifi variables
 
-
     // control legs, temp system
     if (joystick.getButtonR1())
     {
+      choreoPlayer.stop();
       if (joystick.getMiscPSPressed())
       {
         legR.startCalibration();
@@ -301,13 +298,14 @@ void taskMain(void *parameter)
 
     if (joystick.getButtonL1())
     {
+      choreoPlayer.stop();
       if (joystick.getMiscPSPressed())
       {
         legL.startCalibration();
       }
 
       float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
-      legL.setTarget(legPos,menu.getP(), menu.getD());
+      legL.setTarget(legPos, menu.getP(), menu.getD());
     }
 
     if (joystick.getButtonCrossPressed())
@@ -315,22 +313,22 @@ void taskMain(void *parameter)
 
       legR.stop();
       legL.stop();
-      choreoPlayer.stopChoreo();
+      choreoPlayer.stop();
     }
 
     if (joystick.getButtonSquarePressed())
     {
 
-      choreoPlayer.startChoreo(STANDING);
+      choreoPlayer.start(STANDING);
     }
 
     if (joystick.getButtonTrianglePressed())
     {
-      choreoPlayer.startChoreo(WALK_CONT);
+      choreoPlayer.start(WALK_CONT);
     }
     if (joystick.getButtonCirclePressed())
     {
-      choreoPlayer.startChoreo(WALK_CONT_FORCE);
+      choreoPlayer.start(SLOW_CHOREO);
     }
 
     // debug messages
@@ -338,7 +336,6 @@ void taskMain(void *parameter)
     if (runEvery(1000, executionTimer1))
     {
       debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
-
     }
 
     Debug.handle(); // needs to be in bottom of loop
@@ -369,5 +366,3 @@ void loop()
 {
   vTaskDelete(NULL);
 }
-
-
