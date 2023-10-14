@@ -324,11 +324,11 @@ void taskMain(void *parameter)
 
     if (joystick.getButtonTrianglePressed())
     {
-      choreoPlayer.start(WALK_CONT);
+      choreoPlayer.start(MUSIC_SEQUENCE_4);
     }
     if (joystick.getButtonCirclePressed())
     {
-      choreoPlayer.start(SLOW_CHOREO);
+      choreoPlayer.start(ACT_MILA);
     }
 
     // debug messages

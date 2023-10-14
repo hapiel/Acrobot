@@ -43,8 +43,8 @@ private:
   float kDMinimumStart = 5; // after starting this value is ramped down to kpMinimum
   int startRampDuration = 2000; // duration in ms to ramp kp and kd
   uint32_t startTime = 0; // moment the motor starts. Used to ramp
-  float posMin = 90;
-  float posMax = 270;
+  float posMin = 27;
+  float posMax = 330;
   float offset180;
   float target;
   bool inverted;

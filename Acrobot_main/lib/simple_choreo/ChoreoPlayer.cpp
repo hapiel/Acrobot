@@ -53,6 +53,42 @@ void ChoreoPlayer::start(ChoreoName choreoName)
   case SLOW_CHOREO:
     launchChoreo(slowChoreo);
     break;
+  case ACT_MILA:
+    launchChoreo(actMila);
+    break;
+  case TEXT_SEQUENCE_0:
+    launchChoreo(textSequence0);
+    break;
+  case TEXT_SEQUENCE_1:
+    launchChoreo(textSequence1);
+    break;
+  case MUSIC_SEQUENCE_0:
+    launchChoreo(musicSequence0);
+    break;
+  case MUSIC_SEQUENCE_1:
+    launchChoreo(musicSequence1);
+    break;
+  case MUSIC_SEQUENCE_2:
+    launchChoreo(musicSequence2);
+    break;
+  case MUSIC_SEQUENCE_3:
+    launchChoreo(musicSequence3);
+    break;
+  case MUSIC_SEQUENCE_4:
+    launchChoreo(musicSequence4);
+    break;
+  case MUSIC_SEQUENCE_5:
+    launchChoreo(musicSequence5);
+    break;
+  case MUSIC_SEQUENCE_6:
+    launchChoreo(musicSequence6);
+    break;
+  case MUSIC_SEQUENCE_7:
+    launchChoreo(musicSequence7);
+    break;
+  case MUSIC_SEQUENCE_8:
+    launchChoreo(musicSequence8);
+    break;
   default:
     break;
   }
@@ -103,25 +139,25 @@ void ChoreoPlayer::pStandDirect()
   pBowDirect(balanceAngle);
 }
 
-void ChoreoPlayer::pStepRightDirect(int8_t degrees)
+void ChoreoPlayer::pStepRightDirect(int16_t degrees)
 {
   legL.setTarget(balanceAngle + degrees, pL, pR);
   legR.setTarget(balanceAngle - degrees, pL, pR);
 }
 
-void ChoreoPlayer::pStepLeftDirect(int8_t degrees)
+void ChoreoPlayer::pStepLeftDirect(int16_t degrees)
 {
   legL.setTarget(balanceAngle - degrees, pL, pR);
   legR.setTarget(balanceAngle + degrees, pL, pR);
 }
 
-void ChoreoPlayer::pKickRightDirect(int8_t degrees)
+void ChoreoPlayer::pKickRightDirect(int16_t degrees)
 {
   legL.setTarget(balanceAngle, pL, pR);
   legR.setTarget(balanceAngle - degrees, pL, pR);
 }
 
-void ChoreoPlayer::pKickLeftDirect(int8_t degrees)
+void ChoreoPlayer::pKickLeftDirect(int16_t degrees)
 {
   legL.setTarget(balanceAngle - degrees, pL, pR);
   legR.setTarget(balanceAngle, pL, pR);
@@ -141,28 +177,28 @@ void ChoreoPlayer::pBow(int16_t upperBodyDegrees, int16_t duration)
   pLRDirect(posL, posR);
 }
 
-void ChoreoPlayer::pStepRight(int8_t degreesFromCenter, int16_t duration)
+void ChoreoPlayer::pStepRight(int16_t degreesFromCenter, int16_t duration)
 {
   float posL = moveLinear(posLStepStart, balanceAngle + degreesFromCenter, duration);
   float posR = moveLinear(posRStepStart, balanceAngle - degreesFromCenter, duration);
   pLRDirect(posL, posR);
 }
 
-void ChoreoPlayer::pStepLeft(int8_t degreesFromCenter, int16_t duration)
+void ChoreoPlayer::pStepLeft(int16_t degreesFromCenter, int16_t duration)
 {
   float posL = moveLinear(posLStepStart, balanceAngle - degreesFromCenter, duration);
   float posR = moveLinear(posRStepStart, balanceAngle + degreesFromCenter, duration);
   pLRDirect(posL, posR);
 }
 
-void ChoreoPlayer::pKickRight(int8_t degrees, int16_t duration)
+void ChoreoPlayer::pKickRight(int16_t degrees, int16_t duration)
 {
   float posL = moveLinear(posLStepStart, balanceAngle, duration);
   float posR = moveLinear(posRStepStart, degrees, duration);
   pLRDirect(posL, posR);
 }
 
-void ChoreoPlayer::pKickLeft(int8_t degrees, int16_t duration)
+void ChoreoPlayer::pKickLeft(int16_t degrees, int16_t duration)
 {
   float posL = moveLinear(posLStepStart, degrees, duration);
   float posR = moveLinear(posRStepStart, balanceAngle, duration);

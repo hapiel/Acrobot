@@ -26,15 +26,18 @@ public:
 
 
 private:
-
-  void legsAbsolute();
-  void legsRelative();
-
-
   RemoteDebug& Debug;
   Joystick &joystick;
   Leg &legL;
   Leg &legR;
+
+  int legRTarget = 180;
+  int legLTarget = 180;
+
+  float speed = 10.0;
+
+  void legsAbsolute();
+  void legsRelative();
 
 };
 
