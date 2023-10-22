@@ -1,6 +1,5 @@
 #include "Menu.h"
 
-
 Menu::Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug) : lcdMenu(lcdMenu), lcd(lcd), joystick(joystick), buttonUp(buttonUp), buttonDown(buttonDown), buttonLeft(buttonLeft), buttonRight(buttonRight), legL(legL), legR(legR), buzzer(buzzer), hallSensor(hallSensor), WiFi(WiFi), eStop(eStop), batterySensor(batterySensor), Debug(Debug)
 {
 }
@@ -11,12 +10,15 @@ void Menu::callbackBeep()
   debugD("Beep");
 }
 
-void Menu::callbackBacklight(uint16_t  isOff)
+void Menu::callbackBacklight(uint16_t isOff)
 {
   // receives inverse value on isOn
-  if (!isOff){
+  if (!isOff)
+  {
     lcd.backlight();
-  } else {
+  }
+  else
+  {
     lcd.noBacklight();
   }
 
@@ -30,28 +32,51 @@ void Menu::init(MenuItem **mainMenu)
   lcdMenu.setupLcdWithMenu(0x27, mainMenu);
 }
 
-
 void Menu::update()
 {
   // update all buttons
-  if (buttonUp.isPressed() || joystick.getDpadUpPressed())
+  if (buttonUp.isPressed() )
   {
     upPressed = true;
   }
-  if (buttonDown.isPressed() || joystick.getDpadDownPressed())
+  if (buttonDown.isPressed())
   {
     downPressed = true;
   }
-  if (buttonLeft.isPressed() || joystick.getDpadLeftPressed())
+  if (buttonLeft.isPressed())
   {
+    leftPressed = true;
     backPressed = true;
   }
-  if (buttonRight.isPressed() || joystick.getDpadRightPressed())
+  if (buttonRight.isPressed())
   {
     rightPressed = true;
     enterPressed = true;
   }
 }
+
+void Menu::pressUp()
+{
+  upPressed = true;
+}
+
+void Menu::pressDown()
+{
+  downPressed = true;
+}
+
+void Menu::pressLeft()
+{
+  leftPressed = true;
+  backPressed = true;
+}
+
+void Menu::pressRight()
+{
+  rightPressed = true;
+  enterPressed = true;
+}
+
 
 void Menu::applyInput()
 {
@@ -130,21 +155,24 @@ void Menu::updateI2C()
 {
   applyInput();
 
-    static long executionTimer = 0;
-    if (runEvery(200, executionTimer))
-    {
-      updateText();
-      lcdBatteryValue();
-      lcdMenu.drawMenuNoClear();
-    }
+  static long executionTimer = 0;
+  if (runEvery(200, executionTimer))
+  {
+    updateText();
+    lcdBatteryValue();
+    lcdMenu.drawMenuNoClear();
+  }
 }
 
-void Menu::updateText(){
-    sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
+void Menu::updateText()
+{
+  sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
-  sprintf(bootState, "S: %3s %3s xxx xxx", 
-    legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL" : "ON",
-    legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL" : "ON");
+  sprintf(bootState, "S: %3s %3s xxx xxx",
+          legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON",
+          legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON");
 
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
 
@@ -166,26 +194,24 @@ void Menu::updateText(){
   sprintf(DUpText, "D UP, val: %.1f", D);
 }
 
-
-void Menu::PUp(){
-  P += 1;
+void Menu::PAdjust(float val)
+{
+  P += val;
 }
 
-void Menu::PDown(){
-  P -= 1;
-}
-void Menu::DUp(){
-  D += 0.2; 
+void Menu::DAdjust(float val)
+{
+  D += val;
 }
 
-void Menu::DDown(){
-  D -= 0.2; 
-}
 
-float Menu::getP(){
+
+float Menu::getP()
+{
   return P;
 }
 
-float Menu::getD(){
+float Menu::getD()
+{
   return D;
 }

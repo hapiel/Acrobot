@@ -18,7 +18,6 @@
 #include "BatterySensor.h"
 #include "utils.h"
 
-
 class Menu
 {
 public:
@@ -28,14 +27,17 @@ public:
 
   void callbackBeep();
   void callbackBacklight(uint16_t isOff);
-  void PUp();
-  void PDown();
-  void DUp();
-  void DDown();
+  void PAdjust(float val);
+  void DAdjust(float val);
+
+  void pressUp();
+  void pressDown();
+  void pressLeft();
+  void pressRight();
 
   float getP(); // for testing different P/D values that are settable
   float getD();
-  
+
   void update();
   void updateI2C();
 
@@ -79,7 +81,6 @@ private:
   float P = 6;
   float D = 1;
 
-
   bool upPressed = false;
   bool downPressed = false;
   bool leftPressed = false;
@@ -94,7 +95,6 @@ private:
   void updateText();
   void lcdBatteryValue();
   void lcdBatteryAll();
-
 };
 
 #endif

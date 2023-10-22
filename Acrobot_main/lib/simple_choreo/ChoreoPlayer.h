@@ -150,7 +150,7 @@ private:
   };
 
   ChoreographyStep standingChoreo[2] = {
-    {0, [this](){ moveStand(); }},
+    {0, [this](){ setPD(12, 2); pStand(1000); }},
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
 

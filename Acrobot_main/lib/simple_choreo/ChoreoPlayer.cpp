@@ -21,7 +21,7 @@ void ChoreoPlayer::update()
       debugD("posL: %f, posR: %f", posLStepStart, posRStepStart);
     }
   }
-  currentChoreo[choreoStepCounter - 1].move();
+  currentChoreo[max(0, choreoStepCounter - 1)].move(); // catch weird exception with max();
 }
 
 void ChoreoPlayer::start(ChoreoName choreoName)
@@ -223,11 +223,11 @@ void ChoreoPlayer::pLR(int16_t degreesL, int16_t degreesR, int16_t duration)
 
 void ChoreoPlayer::moveStand()
 {
-  pL = 15;
-  pR = 15;
-  dL = 5;
-  dR = 5;
-  pStandDirect();
+  pL = 12;
+  pR = 12;
+  dL = 3;
+  dR = 3;
+  pStand(1000);
 }
 
 void ChoreoPlayer::moveWalk()

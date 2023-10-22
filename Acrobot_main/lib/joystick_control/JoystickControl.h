@@ -17,8 +17,6 @@ enum JoystickControlMode
   MODE_LEGS_RELATIVE
 };
 
-// TODO:
-// Update runs the relevant sub-function selected in the joystick control mode. The absolute method has a limited speed. The moment control is taken over by the joystick, the current position is registered and from there on it's only allowed to be changed by a certain amount per update delta time.
 
 class JoystickControl
 {
@@ -44,11 +42,15 @@ private:
   float legLTarget = 180;
 
   float speedAbsoluteMode = .4;
+  float speedRelativeMode = .2;
 
   // these are partial modes, that can be overlayed? How to call this
   void submodeCalibrate();
   void submodeStop();
+  void submodeStand();
   void submodeMenu();
+
+  void defaultSubmodes();
 
   void modeLegsAbsolute(int limitLow, int limitHigh, float speed);
   void modeLegsRelative();

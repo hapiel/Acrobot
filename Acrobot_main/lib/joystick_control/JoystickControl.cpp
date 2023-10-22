@@ -8,8 +8,7 @@ void JoystickControl::update()
 
   deltaT = millis() - prevUpdateTime;
 
-  submodeCalibrate();
-  submodeStop();
+  defaultSubmodes();
 
   switch (controlMode)
   {
@@ -65,8 +64,52 @@ void JoystickControl::submodeStop()
   {
     legR.stop();
     legL.stop();
+    legLTarget = 180;
+    legRTarget = 180;
     choreoPlayer.stop();
   }
+}
+
+void JoystickControl::submodeStand()
+{
+  if (joystick.getButtonSquarePressed())
+  {
+    choreoPlayer.start(CHOREO_STANDING);
+    legLTarget = 180;
+    legRTarget = 180;
+  }
+}
+
+void JoystickControl::submodeMenu()
+{
+
+  if (joystick.getDpadUpPressed())
+  {
+    menu.pressUp();
+  }
+
+  if (joystick.getDpadDownPressed())
+  {
+    menu.pressDown();
+  }
+
+  if (joystick.getDpadLeftPressed())
+  {
+    menu.pressLeft();
+  }
+
+  if (joystick.getDpadRightPressed())
+  {
+    menu.pressRight();
+  }
+}
+
+void JoystickControl::defaultSubmodes()
+{
+  submodeCalibrate();
+  submodeStop();
+  submodeStand();
+  submodeMenu();
 }
 
 void JoystickControl::modeLegsAbsolute(int limitLow, int limitHigh, float speed)
@@ -127,8 +170,27 @@ void JoystickControl::modeLegsAbsolute(int limitLow, int limitHigh, float speed)
 
 void JoystickControl::modeLegsRelative()
 {
-  // Implement the relative legs control logic here.
-  // You can use the joystick input to calculate the relative movement of the legs.
-  // Use legRTarget and legLTarget to set the target positions.
-  // Ensure that the movement does not exceed a certain speed (use the 'speed' variable).
+  if (joystick.getButtonL1()) // could be replaced with joystick being in center?
+  {
+    choreoPlayer.stop();
+    float legLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, -1, 1);
+
+    float displacementL = legLPosJoystick * speedRelativeMode * deltaT;
+
+    legLTarget += displacementL;
+    legLTarget = constrain(legLTarget, 40, 320);
+    legL.setTarget(legLTarget, menu.getP(), menu.getD());
+  }
+
+  if (joystick.getButtonR1())
+  {
+    choreoPlayer.stop();
+    float legRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, -1, 1);
+
+    float displacementR = legRPosJoystick * speedRelativeMode * deltaT;
+
+    legRTarget += displacementR;
+    legRTarget = constrain(legRTarget, 40, 320);
+    legR.setTarget(legRTarget, menu.getP(), menu.getD());
+  }
 }

@@ -156,17 +156,16 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_LEGS_ABSOLUTE_40_LIMITED); }),
          ITEM_COMMAND("Legs relative", []()
                       { joystickControl.setMode(MODE_LEGS_RELATIVE); }));
-                      
 
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()
-                      { menu.PUp(); }),
-         ITEM_COMMAND("P DOWN step: (1)", []()
-                      { menu.PDown(); }),
+                      { menu.PAdjust(2); }),
+         ITEM_COMMAND("P DOWN step: (2)", []()
+                      { menu.PAdjust(-2); }),
          ITEM_COMMAND(menu.DUpText, []()
-                      { menu.DUp(); }),
-         ITEM_COMMAND("D DOWN step: (0.2)", []()
-                      { menu.DDown(); }));
+                      { menu.DAdjust(0.5); }),
+         ITEM_COMMAND("D DOWN step: (0.5)", []()
+                      { menu.DAdjust(-0.5); }));
 
 SUB_MENU(sequencePage, mainMenu,
          ITEM_COMMAND("Stand", []()
@@ -176,7 +175,7 @@ SUB_MENU(sequencePage, mainMenu,
          ITEM_COMMAND("Mila start", []()
                       { choreoPlayer.start(ACT_MILA); }),
          ITEM_COMMAND("Mila_music 0", []()
-                      { choreoPlayer.start(MUSIC_SEQUENCE_1); }));
+                      { choreoPlayer.start(MUSIC_SEQUENCE_0); }));
 
 SUB_MENU(hardwarePage, mainMenu,
          ITEM_COMMAND("Set eStop", []()
