@@ -6,7 +6,7 @@ ChoreoPlayer::ChoreoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR) : Debug(Deb
 
 void ChoreoPlayer::update()
 {
-  if (currentChoreoName == NONE)
+  if (currentChoreoName == CHOREO_NONE)
   {
     return;
   }
@@ -30,15 +30,15 @@ void ChoreoPlayer::start(ChoreoName choreoName)
 
   switch (choreoName)
   {
-  case NONE:
+  case CHOREO_NONE:
     break;
-  case STANDING:
+  case CHOREO_STANDING:
     launchChoreo(standingChoreo);
     break;
-  case THREE_STEP:
+  case CHOREO_THREE_STEP:
     launchChoreo(threeStepChoreo);
     break;
-  case WALK_CONT:
+  case CHOREO_WALK_CONT:
     launchChoreo(walkContChoreo);
     break;
   case WALK_CONT_FORCE:
@@ -103,7 +103,7 @@ void ChoreoPlayer::launchChoreo(ChoreographyStep choreo[])
 
 void ChoreoPlayer::stop()
 {
-  currentChoreoName = NONE;
+  currentChoreoName = CHOREO_NONE;
 }
 
 bool ChoreoPlayer::choreoTimePassed(uint32_t time)
@@ -210,7 +210,6 @@ void ChoreoPlayer::pStand(int16_t duration)
   float posL = moveLinear(posLStepStart, balanceAngle, duration);
   float posR = moveLinear(posRStepStart, balanceAngle, duration);
   pLRDirect(posL, posR);
-
 }
 
 void ChoreoPlayer::pLR(int16_t degreesL, int16_t degreesR, int16_t duration)

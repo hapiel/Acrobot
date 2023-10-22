@@ -15,10 +15,10 @@ to add new choreography:
 
 enum ChoreoName
 {
-  NONE,
-  STANDING,
-  THREE_STEP,
-  WALK_CONT,
+  CHOREO_NONE,
+  CHOREO_STANDING,
+  CHOREO_THREE_STEP,
+  CHOREO_WALK_CONT,
   WALK_CONT_FORCE,
   SPLIT_TWICE,
   TEST_CHOREO,
@@ -64,7 +64,7 @@ private:
 
   ChoreographyStep *currentChoreo;
 
-  ChoreoName currentChoreoName = NONE;
+  ChoreoName currentChoreoName = CHOREO_NONE;
 
   void launchChoreo(ChoreographyStep choreo[]);
   bool choreoTimePassed(uint32_t time);

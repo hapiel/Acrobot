@@ -30,6 +30,7 @@ void Menu::init(MenuItem **mainMenu)
   lcdMenu.setupLcdWithMenu(0x27, mainMenu);
 }
 
+
 void Menu::update()
 {
   // update all buttons

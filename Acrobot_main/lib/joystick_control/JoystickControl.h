@@ -5,40 +5,53 @@
 #include "RemoteDebug.h"
 #include "Joystick.h"
 #include "Leg.h"
+#include "ChoreoPlayer.h"
+#include "menu.h"
 
 enum JoystickControlMode
 {
-  NONE,
-  LEGS_ABSOLUTE,
-  LEGS_RELATIVE
+  MODE_NONE,
+  MODE_LEGS_ABSOLUTE_90_LIMITED,
+  MODE_LEGS_ABSOLUTE_90_UNLIMITED,
+  MODE_LEGS_ABSOLUTE_40_LIMITED,
+  MODE_LEGS_RELATIVE
 };
 
 // TODO:
-// Update runs the relevant sub-function selected in the joystick control mode. The absolute method has a limited speed. The moment control is taken over by the joystick, the current position is registered and from there on it's only allowed to be changed by a certain amount per update delta time. 
-
+// Update runs the relevant sub-function selected in the joystick control mode. The absolute method has a limited speed. The moment control is taken over by the joystick, the current position is registered and from there on it's only allowed to be changed by a certain amount per update delta time.
 
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug& Debug, Joystick &joystick, Leg &legL, Leg &legR);
-  void init();
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, ChoreoPlayer &choreoPlayer, Menu &menu);
   void update();
 
+  void setMode(JoystickControlMode mode);
 
 private:
-  RemoteDebug& Debug;
+  RemoteDebug &Debug;
   Joystick &joystick;
   Leg &legL;
   Leg &legR;
+  ChoreoPlayer &choreoPlayer;
+  JoystickControlMode controlMode = MODE_LEGS_ABSOLUTE_90_LIMITED;
+  Menu &menu;
 
-  int legRTarget = 180;
-  int legLTarget = 180;
+  long prevUpdateTime = 0;
+  int deltaT = 0;
 
-  float speed = 10.0;
+  float legRTarget = 180;
+  float legLTarget = 180;
 
-  void legsAbsolute();
-  void legsRelative();
+  float speedAbsoluteMode = .4;
 
+  // these are partial modes, that can be overlayed? How to call this
+  void submodeCalibrate();
+  void submodeStop();
+  void submodeMenu();
+
+  void modeLegsAbsolute(int limitLow, int limitHigh, float speed);
+  void modeLegsRelative();
 };
 
 #endif // JOYSTICK_CONTROL_H

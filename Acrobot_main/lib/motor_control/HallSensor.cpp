@@ -29,9 +29,14 @@ bool HallSensor::getReadyFromID(int motorID)
 // TODO: Needs mutex
 void HallSensor::update()
 {
+  // save to a local variable
   for (int i = 0; i < 4; i++)
   {
     sensorValueOfId[i] = ADS->readADC(motorIDToSensorTable[i]);
     // TODO: Slow function, could be rewritten to ADS continuous mode?
   }
+
+  // store local variable in sensorValueOfId in mutex
+  
+
 }

@@ -54,6 +54,7 @@ The project should be built in platformio
 #include "StatusChecker.h"
 #include "menu.h"
 #include "ChoreoPlayer.h"
+#include "JoystickControl.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -96,6 +97,7 @@ DebugLed debugLed;
 ChoreoPlayer choreoPlayer(Debug, legL, legR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
+JoystickControl joystickControl(Debug, joystick, legL, legR, choreoPlayer, menu);
 
 // wifi
 bool wifiConnected = false;
@@ -105,19 +107,23 @@ bool wifiConnected = false;
 
 // This section needs to be in the same file that inits the lcdMenu.
 
+extern MenuItem *bootPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
-extern MenuItem *hardwarePage[];
-extern MenuItem *adsPage[];
-extern MenuItem *aboutPage[];
-extern MenuItem *bootPage[];
+extern MenuItem *joystickPage[];
 extern MenuItem *PIPage[];
+extern MenuItem *sequencePage[];
+extern MenuItem *hardwarePage[];
+extern MenuItem *adsPage[]; // in hardwarpage
+extern MenuItem *aboutPage[];
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
+    ITEM_SUBMENU("Joystick", joystickPage),
     ITEM_SUBMENU("Change PI value", PIPage),
+    ITEM_SUBMENU("Sequences", sequencePage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
@@ -141,6 +147,17 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorPosA),
          ITEM_BASIC(menu.motorTargA));
 
+SUB_MENU(joystickPage, mainMenu,
+         ITEM_COMMAND("Legs 90 limited", []()
+                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_90_LIMITED); }),
+         ITEM_COMMAND("Legs 90 unlimited", []()
+                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_90_UNLIMITED); }),
+         ITEM_COMMAND("Legs 40 limited", []()
+                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_40_LIMITED); }),
+         ITEM_COMMAND("Legs relative", []()
+                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }));
+                      
+
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()
                       { menu.PUp(); }),
@@ -150,6 +167,16 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.DUp(); }),
          ITEM_COMMAND("D DOWN step: (0.2)", []()
                       { menu.DDown(); }));
+
+SUB_MENU(sequencePage, mainMenu,
+         ITEM_COMMAND("Stand", []()
+                      { choreoPlayer.start(CHOREO_STANDING); }),
+         ITEM_COMMAND("walk cont", []()
+                      { choreoPlayer.start(CHOREO_WALK_CONT); }),
+         ITEM_COMMAND("Mila start", []()
+                      { choreoPlayer.start(ACT_MILA); }),
+         ITEM_COMMAND("Mila_music 0", []()
+                      { choreoPlayer.start(MUSIC_SEQUENCE_1); }));
 
 SUB_MENU(hardwarePage, mainMenu,
          ITEM_COMMAND("Set eStop", []()
@@ -263,6 +290,7 @@ void updates()
   buttonRight.update();
   batterySensor.update();
   debugLed.update();
+  joystickControl.update();
   legL.update();
   legR.update();
   menu.update();
@@ -285,51 +313,51 @@ void taskMain(void *parameter)
     wifiConnection(); // restore wifi variables
 
     // control legs, temp system
-    if (joystick.getButtonR1())
-    {
-      choreoPlayer.stop();
-      if (joystick.getMiscPSPressed())
-      {
-        legR.startCalibration();
-      }
-      float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-      legR.setTarget(position, menu.getP(), menu.getD());
-    }
+    // if (joystick.getButtonR1())
+    // {
+    //   choreoPlayer.stop();
+    //   if (joystick.getMiscPSPressed())
+    //   {
+    //     legR.startCalibration();
+    //   }
+    //   float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
+    //   legR.setTarget(position, menu.getP(), menu.getD());
+    // }
 
-    if (joystick.getButtonL1())
-    {
-      choreoPlayer.stop();
-      if (joystick.getMiscPSPressed())
-      {
-        legL.startCalibration();
-      }
+    // if (joystick.getButtonL1())
+    // {
+    //   choreoPlayer.stop();
+    //   if (joystick.getMiscPSPressed())
+    //   {
+    //     legL.startCalibration();
+    //   }
 
-      float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
-      legL.setTarget(legPos, menu.getP(), menu.getD());
-    }
+    //   float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
+    //   legL.setTarget(legPos, menu.getP(), menu.getD());
+    // }
 
-    if (joystick.getButtonCrossPressed())
-    {
+    // if (joystick.getButtonCrossPressed())
+    // {
 
-      legR.stop();
-      legL.stop();
-      choreoPlayer.stop();
-    }
+    //   legR.stop();
+    //   legL.stop();
+    //   choreoPlayer.stop();
+    // }
 
-    if (joystick.getButtonSquarePressed())
-    {
+    // if (joystick.getButtonSquarePressed())
+    // {
 
-      choreoPlayer.start(STANDING);
-    }
+    //   choreoPlayer.start(CHOREO_STANDING);
+    // }
 
-    if (joystick.getButtonTrianglePressed())
-    {
-      choreoPlayer.start(MUSIC_SEQUENCE_4);
-    }
-    if (joystick.getButtonCirclePressed())
-    {
-      choreoPlayer.start(ACT_MILA);
-    }
+    // if (joystick.getButtonTrianglePressed())
+    // {
+    //   choreoPlayer.start(MUSIC_SEQUENCE_4);
+    // }
+    // if (joystick.getButtonCirclePressed())
+    // {
+    //   choreoPlayer.start(ACT_MILA);
+    // }
 
     // debug messages
     static long executionTimer1 = 0;
