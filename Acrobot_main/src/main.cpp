@@ -155,7 +155,12 @@ SUB_MENU(joystickPage, mainMenu,
          ITEM_COMMAND("Legs 40 limited", []()
                       { joystickControl.setMode(MODE_LEGS_ABSOLUTE_40_LIMITED); }),
          ITEM_COMMAND("Legs relative", []()
-                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }));
+                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
+         ITEM_COMMAND("Summative", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE); }),
+         ITEM_COMMAND("Pose", []()
+                      { joystickControl.setMode(MODE_POSE); })
+                      );
 
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()

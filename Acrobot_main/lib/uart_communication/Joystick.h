@@ -11,21 +11,21 @@ public:
   // Getter functions
   bool getConnected();
   int getIdx();
-  int getAxisLX();
-  int getAxisLY();
-  int getAxisRX();
-  int getAxisRY();
-  int getL2();
-  int getR2();
+  int getAxisLX(); // -508 - 512
+  int getAxisLY(); // -508 - 512
+  int getAxisRX(); // -508 - 512
+  int getAxisRY(); // -508 - 512
+  int getL2();     // 0 - 1020
+  int getR2();     // 0 - 1020
   int getMisc();
   unsigned int getDpad();    // probably using getDpadUp etc. is preferred
   unsigned int getButtons(); // probably using getButtonCoss etc. is preferred
-  long getGyroX();
-  long getGyroY();
-  long getGyroZ();
-  long getAccelX();
-  long getAccelY();
-  long getAccelZ();
+  long getGyroX();           // at least 6 digits, signed
+  long getGyroY();           // at least 6 digits, signed
+  long getGyroZ();           // at least 6 digits, signed
+  long getAccelX();          // at least 5 digits, signed
+  long getAccelY();          // at least 5 digits, signed
+  long getAccelZ();          // at least 5 digits, signed
 
   bool getDpadUp();
   bool getDpadDown();
@@ -44,7 +44,7 @@ public:
 
   bool getMiscPS();
   bool getMiscCreate();
-  bool getMiscOptions();
+  bool getMiscOption();
 
   bool getDpadUpPressed();
   bool getDpadDownPressed();
@@ -61,14 +61,14 @@ public:
   bool getButtonL3Pressed();
   bool getButtonR3Pressed();
 
-  int getAxisLXCorrected();
-  int getAxisLYCorrected();
-  int getAxisRXCorrected();
-  int getAxisRYCorrected();
+  int getAxisLXCorrected(); // -127 - 128
+  int getAxisLYCorrected(); // -127 - 128
+  int getAxisRXCorrected(); // -127 - 128
+  int getAxisRYCorrected(); // -127 - 128
 
   bool getMiscPSPressed();
   bool getMiscCreatePressed();
-  bool getMiscOptionsPressed();
+  bool getMiscOptionPressed();
 
   int getBatteryPercentage();
 

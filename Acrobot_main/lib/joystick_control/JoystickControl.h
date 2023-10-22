@@ -14,7 +14,9 @@ enum JoystickControlMode
   MODE_LEGS_ABSOLUTE_90_LIMITED,
   MODE_LEGS_ABSOLUTE_90_UNLIMITED,
   MODE_LEGS_ABSOLUTE_40_LIMITED,
-  MODE_LEGS_RELATIVE
+  MODE_LEGS_RELATIVE,
+  MODE_SUMMATIVE,
+  MODE_POSE
 };
 
 
@@ -43,17 +45,24 @@ private:
 
   float speedAbsoluteMode = .4;
   float speedRelativeMode = .2;
+  float speedSummativeMode = .3;
+  float speedTriggerMax = .2;
 
   // these are partial modes, that can be overlayed? How to call this
   void submodeCalibrate();
   void submodeStop();
   void submodeStand();
   void submodeMenu();
+  void submodeMenuOption();
 
   void defaultSubmodes();
 
   void modeLegsAbsolute(int limitLow, int limitHigh, float speed);
   void modeLegsRelative();
+  void modeSummative();
+  void modePose();
+
+  float adjustByDisplacement(float currentVal, float target, float displacement);
 };
 
 #endif // JOYSTICK_CONTROL_H

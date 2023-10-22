@@ -161,7 +161,7 @@ bool Joystick::getMiscCreate()
   return misc & 0x0002;
 }
 
-bool Joystick::getMiscOptions()
+bool Joystick::getMiscOption()
 {
   return misc & 0x0004;
 }
@@ -235,7 +235,7 @@ bool Joystick::getMiscCreatePressed()
   return pressedMisc & 0x0002;
 }
 
-bool Joystick::getMiscOptionsPressed()
+bool Joystick::getMiscOptionPressed()
 {
   return pressedMisc & 0x0004;
 }
