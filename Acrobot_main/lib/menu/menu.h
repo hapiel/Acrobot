@@ -12,6 +12,7 @@
 #include "Button.h"
 #include "Buzzer.h"
 #include "Leg.h"
+#include "Arm.h"
 #include "Hallsensor.h"
 #include "WiFi.h"
 #include "EStop.h"
@@ -21,7 +22,7 @@
 class Menu
 {
 public:
-  Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug);
+  Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR,Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug);
   void init(MenuItem **mainMenu);
   void lcdMessage(const String &message);
 
@@ -71,6 +72,8 @@ private:
   Button &buttonRight;
   Leg &legL;
   Leg &legR;
+  Arm &armL;
+  Arm &armR;
   Buzzer &buzzer;
   HallSensor &hallSensor;
   WiFiClass &WiFi;

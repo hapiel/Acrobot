@@ -15,7 +15,7 @@ public:
   void update();
 
   int16_t getValFromID(int motorID);
-  bool getReadyFromID(int motorID);
+  bool getReadyFromID(int motorID, int16_t calibrationTreshold);
 
 
 private:
@@ -23,9 +23,9 @@ private:
   TwoWire &wire;
   ADS1115 *ADS;
   uint8_t address = 0x48;
-  int motorIDToSensorTable[4]; // ID-1, so motor ID 1 is stored in array[0]. Values are set in constructor
-  int16_t sensorValueOfId[4] ;
-  int16_t calibrationTreshold = 9400; // 7500 for sleevless (arms), 7900 for sleevles legs, 9400 for sleeved legs
+  static const uint8_t SENSOR_COUNT = 4;
+  int motorIDToSensorTable[SENSOR_COUNT]; // ID-1, so motor ID 1 is stored in array[0]. Values are set in constructor
+  int16_t sensorValueOfId[SENSOR_COUNT] ;
 
 };
 

@@ -21,7 +21,7 @@ int16_t HallSensor::getValFromID(int motorID)
 }
 
 
-bool HallSensor::getReadyFromID(int motorID)
+bool HallSensor::getReadyFromID(int motorID, int16_t calibrationTreshold)
 {
   return sensorValueOfId[motorID -1] < calibrationTreshold;
 }

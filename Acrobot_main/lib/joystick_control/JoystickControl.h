@@ -5,25 +5,27 @@
 #include "RemoteDebug.h"
 #include "Joystick.h"
 #include "Leg.h"
+#include "Arm.h"
 #include "ChoreoPlayer.h"
 #include "menu.h"
 
 enum JoystickControlMode
 {
   MODE_NONE,
-  MODE_LEGS_ABSOLUTE_90_LIMITED,
-  MODE_LEGS_ABSOLUTE_90_UNLIMITED,
-  MODE_LEGS_ABSOLUTE_40_LIMITED,
+  MODE_ABSOLUTE_90_LIMITED,
+  MODE_ABSOLUTE_90_UNLIMITED,
+  MODE_ABSOLUTE_140_LIMITED,
+  MODE_ABSOLUTE_20_LIMITED,
   MODE_LEGS_RELATIVE,
-  MODE_SUMMATIVE,
+  MODE_SUMMATIVE_90,
+  MODE_SUMMATIVE_140,
   MODE_POSE
 };
-
 
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, ChoreoPlayer &choreoPlayer, Menu &menu);
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu);
   void update();
 
   void setMode(JoystickControlMode mode);
@@ -33,18 +35,27 @@ private:
   Joystick &joystick;
   Leg &legL;
   Leg &legR;
+  Arm &armL;
+  Arm &armR;
   ChoreoPlayer &choreoPlayer;
-  JoystickControlMode controlMode = MODE_LEGS_ABSOLUTE_90_LIMITED;
+  JoystickControlMode controlMode = MODE_ABSOLUTE_90_LIMITED;
   Menu &menu;
 
   long prevUpdateTime = 0;
   int deltaT = 0;
 
-  float legRTarget = 180;
   float legLTarget = 180;
+  float legRTarget = 180;
+  float armLTarget = 180;
+  float armRTarget = 180;
+
+  float armLNeutral = 180;
+  float armRNeutral = 180;
+  float legLNeutral = 180;
+  float legRNeutral = 180;
 
   float speedAbsoluteMode = .4;
-  float speedRelativeMode = .2;
+  float speedRelativeMode = .1;
   float speedSummativeMode = .3;
   float speedTriggerMax = .2;
 
@@ -54,12 +65,13 @@ private:
   void submodeStand();
   void submodeMenu();
   void submodeMenuOption();
+  void submodeArmNeutral();
 
   void defaultSubmodes();
 
-  void modeLegsAbsolute(int limitLow, int limitHigh, float speed);
+  void modeAbsolute(int rotDegrees, float speed);
   void modeLegsRelative();
-  void modeSummative();
+  void modeSummative(int rotDegrees, float speed);
   void modePose();
 
   float adjustByDisplacement(float currentVal, float target, float displacement);

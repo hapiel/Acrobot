@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Leg.h"
+#include "Arm.h"
 #include "utilsAcrobot.h"
 #include "RemoteDebug.h"
 
@@ -40,7 +41,7 @@ enum ChoreoName
 class ChoreoPlayer
 {
 public:
-  ChoreoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR);
+  ChoreoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR);
 
   void update();
   void start(ChoreoName choreoName);
@@ -50,6 +51,8 @@ private:
   RemoteDebug &Debug;
   Leg &legL;
   Leg &legR;
+  Arm &armL;
+  Arm &armR;
   float posLStepStart;
   float posRStepStart;
 

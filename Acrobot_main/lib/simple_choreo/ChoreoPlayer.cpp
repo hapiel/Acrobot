@@ -1,6 +1,6 @@
 #include "ChoreoPlayer.h"
 
-ChoreoPlayer::ChoreoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR) : Debug(Debug), legL(legL), legR(legR)
+ChoreoPlayer::ChoreoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR) : Debug(Debug), legL(legL), legR(legR), armL(armL), armR(armR)
 {
 }
 

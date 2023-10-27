@@ -51,6 +51,7 @@ The project should be built in platformio
 #include "DebugLed.h"
 #include "HallSensor.h"
 #include "Leg.h"
+#include "Arm.h"
 #include "StatusChecker.h"
 #include "menu.h"
 #include "ChoreoPlayer.h"
@@ -83,9 +84,14 @@ Joystick joystick;
 CANHandler canHandler;
 Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
+Motor motorArmL(ARM_L_ID, canHandler, Debug);
+Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
+Arm armL(motorArmL, hallSensor, ARM_L_ID, 0, true);
+Arm armR(motorArmR, hallSensor, ARM_R_ID, 0, false);
+
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -94,10 +100,10 @@ Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
 DebugLed debugLed;
-ChoreoPlayer choreoPlayer(Debug, legL, legR);
+ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
-Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
-JoystickControl joystickControl(Debug, joystick, legL, legR, choreoPlayer, menu);
+Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
+JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
 // wifi
 bool wifiConnected = false;
@@ -118,6 +124,8 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
+    ITEM_COMMAND("CALLIBRATE", []()
+                 { legR.startCalibration(); legL.startCalibration(); }),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
@@ -149,18 +157,21 @@ SUB_MENU(motorPage, mainMenu,
 
 SUB_MENU(joystickPage, mainMenu,
          ITEM_COMMAND("Legs 90 limited", []()
-                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_90_LIMITED); }),
+                      { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
          ITEM_COMMAND("Legs 90 unlimited", []()
-                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_90_UNLIMITED); }),
+                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
          ITEM_COMMAND("Legs 40 limited", []()
-                      { joystickControl.setMode(MODE_LEGS_ABSOLUTE_40_LIMITED); }),
+                      { joystickControl.setMode(MODE_ABSOLUTE_140_LIMITED); }),
+         ITEM_COMMAND("Legs 160 unlimited", []()
+                      { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
          ITEM_COMMAND("Legs relative", []()
                       { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
-         ITEM_COMMAND("Summative", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE); }),
+         ITEM_COMMAND("Summative 90", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90); }),
+         ITEM_COMMAND("Summative 40", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_140); }),
          ITEM_COMMAND("Pose", []()
-                      { joystickControl.setMode(MODE_POSE); })
-                      );
+                      { joystickControl.setMode(MODE_POSE); }));
 
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()

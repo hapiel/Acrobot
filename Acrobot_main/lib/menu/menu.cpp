@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug) : lcdMenu(lcdMenu), lcd(lcd), joystick(joystick), buttonUp(buttonUp), buttonDown(buttonDown), buttonLeft(buttonLeft), buttonRight(buttonRight), legL(legL), legR(legR), buzzer(buzzer), hallSensor(hallSensor), WiFi(WiFi), eStop(eStop), batterySensor(batterySensor), Debug(Debug)
+Menu::Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR,Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug) : lcdMenu(lcdMenu), lcd(lcd), joystick(joystick), buttonUp(buttonUp), buttonDown(buttonDown), buttonLeft(buttonLeft), buttonRight(buttonRight), legL(legL), legR(legR), armL(armL), armR(armR), buzzer(buzzer), hallSensor(hallSensor), WiFi(WiFi), eStop(eStop), batterySensor(batterySensor), Debug(Debug)
 {
 }
 
@@ -169,9 +169,9 @@ void Menu::updateText()
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
   sprintf(bootState, "S: %3s %3s xxx xxx",
-          legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
+          legL.getState() == STATE_OFF ? "STATE_OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON",
-          legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
+          legR.getState() == STATE_OFF ? "STATE_OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON");
 
   sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
