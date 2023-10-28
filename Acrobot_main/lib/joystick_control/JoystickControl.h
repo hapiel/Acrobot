@@ -18,6 +18,7 @@ enum JoystickControlMode
   MODE_ABSOLUTE_20_LIMITED,
   MODE_LEGS_RELATIVE,
   MODE_SUMMATIVE_90,
+  MODE_SUMMATIVE_90_FAST,
   MODE_SUMMATIVE_140,
   MODE_POSE
 };
@@ -55,8 +56,10 @@ private:
   float legRNeutral = 180;
 
   float speedAbsoluteMode = .4;
+  float speedUnlimitedMode = 5;
   float speedRelativeMode = .1;
   float speedSummativeMode = .3;
+  float speedSummativeFastMode = .5;
   float speedTriggerMax = .2;
 
   // these are partial modes, that can be overlayed? How to call this

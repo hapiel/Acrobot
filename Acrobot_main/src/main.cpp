@@ -89,7 +89,7 @@ Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
-Arm armL(motorArmL, hallSensor, ARM_L_ID, 0, true);
+Arm armL(motorArmL, hallSensor, ARM_L_ID, 16.54, true);
 Arm armR(motorArmR, hallSensor, ARM_R_ID, 0, false);
 
 EStop eStop(ESTOP_PIN, Debug);
@@ -125,7 +125,8 @@ extern MenuItem *aboutPage[];
 
 MAIN_MENU(
     ITEM_COMMAND("CALLIBRATE", []()
-                 { legR.startCalibration(); legL.startCalibration(); }),
+                 { legR.startCalibration(); legL.startCalibration(); 
+                   armL.startCalibration(), armR.startCalibration(); }),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
@@ -138,11 +139,12 @@ MAIN_MENU(
 SUB_MENU(bootPage, mainMenu,
          ITEM_BASIC(menu.bootAdc),   // adc
          ITEM_BASIC(menu.bootState), // or "ready ready ready"
-         ITEM_BASIC(menu.bootPos),
+         ITEM_BASIC(menu.bootPosA),
+         ITEM_BASIC(menu.bootPosL),
          ITEM_BASIC(menu.bootRelais));
 
 SUB_MENU(statusPage, mainMenu,
-         ITEM_BASIC(menu.statusTemp), // XX = missing motor
+         ITEM_BASIC(menu.statusTemp), 
          ITEM_BASIC(menu.statusWifi),
          ITEM_BASIC(menu.statusMem));
 
@@ -150,25 +152,27 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC("   ArL ArR LeL LeR"),
          ITEM_BASIC(menu.motorTemp),
          ITEM_BASIC(menu.motorAmp),
-         ITEM_BASIC(menu.motorPosL), // should later be swapped with arms
-         ITEM_BASIC(menu.motorTargL),
          ITEM_BASIC(menu.motorPosA),
-         ITEM_BASIC(menu.motorTargA));
+         ITEM_BASIC(menu.motorTargA),
+         ITEM_BASIC(menu.motorPosL), // should later be swapped with arms
+         ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(joystickPage, mainMenu,
-         ITEM_COMMAND("Legs 90 limited", []()
+         ITEM_COMMAND("90 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
-         ITEM_COMMAND("Legs 90 unlimited", []()
+         ITEM_COMMAND("90 unlimited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
-         ITEM_COMMAND("Legs 40 limited", []()
+         ITEM_COMMAND("140 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_140_LIMITED); }),
-         ITEM_COMMAND("Legs 160 unlimited", []()
+         ITEM_COMMAND("20 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
          ITEM_COMMAND("Legs relative", []()
                       { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
          ITEM_COMMAND("Summative 90", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
-         ITEM_COMMAND("Summative 40", []()
+         ITEM_COMMAND("Summative 90 fast", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
+         ITEM_COMMAND("Summative 140", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_140); }),
          ITEM_COMMAND("Pose", []()
                       { joystickControl.setMode(MODE_POSE); }));
@@ -204,8 +208,8 @@ SUB_MENU(hardwarePage, mainMenu,
 
 SUB_MENU(adsPage, hardwarePage,
          ITEM_BASIC(" - ADS values - "),
-         ITEM_BASIC("AL 00000 AR 00000"),
-         ITEM_BASIC("LL 00000 LR 00000"));
+         ITEM_BASIC(menu.adsA),
+         ITEM_BASIC(menu.adsL));
 
 SUB_MENU(aboutPage, mainMenu,
          ITEM_BASIC("Acrobot v3 Jona"),
@@ -308,6 +312,8 @@ void updates()
   joystickControl.update();
   legL.update();
   legR.update();
+  armL.update();
+  armR.update();
   menu.update();
   statusChecker.update();
   choreoPlayer.update();

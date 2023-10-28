@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR,Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug) : lcdMenu(lcdMenu), lcd(lcd), joystick(joystick), buttonUp(buttonUp), buttonDown(buttonDown), buttonLeft(buttonLeft), buttonRight(buttonRight), legL(legL), legR(legR), armL(armL), armR(armR), buzzer(buzzer), hallSensor(hallSensor), WiFi(WiFi), eStop(eStop), batterySensor(batterySensor), Debug(Debug)
+Menu::Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug) : lcdMenu(lcdMenu), lcd(lcd), joystick(joystick), buttonUp(buttonUp), buttonDown(buttonDown), buttonLeft(buttonLeft), buttonRight(buttonRight), legL(legL), legR(legR), armL(armL), armR(armR), buzzer(buzzer), hallSensor(hallSensor), WiFi(WiFi), eStop(eStop), batterySensor(batterySensor), Debug(Debug)
 {
 }
 
@@ -35,7 +35,7 @@ void Menu::init(MenuItem **mainMenu)
 void Menu::update()
 {
   // update all buttons
-  if (buttonUp.isPressed() )
+  if (buttonUp.isPressed())
   {
     upPressed = true;
   }
@@ -76,7 +76,6 @@ void Menu::pressRight()
   rightPressed = true;
   enterPressed = true;
 }
-
 
 void Menu::applyInput()
 {
@@ -168,13 +167,19 @@ void Menu::updateText()
 {
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
-  sprintf(bootState, "S: %3s %3s xxx xxx",
-          legL.getState() == STATE_OFF ? "STATE_OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
+  sprintf(bootState, "S: %3s %3s %3s %3s",
+          legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON",
-          legR.getState() == STATE_OFF ? "STATE_OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
+          legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON",
+          armL.getState() == STATE_OFF ? "OFF" : armL.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON",
+          armR.getState() == STATE_OFF ? "OFF" : armR.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON");
 
-  sprintf(bootPos, "P: %.2f %.2f", legL.getPosition(), legR.getPosition());
+  sprintf(bootPosA, "PA: %.2f %.2f", armL.getPosition(), armR.getPosition());
+
+  sprintf(bootPosL, "PL: %.2f %.2f", legL.getPosition(), legR.getPosition());
 
   sprintf(statusTemp, "Temp: 00 00 %0d %0d", legL.getTemperature(), legR.getTemperature());
 
@@ -182,13 +187,20 @@ void Menu::updateText()
 
   sprintf(statusMem, "Mem: %2d%% R-%u:%.2u:%.2u", (int)(100 * (1 - ((float)ESP.getFreeHeap() / (float)ESP.getHeapSize()))), (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
 
-  sprintf(motorTemp, "Tem %02d %02d %02d %02d", 0, 0, legL.getTemperature(), legR.getTemperature());
+  sprintf(motorTemp, "Tem %02d %02d %02d %02d", armL.getTemperature(), armR.getTemperature(), legL.getTemperature(), legR.getTemperature());
 
-  sprintf(motorAmp, "Amp %02d %02d %02d %02d", 0, 0, (int)legL.getTorque(), (int)legR.getTorque());
+  sprintf(motorAmp, "Amp %02d %02d %02d %02d", (int)armL.getTorque(), (int)armR.getTorque(), (int)legL.getTorque(), (int)legR.getTorque());
+
+  sprintf(motorPosA, "PA %06.1f %06.1f", armL.getPosition(), armR.getPosition());
+
+  sprintf(motorTargA, "TA %06.1f %06.1f", armL.getTarget(), armR.getTarget());
 
   sprintf(motorPosL, "PL %06.1f %06.1f", legL.getPosition(), legR.getPosition());
 
   sprintf(motorTargL, "TL %06.1f %06.1f", legL.getTarget(), legR.getTarget());
+
+  sprintf(adsA, "AL: %05d AR: %05d", hallSensor.getValFromID(ARM_L_ID), hallSensor.getValFromID(ARM_R_ID));
+  sprintf(adsL, "LL: %05d LR: %05d",  hallSensor.getValFromID(LEG_L_ID), hallSensor.getValFromID(LEG_R_ID));
 
   sprintf(PUpText, "P UP, val: %.1f", P);
   sprintf(DUpText, "D UP, val: %.1f", D);
@@ -203,8 +215,6 @@ void Menu::DAdjust(float val)
 {
   D += val;
 }
-
-
 
 float Menu::getP()
 {

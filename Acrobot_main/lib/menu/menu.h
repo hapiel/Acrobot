@@ -22,7 +22,7 @@
 class Menu
 {
 public:
-  Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR,Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug);
+  Menu(LcdMenu &lcdMenu, LiquidCrystal_I2C &lcd, Joystick &joystick, Button &buttonUp, Button &buttonDown, Button &buttonLeft, Button &buttonRight, Leg &legL, Leg &legR, Arm &armL, Arm &armR, Buzzer &buzzer, HallSensor &hallSensor, WiFiClass &WiFi, EStop &eStop, BatterySensor &batterySensor, RemoteDebug &Debug);
   void init(MenuItem **mainMenu);
   void lcdMessage(const String &message);
 
@@ -45,7 +45,8 @@ public:
   // variable menu texts
   char bootAdc[19] = "A: 234 234 234 234";
   char bootState[19] = "S: off on cal xxx";   // or "ready ready ready
-  char bootPos[19] = "P: 123 123 123 123";    // position
+  char bootPosA[19] = "PA: 123 123 ";   // position arms
+  char bootPosL[19] = "PL: 123 123 ";   // position legs
   char bootRelais[19] = "Relais: Set EXAMPL"; // or relais unset
 
   char statusTemp[19] = "Temp: 00 00 XX 00 "; // XX = missing motor
@@ -58,6 +59,9 @@ public:
   char motorTargL[19] = "TL -0000.0 -0000.0";
   char motorPosA[19] = "PA -0000.0 -0000.0";
   char motorTargA[19] = "TA -0000.0 -0000.0";
+
+  char adsA[19] = "AL: 00000 AR: 00000";
+  char adsL[19] = "LL: 00000 LR: 00000";
 
   char PUpText[19] = "P UP, val: X";
   char DUpText[19] = "D UP, val: X";
