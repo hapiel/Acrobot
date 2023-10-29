@@ -6,7 +6,7 @@ BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &ar
 void BottangoPlayer::update()
 {
   currenttime = millis()-starttime;
-  if(currenttime >= 733){
+  if(currenttime >= 3000){
     enabled = 0;
   }
   if(enabled == 1){

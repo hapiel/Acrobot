@@ -21,7 +21,7 @@ private:
 
   unsigned long int starttime;
   unsigned long int currenttime;
-  float kp = 10.0;
+  float kp = 5.0;
   float ki = 2.0;
   float legLBezier_testdata[8] = {0,3000,193.677978515625,750,0.0,166.48681640625,-750,0.0};
   float legRBezier_testdata[8] = {0,3000,166.48681640625,750,0.0,193.51318359375,-750,0.0};

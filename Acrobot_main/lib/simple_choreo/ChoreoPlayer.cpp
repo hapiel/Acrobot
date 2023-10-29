@@ -225,8 +225,8 @@ void ChoreoPlayer::moveStand()
 {
   pL = 12;
   pR = 12;
-  dL = 3;
-  dR = 3;
+  iL = 3;
+  iR = 3;
   pStand(1000);
 }
 
@@ -234,8 +234,8 @@ void ChoreoPlayer::moveWalk()
 {
   pL = 8;
   pR = 8;
-  dL = 5;
-  dR = 5;
+  iL = 5;
+  iR = 5;
   if (stepTimeBetween(0, 800))
   {
     pStepRightDirect(20);
