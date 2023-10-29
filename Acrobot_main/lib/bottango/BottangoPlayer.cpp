@@ -10,10 +10,10 @@ void BottangoPlayer::update()
     enabled = 0;
   }
   if(enabled == 1){
-  legL.setTarget(mapBeziervalue(legLBezier.getValue(currenttime)), kp, ki);
-  legR.setTarget(mapBeziervalue(legRBezier.getValue(currenttime)), kp, ki);
-  armL.setTarget(mapBeziervalue(armLBezier.getValue(currenttime)), kp, ki);
-  armR.setTarget(mapBeziervalue(armRBezier.getValue(currenttime)), kp, ki);
+  legL.setTarget(legLBezier.getValue(currenttime), kp, ki);
+  legR.setTarget(legRBezier.getValue(currenttime), kp, ki);
+  armL.setTarget(armLBezier.getValue(currenttime), kp, ki);
+  armR.setTarget(armRBezier.getValue(currenttime), kp, ki);
   }
 }
 
@@ -27,11 +27,5 @@ void BottangoPlayer::stop()
 {
   enabled = 0;
 }
-
-float BottangoPlayer::mapBeziervalue(float value)
-{
-  return fMap(value, 0.0, 8128.0, -180.0, 540);
-}
-
 
 // POSES
