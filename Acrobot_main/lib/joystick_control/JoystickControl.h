@@ -21,6 +21,8 @@ enum JoystickControlMode
   MODE_SUMMATIVE_90_FAST,
   MODE_SUMMATIVE_140,
   MODE_POSE,
+  MODE_SYNCH_90,
+  MODE_SYNCH_140,
   MODE_TELEPRESENCE
 };
 
@@ -62,6 +64,7 @@ private:
   float speedSummativeMode = .3;
   float speedSummativeFastMode = .5;
   float speedTriggerMax = .12;
+  float speedSynchMode = .4;
 
   // Define constants for the control gains
   float teleKp = 0.02; // Proportional gain
@@ -83,6 +86,7 @@ private:
   void modeSummative(int rotDegrees, float speed);
   void modePose();
   void modeTelepresence();
+  void modeSynch(int rotDegrees, float speed);
 
   float adjustByDisplacement(float currentVal, float target, float displacement);
   float calcTelepresenceTorque(float angleDiff, float velDiff, float localVel);

@@ -171,29 +171,31 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(joystickPage, mainMenu,
-         ITEM_COMMAND("90 limited", []()
+         ITEM_COMMAND("Abs 90 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
          ITEM_COMMAND("Summative 90", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
-
-         ITEM_COMMAND("90 unlimited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
-         ITEM_COMMAND("140 limited", []()
+         ITEM_COMMAND("Abs 140 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_140_LIMITED); }),
-         ITEM_COMMAND("20 limited", []()
+         ITEM_COMMAND("Abs 20 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
-         ITEM_COMMAND("Legs relative", []()
-                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
-
-         ITEM_COMMAND("Summative 90 fast", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
+         ITEM_COMMAND("Abs 90 unlimited", []()
+                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
          ITEM_COMMAND("Summative 140", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_140); }),
+         ITEM_COMMAND("Summative 90 fast", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
+         ITEM_COMMAND("Synch 90", []()
+                      { joystickControl.setMode(MODE_SYNCH_90); }),
+         ITEM_COMMAND("Synch 140", []()
+                      { joystickControl.setMode(MODE_SYNCH_140); }),
+         ITEM_COMMAND("Legs relative", []()
+                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
          ITEM_COMMAND("Telepresence Arm", []()
                       { joystickControl.setMode(MODE_TELEPRESENCE); }),
          ITEM_COMMAND("Pose", []()
                       { joystickControl.setMode(MODE_POSE); }));
-
+                      
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()
                       { menu.PAdjust(2); }),
