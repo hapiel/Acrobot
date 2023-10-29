@@ -49,10 +49,10 @@ public:
 
 private:
   RemoteDebug &Debug;
-  Leg &legL;
-  Leg &legR;
   Arm &armL;
   Arm &armR;
+  Leg &legL;
+  Leg &legR;
   float posLStepStart;
   float posRStepStart;
 
@@ -78,9 +78,9 @@ private:
 
   float pL = 0;
   float pR = 0;
-  float dL = 5;
-  float dR = 5;
-  void setPPDDLR(float pL, float pR, float dL = 5, float dR = 5);
+  float iL = 5;
+  float iR = 5;
+  void setPPDDLR(float pL, float pR, float iL = 5, float iR = 5);
   void setPD(float p, float d = 5);
 
   float balanceAngle = 186;
