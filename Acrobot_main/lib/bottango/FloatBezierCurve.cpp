@@ -1,8 +1,7 @@
 
 #include "FloatBezierCurve.h"
 #include "Arduino.h"
-#include "Log.h"
-#include "../BottangoArduinoConfig.h"
+#define COMPRESSED_SIGNAL_MAX 8192.0f
 
 FloatBezierCurve::FloatBezierCurve(
     unsigned long startTimeInMs,
@@ -12,7 +11,7 @@ FloatBezierCurve::FloatBezierCurve(
     int startControlY,
     int endY,
     long endControlX,
-    int endControlY) : BezierCurve()
+    int endControlY)
 {
 
     this->curveStartTimeInMs = startTimeInMs;
@@ -112,26 +111,4 @@ float FloatBezierCurve::getStartMovement()
 float FloatBezierCurve::getEndMovement()
 {
     return endY / COMPRESSED_SIGNAL_MAX;
-}
-
-void FloatBezierCurve::dump()
-{
-    LOG(F("CURVE[t=("))
-    LOG_MKBUF
-    LOG_FLOAT(getStartTimeMs())
-    LOG(F(","))
-    LOG_FLOAT(startY)
-    LOG(F(")/("))
-    LOG_FLOAT(startControlX)
-    LOG(F(","))
-    LOG_FLOAT(startControlY)
-    LOG(F(")-("))
-    LOG_FLOAT(getEndTimeMs())
-    LOG(F(","))
-    LOG_FLOAT(endY)
-    LOG(F(")/("))
-    LOG_FLOAT(endControlX)
-    LOG(F(","))
-    LOG_FLOAT(endControlY)
-    LOG_LN(F(")"))
 }

@@ -2,9 +2,7 @@
 #ifndef BOTTANGOARDUINO_FLOATBEZIERCURVE_H
 #define BOTTANGOARDUINO_FLOATBEZIERCURVE_H
 
-#include "BezierCurve.h"
-
-class FloatBezierCurve : public BezierCurve
+class FloatBezierCurve
 {
 public:
     FloatBezierCurve(
