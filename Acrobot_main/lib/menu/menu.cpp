@@ -168,13 +168,13 @@ void Menu::updateText()
   sprintf(bootAdc, "A: %03d %03d %03d %03d", hallSensor.getValFromID(ARM_L_ID) / 100, hallSensor.getValFromID(ARM_R_ID) / 100, hallSensor.getValFromID(LEG_L_ID) / 100, hallSensor.getValFromID(LEG_R_ID) / 100);
 
   sprintf(bootState, "S: %3s %3s %3s %3s",
-          legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
-                                                                                      : "ON",
-          legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
-                                                                                      : "ON",
           armL.getState() == STATE_OFF ? "OFF" : armL.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON",
           armR.getState() == STATE_OFF ? "OFF" : armR.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON",
+          legL.getState() == STATE_OFF ? "OFF" : legL.getState() == STATE_CALIBRATION ? "CAL"
+                                                                                      : "ON",
+          legR.getState() == STATE_OFF ? "OFF" : legR.getState() == STATE_CALIBRATION ? "CAL"
                                                                                       : "ON");
 
   sprintf(bootPosA, "PA: %.2f %.2f", armL.getPosition(), armR.getPosition());
@@ -199,8 +199,8 @@ void Menu::updateText()
 
   sprintf(motorTargL, "TL %06.1f %06.1f", legL.getTarget(), legR.getTarget());
 
-  sprintf(adsA, "AL: %05d AR: %05d", hallSensor.getValFromID(ARM_L_ID), hallSensor.getValFromID(ARM_R_ID));
-  sprintf(adsL, "LL: %05d LR: %05d",  hallSensor.getValFromID(LEG_L_ID), hallSensor.getValFromID(LEG_R_ID));
+  sprintf(adsA, "AL %05d AR %05d", hallSensor.getValFromID(ARM_L_ID), hallSensor.getValFromID(ARM_R_ID));
+  sprintf(adsL, "LL %05d LR %05d", hallSensor.getValFromID(LEG_L_ID), hallSensor.getValFromID(LEG_R_ID));
 
   sprintf(PUpText, "P UP, val: %.1f", P);
   sprintf(DUpText, "D UP, val: %.1f", D);

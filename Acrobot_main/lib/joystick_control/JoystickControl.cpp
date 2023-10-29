@@ -9,8 +9,6 @@ void JoystickControl::update()
   deltaT = millis() - prevUpdateTime;
 
   bool defaultOn = true;
-  legLNeutral = 180;
-  legRNeutral = 180;
 
   switch (controlMode)
   {
@@ -27,8 +25,6 @@ void JoystickControl::update()
     modeAbsolute(140, speedAbsoluteMode);
     break;
   case MODE_ABSOLUTE_20_LIMITED:
-    legLNeutral = 185;
-    legRNeutral = 185;
     modeAbsolute(20, speedAbsoluteMode);
     break;
   case MODE_LEGS_RELATIVE:
@@ -148,7 +144,7 @@ void JoystickControl::submodeMenuOption()
 void JoystickControl::submodeArmNeutral()
 {
 
-  if (joystick.getButtonR1())
+  if (joystick.getButtonR1() || joystick.getR2() > 0)
   {
     if (joystick.getDpadUpPressed())
     {
@@ -188,25 +184,15 @@ void JoystickControl::defaultSubmodes()
 void JoystickControl::modeAbsolute(int rotDegrees, float speed)
 {
 
-  if (joystick.getButtonR1())
+  //legs
+  if (joystick.getButtonL1() || joystick.getL2() > 0)
   {
     choreoPlayer.stop();
 
-    float displacement = speed * deltaT;
-
-    float armLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
-    float armRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, armRNeutral - rotDegrees, armRNeutral + rotDegrees);
-
-    armLTarget = adjustByDisplacement(armLTarget, armLPosJoystick, displacement);
-    armRTarget = adjustByDisplacement(armRTarget, armRPosJoystick, displacement);
-
-    armL.setTarget(armLTarget, menu.getP(), menu.getD());
-    armR.setTarget(armRTarget, menu.getP(), menu.getD());
-  }
-
-  if (joystick.getButtonL1())
-  {
-    choreoPlayer.stop();
+    if (joystick.getL2() > 0)
+    {
+      speed = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
+    }
 
     float displacement = speed * deltaT;
 
@@ -218,6 +204,28 @@ void JoystickControl::modeAbsolute(int rotDegrees, float speed)
 
     legL.setTarget(legLTarget, menu.getP(), menu.getD());
     legR.setTarget(legRTarget, menu.getP(), menu.getD());
+  }
+
+  //arms
+  if (joystick.getButtonR1() || joystick.getR2() > 0)
+  {
+    choreoPlayer.stop();
+
+    if (joystick.getR2() > 0)
+    {
+      speed = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
+    }
+
+    float displacement = speed * deltaT;
+
+    float armLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
+    float armRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, armRNeutral - rotDegrees, armRNeutral + rotDegrees);
+
+    armLTarget = adjustByDisplacement(armLTarget, armLPosJoystick, displacement);
+    armRTarget = adjustByDisplacement(armRTarget, armRPosJoystick, displacement);
+
+    armL.setTarget(armLTarget, menu.getP(), menu.getD());
+    armR.setTarget(armRTarget, menu.getP(), menu.getD());
   }
 }
 
@@ -287,7 +295,7 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
 
     if (joystick.getR2() > 0)
     {
-      speed = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
+      speed = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
     }
 
     float displacement = speed * deltaT;

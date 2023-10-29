@@ -60,8 +60,8 @@ public:
   char motorPosA[19] = "PA -0000.0 -0000.0";
   char motorTargA[19] = "TA -0000.0 -0000.0";
 
-  char adsA[19] = "AL: 00000 AR: 00000";
-  char adsL[19] = "LL: 00000 LR: 00000";
+  char adsA[19] = "AL 00000 AR 00000";
+  char adsL[19] = "LL 00000 LR 00000";
 
   char PUpText[19] = "P UP, val: X";
   char DUpText[19] = "D UP, val: X";
@@ -85,7 +85,7 @@ private:
   BatterySensor &batterySensor;
   RemoteDebug &Debug;
 
-  float P = 6;
+  float P = 8;
   float D = 1;
 
   bool upPressed = false;

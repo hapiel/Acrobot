@@ -52,15 +52,15 @@ private:
 
   float armLNeutral = 180;
   float armRNeutral = 180;
-  float legLNeutral = 180;
-  float legRNeutral = 180;
+  float legLNeutral = 185;
+  float legRNeutral = 185;
 
   float speedAbsoluteMode = .4;
   float speedUnlimitedMode = 5;
   float speedRelativeMode = .1;
   float speedSummativeMode = .3;
   float speedSummativeFastMode = .5;
-  float speedTriggerMax = .2;
+  float speedTriggerMax = .12;
 
   // these are partial modes, that can be overlayed? How to call this
   void submodeCalibrate();

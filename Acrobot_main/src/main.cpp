@@ -90,7 +90,7 @@ HallSensor hallSensor(wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
 Arm armL(motorArmL, hallSensor, ARM_L_ID, 16.54, true);
-Arm armR(motorArmR, hallSensor, ARM_R_ID, 0, false);
+Arm armR(motorArmR, hallSensor, ARM_R_ID, 20.32, false);
 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
@@ -124,9 +124,6 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
-    ITEM_COMMAND("CALLIBRATE", []()
-                 { legR.startCalibration(); legL.startCalibration(); 
-                   armL.startCalibration(), armR.startCalibration(); }),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
@@ -137,6 +134,9 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(bootPage, mainMenu,
+         ITEM_COMMAND("CALLIBRATE", []()
+                      { legR.startCalibration(); legL.startCalibration(); 
+                   armL.startCalibration(), armR.startCalibration(); }),
          ITEM_BASIC(menu.bootAdc),   // adc
          ITEM_BASIC(menu.bootState), // or "ready ready ready"
          ITEM_BASIC(menu.bootPosA),
@@ -144,7 +144,7 @@ SUB_MENU(bootPage, mainMenu,
          ITEM_BASIC(menu.bootRelais));
 
 SUB_MENU(statusPage, mainMenu,
-         ITEM_BASIC(menu.statusTemp), 
+         ITEM_BASIC(menu.statusTemp),
          ITEM_BASIC(menu.statusWifi),
          ITEM_BASIC(menu.statusMem));
 
@@ -160,6 +160,8 @@ SUB_MENU(motorPage, mainMenu,
 SUB_MENU(joystickPage, mainMenu,
          ITEM_COMMAND("90 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
+         ITEM_COMMAND("Summative 90", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90); }),
          ITEM_COMMAND("90 unlimited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
          ITEM_COMMAND("140 limited", []()
@@ -168,8 +170,7 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
          ITEM_COMMAND("Legs relative", []()
                       { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
-         ITEM_COMMAND("Summative 90", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_90); }),
+
          ITEM_COMMAND("Summative 90 fast", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
          ITEM_COMMAND("Summative 140", []()
