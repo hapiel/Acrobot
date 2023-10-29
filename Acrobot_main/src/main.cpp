@@ -38,6 +38,9 @@ The project should be built in platformio
 #include "ItemToggle.h"
 #include "ItemCommand.h"
 #include "LcdMenu.h" // needs to be after item-imports!!!
+#include "SdFat.h"
+#include "sdios.h"
+#include "SPI.h"
 
 // custom libraries
 #include "utilsAcrobot.h"
@@ -72,12 +75,22 @@ The project should be built in platformio
 #define BATTERY_SENSOR 36
 
 #define HOST_NAME "Acrobot"
+#define SCK 22
+#define MISO 19
+#define MOSI 23
+#define CS 18
 
 // external libraries
 TwoWire wire(0);
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
+// need custom SPI class because of incorrect wiring
+SPIClass spi = SPIClass(VSPI);
+#define SD_CONFIG SdSpiConfig(CS, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
+// only allow exFAT sd, can be changed, see library.
+SdExFat sd;
+ExFile file;
 
 // custom libraries
 Joystick joystick;
@@ -89,8 +102,8 @@ Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
-Arm armL(motorArmL, hallSensor, ARM_L_ID, 16.54, true);
-Arm armR(motorArmR, hallSensor, ARM_R_ID, 20.32, false);
+Arm armL(motorArmL, hallSensor, ARM_L_ID, 28.64, true);
+Arm armR(motorArmR, hallSensor, ARM_R_ID, -3.25, false);
 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
@@ -162,6 +175,7 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
          ITEM_COMMAND("Summative 90", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
+
          ITEM_COMMAND("90 unlimited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
          ITEM_COMMAND("140 limited", []()
@@ -175,6 +189,8 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
          ITEM_COMMAND("Summative 140", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_140); }),
+         ITEM_COMMAND("Telepresence Arm", []()
+                      { joystickControl.setMode(MODE_TELEPRESENCE); }),
          ITEM_COMMAND("Pose", []()
                       { joystickControl.setMode(MODE_POSE); }));
 
@@ -253,6 +269,19 @@ void inits()
   debugI("Next init: Battery sensor");
   batterySensor.init();
 
+  debugI("Next init: SPI");
+  spi.begin(SCK, MISO, MOSI, CS);
+
+  debugI("Next init: SD card");
+  if (!sd.begin(SD_CONFIG))
+  {
+    debugE("SD card init FAILED!");
+  }
+  else
+  {
+    debugI("SD card init done.");
+  }
+
   debugI("Next init: canHandler");
   canHandler.setupCAN();
 
@@ -278,6 +307,7 @@ void inits()
   menu.init(mainMenu);
 
   debugI("Inits Done.");
+  buzzer.buzz(40); // short buzz to indicate boot
 }
 
 void wifiConnection()
@@ -333,53 +363,6 @@ void taskMain(void *parameter)
 
     updates();
     wifiConnection(); // restore wifi variables
-
-    // control legs, temp system
-    // if (joystick.getButtonR1())
-    // {
-    //   choreoPlayer.stop();
-    //   if (joystick.getMiscPSPressed())
-    //   {
-    //     legR.startCalibration();
-    //   }
-    //   float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-    //   legR.setTarget(position, menu.getP(), menu.getD());
-    // }
-
-    // if (joystick.getButtonL1())
-    // {
-    //   choreoPlayer.stop();
-    //   if (joystick.getMiscPSPressed())
-    //   {
-    //     legL.startCalibration();
-    //   }
-
-    //   float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
-    //   legL.setTarget(legPos, menu.getP(), menu.getD());
-    // }
-
-    // if (joystick.getButtonCrossPressed())
-    // {
-
-    //   legR.stop();
-    //   legL.stop();
-    //   choreoPlayer.stop();
-    // }
-
-    // if (joystick.getButtonSquarePressed())
-    // {
-
-    //   choreoPlayer.start(CHOREO_STANDING);
-    // }
-
-    // if (joystick.getButtonTrianglePressed())
-    // {
-    //   choreoPlayer.start(MUSIC_SEQUENCE_4);
-    // }
-    // if (joystick.getButtonCirclePressed())
-    // {
-    //   choreoPlayer.start(ACT_MILA);
-    // }
 
     // debug messages
     static long executionTimer1 = 0;

@@ -1,4 +1,4 @@
-// rename this to config.h with the correct network settings
+// rename this to wifiConfig.h with the correct network settings
 
 #ifndef CONFIG_H
 #define CONFIG_H

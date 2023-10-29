@@ -46,6 +46,9 @@ void JoystickControl::update()
     submodeMenuOption();
     modePose();
     break;
+  case MODE_TELEPRESENCE:
+    modeTelepresence();
+    break;
   default:
     break;
   }
@@ -92,6 +95,8 @@ void JoystickControl::submodeStop()
     legL.stop();
     legLTarget = 180;
     legRTarget = 180;
+    armR.stop();
+    armL.stop();
     choreoPlayer.stop();
   }
 }
@@ -379,6 +384,29 @@ void JoystickControl::modePose()
   legR.setTarget(legRTarget, menu.getP(), menu.getD());
 }
 
+void JoystickControl::modeTelepresence(){
+
+  // Variables to store joint angles and angular velocities for arms L and R
+  float angleL = armL.getPosition();
+  float angleR = armR.getPosition();
+  float velL = armL.getVelocity();
+  float velR = armR.getVelocity();
+
+  // Calculate the control signal (torque) for arm L
+  float angleDiffL = angleR - angleL;
+  float velDiffL = velR - velL;
+  float torqueL = calcTelepresenceTorque(angleDiffL, velDiffL, velL);
+
+  // Calculate the control signal (torque) for arm 2
+  float angleDiffR = angleL - angleR;
+  float velDiffR = velL - velR;
+  float torqueR = calcTelepresenceTorque(angleDiffR, velDiffR, velR);
+
+  armL.setTorqueUnprotected(torqueL);
+  armR.setTorqueUnprotected(torqueR);
+
+}
+
 float JoystickControl::adjustByDisplacement(float currentVal, float target, float displacement)
 {
 
@@ -401,4 +429,9 @@ float JoystickControl::adjustByDisplacement(float currentVal, float target, floa
   }
 
   return newVal;
+}
+
+float JoystickControl::calcTelepresenceTorque(float angleDiff, float velDiff, float localVel) {
+  float torque = teleKp * angleDiff + teleKd * velDiff - teleK * localVel;
+  return torque;
 }

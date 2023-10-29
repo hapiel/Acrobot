@@ -20,7 +20,8 @@ enum JoystickControlMode
   MODE_SUMMATIVE_90,
   MODE_SUMMATIVE_90_FAST,
   MODE_SUMMATIVE_140,
-  MODE_POSE
+  MODE_POSE,
+  MODE_TELEPRESENCE
 };
 
 class JoystickControl
@@ -62,6 +63,11 @@ private:
   float speedSummativeFastMode = .5;
   float speedTriggerMax = .12;
 
+  // Define constants for the control gains
+  float teleKp = 0.02; // Proportional gain
+  float teleKd = 0.1;  // Derivative gain, prevents oscilation (or creates oscilation if too high)
+  float teleK = 0.01;  // Local joint damping gain, makes it heavier to push arm
+
   // these are partial modes, that can be overlayed? How to call this
   void submodeCalibrate();
   void submodeStop();
@@ -76,8 +82,10 @@ private:
   void modeLegsRelative();
   void modeSummative(int rotDegrees, float speed);
   void modePose();
+  void modeTelepresence();
 
   float adjustByDisplacement(float currentVal, float target, float displacement);
+  float calcTelepresenceTorque(float angleDiff, float velDiff, float localVel);
 };
 
 #endif // JOYSTICK_CONTROL_H

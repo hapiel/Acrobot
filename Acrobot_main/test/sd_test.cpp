@@ -22,8 +22,7 @@ SPIClass spi = SPIClass(VSPI);
 #define SPI_CLOCK SD_SCK_MHZ(50)
 
 // define CS 
-const uint8_t SD_CS_PIN = CS;
-#define SD_CONFIG SdSpiConfig(SD_CS_PIN, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
+#define SD_CONFIG SdSpiConfig(CS, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
 
 #if SD_FAT_TYPE == 0
 SdFat sd;

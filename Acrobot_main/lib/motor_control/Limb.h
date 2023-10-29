@@ -21,6 +21,8 @@ public:
   void update();
   void startCalibration();
 
+  void setTorqueUnprotected(float torque); // named unprotected to remind user that this function goes straight to the motor. Use with caution.
+
   float getTarget();
   float getPosition();
   float getVelocity();

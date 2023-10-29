@@ -37,6 +37,14 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   motor.setPosition(posToSend, kpToSend, kdToSend);
 }
 
+void Limb::setTorqueUnprotected(float torque)
+{
+  if (inverted){
+    torque = -torque;
+  }
+  motor.setTorque(torque);
+}
+
 float Limb::getTarget()
 {
   return target;
@@ -103,7 +111,12 @@ float Limb::getPosition()
 
 float Limb::getVelocity()
 {
-  return motor.getVelocity();
+  float vel = motor.getVelocity();
+  if (inverted)
+  {
+    vel = -vel;
+  }
+  return vel;
 }
 
 float Limb::getTorque()
