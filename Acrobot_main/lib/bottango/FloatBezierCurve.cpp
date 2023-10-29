@@ -28,7 +28,7 @@ FloatBezierCurve::FloatBezierCurve(
 
 float FloatBezierCurve::getValue(unsigned long currentTimeMs)
 {
-    return Evaluate(currentTimeMs - curveStartTimeInMs) / COMPRESSED_SIGNAL_MAX;
+    return Evaluate(currentTimeMs - curveStartTimeInMs) ;
 }
 
 unsigned long FloatBezierCurve::getEndTimeMs()
@@ -106,9 +106,9 @@ bool FloatBezierCurve::isInProgress(unsigned long currentTimeMs)
 
 float FloatBezierCurve::getStartMovement()
 {
-    return startY / COMPRESSED_SIGNAL_MAX;
+    return startY ;
 }
 float FloatBezierCurve::getEndMovement()
 {
-    return endY / COMPRESSED_SIGNAL_MAX;
+    return endY ;
 }
