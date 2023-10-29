@@ -129,6 +129,7 @@ bool wifiConnected = false;
 
 // This section needs to be in the same file that inits the lcdMenu.
 
+extern MenuItem *bezierPage[];
 extern MenuItem *bootPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
@@ -140,8 +141,7 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
-    ITEM_COMMAND("beziercurve_test", []()
-                      {bottangoPlayer.start();}),
+    ITEM_SUBMENU("Curve tester", bezierPage),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
@@ -151,6 +151,11 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
+SUB_MENU(bezierPage, mainMenu,
+         ITEM_COMMAND("beziercurve_test", []()
+                      { bottangoPlayer.start(); }),
+         ITEM_BASIC(menu.motorTargA),
+         ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE", []()
@@ -195,7 +200,7 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
          ITEM_COMMAND("Summative 140", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_140); }),
-ITEM_COMMAND("Telepresence Arm", []()
+         ITEM_COMMAND("Telepresence Arm", []()
                       { joystickControl.setMode(MODE_TELEPRESENCE); }),
          ITEM_COMMAND("Pose", []()
                       { joystickControl.setMode(MODE_POSE); }));
@@ -313,7 +318,7 @@ void inits()
   menu.init(mainMenu);
 
   debugI("Inits Done.");
-buzzer.buzz(40); // short buzz to indicate boot
+  buzzer.buzz(40); // short buzz to indicate boot
 }
 
 void wifiConnection()

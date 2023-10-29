@@ -4965,7 +4965,7 @@
         "$type": "TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp",
         "FPS": 30,
         "durationInFrames": 44,
-        "name": "Walk_all_motors",
+        "name": "Walk_all_motors copy",
         "loop": true,
         "workAreaStart": 0,
         "workAreaEnd": 44,
@@ -7035,14 +7035,415 @@
         },
         "DurationInSeconds": 10.0,
         "DurationInMS": 10000
+      },
+      {
+        "$id": "704",
+        "$type": "TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp",
+        "FPS": 30,
+        "durationInFrames": 194,
+        "name": "Walk_all_motors_slow",
+        "loop": false,
+        "workAreaStart": 0,
+        "workAreaEnd": 194,
+        "recordAreaStart": 0,
+        "recordAreaEnd": 194,
+        "animationTracks": {
+          "$id": "705",
+          "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotAnimationTrack, Assembly-CSharp]], mscorlib",
+          "$values": [
+            {
+              "$id": "706",
+              "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+              "unbound": false,
+              "parentDimensionalTrack": null,
+              "animatable": {
+                "$ref": "24"
+              },
+              "parentClip": {
+                "$ref": "704"
+              },
+              "ungraphableOverried": false,
+              "markers": {
+                "$id": "707",
+                "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                "$values": []
+              },
+              "cachedAnimatableName": "",
+              "keyframes": {
+                "$id": "708",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                "$values": [
+                  {
+                    "$id": "709",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "706"
+                    },
+                    "Movement": 0.47,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "710",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -1.0,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "711",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.75,
+                      "Y": 0.0
+                    },
+                    "Frame": 0
+                  },
+                  {
+                    "$id": "712",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "706"
+                    },
+                    "Movement": 0.53,
+                    "HandleType": "Broken",
+                    "InTangent": {
+                      "$id": "713",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.175,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "714",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.183333337,
+                      "Y": 0.0
+                    },
+                    "Frame": 90
+                  },
+                  {
+                    "$id": "715",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "706"
+                    },
+                    "Movement": 0.47,
+                    "HandleType": "Broken",
+                    "InTangent": {
+                      "$id": "716",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.589852631,
+                      "Y": 0.00314765237
+                    },
+                    "OutTangent": {
+                      "$id": "717",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.183333337,
+                      "Y": 0.0
+                    },
+                    "Frame": 194
+                  }
+                ]
+              }
+            },
+            {
+              "$id": "718",
+              "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+              "unbound": false,
+              "parentDimensionalTrack": null,
+              "animatable": {
+                "$ref": "14"
+              },
+              "parentClip": {
+                "$ref": "704"
+              },
+              "ungraphableOverried": false,
+              "markers": {
+                "$id": "719",
+                "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                "$values": []
+              },
+              "cachedAnimatableName": "",
+              "keyframes": {
+                "$id": "720",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                "$values": [
+                  {
+                    "$id": "721",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "718"
+                    },
+                    "Movement": 0.53,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "722",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.183333337,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "723",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.75,
+                      "Y": 0.0
+                    },
+                    "Frame": 0
+                  },
+                  {
+                    "$id": "724",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "718"
+                    },
+                    "Movement": 0.47,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "725",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.75,
+                      "Y": -0.002679774
+                    },
+                    "OutTangent": {
+                      "$id": "726",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.8666667,
+                      "Y": 0.00309662777
+                    },
+                    "Frame": 90
+                  },
+                  {
+                    "$id": "727",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "718"
+                    },
+                    "Movement": 0.53,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "728",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -1.19728673,
+                      "Y": 0.030906016
+                    },
+                    "OutTangent": {
+                      "$id": "729",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.183135748,
+                      "Y": -0.00472736359
+                    },
+                    "Frame": 194
+                  }
+                ]
+              }
+            },
+            {
+              "$id": "730",
+              "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+              "unbound": false,
+              "parentDimensionalTrack": null,
+              "animatable": {
+                "$ref": "51"
+              },
+              "parentClip": {
+                "$ref": "704"
+              },
+              "ungraphableOverried": false,
+              "markers": {
+                "$id": "731",
+                "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                "$values": []
+              },
+              "cachedAnimatableName": "",
+              "keyframes": {
+                "$id": "732",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                "$values": [
+                  {
+                    "$id": "733",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "730"
+                    },
+                    "Movement": 0.550719142,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "734",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -1.0,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "735",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.75,
+                      "Y": 0.0
+                    },
+                    "Frame": 0
+                  },
+                  {
+                    "$id": "736",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "730"
+                    },
+                    "Movement": 0.45,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "737",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.75,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "738",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.8666667,
+                      "Y": 0.0
+                    },
+                    "Frame": 90
+                  },
+                  {
+                    "$id": "739",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "730"
+                    },
+                    "Movement": 0.55,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "740",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.8666667,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "741",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 1.0,
+                      "Y": 0.0
+                    },
+                    "Frame": 194
+                  }
+                ]
+              }
+            },
+            {
+              "$id": "742",
+              "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+              "unbound": false,
+              "parentDimensionalTrack": null,
+              "animatable": {
+                "$ref": "44"
+              },
+              "parentClip": {
+                "$ref": "704"
+              },
+              "ungraphableOverried": false,
+              "markers": {
+                "$id": "743",
+                "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                "$values": []
+              },
+              "cachedAnimatableName": "",
+              "keyframes": {
+                "$id": "744",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                "$values": [
+                  {
+                    "$id": "745",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "742"
+                    },
+                    "Movement": 0.45,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "746",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -1.0,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "747",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.75,
+                      "Y": 0.0
+                    },
+                    "Frame": 0
+                  },
+                  {
+                    "$id": "748",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "742"
+                    },
+                    "Movement": 0.55,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "749",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.75,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "750",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 0.8666667,
+                      "Y": 0.0
+                    },
+                    "Frame": 90
+                  },
+                  {
+                    "$id": "751",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                    "unbound": false,
+                    "animationTrack": {
+                      "$ref": "742"
+                    },
+                    "Movement": 0.45,
+                    "HandleType": "AutoSmooth",
+                    "InTangent": {
+                      "$id": "752",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": -0.8666667,
+                      "Y": 0.0
+                    },
+                    "OutTangent": {
+                      "$id": "753",
+                      "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                      "X": 1.0,
+                      "Y": 0.0
+                    },
+                    "Frame": 194
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "markers": {
+          "$id": "754",
+          "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+          "$values": []
+        },
+        "DurationInSeconds": 6.4666667,
+        "DurationInMS": 6467
       }
     ]
   },
   "projectDefaults": {
-    "$id": "704",
+    "$id": "755",
     "$type": "ProjectDefaults+Defaults, Assembly-CSharp",
     "colorPresets": {
-      "$id": "705",
+      "$id": "756",
       "$type": "System.Collections.Generic.List`1[[UnityEngine.Color, UnityEngine.CoreModule]], mscorlib",
       "$values": [
         {
@@ -7061,10 +7462,10 @@
     },
     "liveOnLaunch": true,
     "lastExportedConfig": {
-      "$id": "706",
+      "$id": "757",
       "$type": "StudioExportConfig, Assembly-CSharp",
       "selectedClips": {
-        "$id": "707",
+        "$id": "758",
         "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp]], mscorlib",
         "$values": [
           {
@@ -7081,11 +7482,14 @@
           },
           {
             "$ref": "582"
+          },
+          {
+            "$ref": "704"
           }
         ]
       },
       "selectedEffectors": {
-        "$id": "708",
+        "$id": "759",
         "$type": "System.Collections.Generic.List`1[[IHardwareEffector, Assembly-CSharp]], mscorlib",
         "$values": [
           {
@@ -7111,7 +7515,7 @@
     },
     "apiPort": 59224,
     "ltcSettings": {
-      "$id": "709",
+      "$id": "760",
       "$type": "LTCSettings, Assembly-CSharp",
       "lastDeviceName": "",
       "frameRate": "FPS_30_00",
@@ -7123,7 +7527,7 @@
       "jogWiggle": 500
     },
     "defaultClips": {
-      "$id": "710",
+      "$id": "761",
       "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp]], mscorlib",
       "$values": []
     },
@@ -7142,23 +7546,23 @@
     }
   },
   "serialControllerMetaDatas": {
-    "$id": "711",
+    "$id": "762",
     "$type": "System.Collections.Generic.List`1[[SerialControllerMetaData, Assembly-CSharp]], mscorlib",
     "$values": [
       {
-        "$id": "712",
+        "$id": "763",
         "$type": "SerialControllerMetaData, Assembly-CSharp",
         "Name": "Default Driver",
         "communicationType": "Serial",
         "communicationTypeMetaData": {
-          "$id": "713",
+          "$id": "764",
           "$type": "SerialCommunicationType_USBSerial_MetaData, Assembly-CSharp",
           "SearchQuery": "",
           "SearchExactPath": "",
           "UseExactPath": true,
           "BaudRate": 115200,
           "sharedSerialAPIMetadata": {
-            "$id": "714",
+            "$id": "765",
             "$type": "SharedBottangoSerialAPIMetaData, Assembly-CSharp",
             "signalRange": "Default_16",
             "driverSignalPrecision": "Default",
@@ -7174,7 +7578,7 @@
         "LiveOnLaunch": true,
         "LastSuccessfulPort": "None",
         "Effectors": {
-          "$id": "715",
+          "$id": "766",
           "$type": "System.Collections.Generic.List`1[[IHardwareEffector, Assembly-CSharp]], mscorlib",
           "$values": [
             {
@@ -7193,19 +7597,19 @@
         }
       },
       {
-        "$id": "716",
+        "$id": "767",
         "$type": "SerialControllerMetaData, Assembly-CSharp",
         "Name": "Been driver",
         "communicationType": "Serial",
         "communicationTypeMetaData": {
-          "$id": "717",
+          "$id": "768",
           "$type": "SerialCommunicationType_USBSerial_MetaData, Assembly-CSharp",
           "SearchQuery": "",
           "SearchExactPath": "",
           "UseExactPath": true,
           "BaudRate": 115200,
           "sharedSerialAPIMetadata": {
-            "$id": "718",
+            "$id": "769",
             "$type": "SharedBottangoSerialAPIMetaData, Assembly-CSharp",
             "signalRange": "Default_16",
             "driverSignalPrecision": "Default",
@@ -7221,7 +7625,7 @@
         "LiveOnLaunch": true,
         "LastSuccessfulPort": "None",
         "Effectors": {
-          "$id": "719",
+          "$id": "770",
           "$type": "System.Collections.Generic.List`1[[IHardwareEffector, Assembly-CSharp]], mscorlib",
           "$values": []
         }
@@ -7229,24 +7633,24 @@
     ]
   },
   "controlSchemes": {
-    "$id": "720",
+    "$id": "771",
     "$type": "System.Collections.Generic.List`1[[ControlScheme, Assembly-CSharp]], mscorlib",
     "$values": [
       {
-        "$id": "721",
+        "$id": "772",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Basic controller",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "722",
+          "$id": "773",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "723",
+              "$id": "774",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "724",
+                "$id": "775",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "RangedAbsolute",
                 "inverted": false,
@@ -7256,16 +7660,16 @@
                 "smoothingMaster": 0.486729324
               },
               "inputProviders": {
-                "$id": "725",
+                "$id": "776",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "726",
+                    "$id": "777",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/rightStick/y"
                   },
                   {
-                    "$id": "727",
+                    "$id": "778",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -7275,11 +7679,11 @@
               }
             },
             {
-              "$id": "728",
+              "$id": "779",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "729",
+                "$id": "780",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "RangedAbsolute",
                 "inverted": false,
@@ -7289,16 +7693,16 @@
                 "smoothingMaster": 0.270405173
               },
               "inputProviders": {
-                "$id": "730",
+                "$id": "781",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "731",
+                    "$id": "782",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/rightStick/x"
                   },
                   {
-                    "$id": "732",
+                    "$id": "783",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -7308,11 +7712,11 @@
               }
             },
             {
-              "$id": "733",
+              "$id": "784",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "734",
+                "$id": "785",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "Incremental",
                 "inverted": false,
@@ -7322,16 +7726,16 @@
                 "smoothingMaster": 0.199351147
               },
               "inputProviders": {
-                "$id": "735",
+                "$id": "786",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "736",
+                    "$id": "787",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/leftStick/y"
                   },
                   {
-                    "$id": "737",
+                    "$id": "788",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -7341,11 +7745,11 @@
               }
             },
             {
-              "$id": "738",
+              "$id": "789",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "739",
+                "$id": "790",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "Incremental",
                 "inverted": false,
@@ -7355,16 +7759,16 @@
                 "smoothingMaster": 0.2038439
               },
               "inputProviders": {
-                "$id": "740",
+                "$id": "791",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "741",
+                    "$id": "792",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/leftStick/x"
                   },
                   {
-                    "$id": "742",
+                    "$id": "793",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -7384,28 +7788,28 @@
         "lastSelected": false
       },
       {
-        "$id": "743",
+        "$id": "794",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "poseblending",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "744",
+          "$id": "795",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "745",
+              "$id": "796",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "746",
+                "$id": "797",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "747",
+                    "$id": "798",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "748",
+                      "$id": "799",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "RangedAbsolute",
                       "inverted": false,
@@ -7415,16 +7819,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "749",
+                      "$id": "800",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "750",
+                          "$id": "801",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/rightStick/x"
                         },
                         {
-                          "$id": "751",
+                          "$id": "802",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7434,11 +7838,11 @@
                     }
                   },
                   {
-                    "$id": "752",
+                    "$id": "803",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "753",
+                      "$id": "804",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "RangedAbsolute",
                       "inverted": false,
@@ -7448,16 +7852,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "754",
+                      "$id": "805",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "755",
+                          "$id": "806",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/rightStick/y"
                         },
                         {
-                          "$id": "756",
+                          "$id": "807",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7469,17 +7873,17 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "757",
+                "$id": "808",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "758",
+                  "$id": "809",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$ref": "748"
+                      "$ref": "799"
                     },
                     {
-                      "$ref": "753"
+                      "$ref": "804"
                     }
                   ]
                 }
@@ -7490,19 +7894,19 @@
               "DeviceConnected": false
             },
             {
-              "$id": "759",
+              "$id": "810",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "760",
+                "$id": "811",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "761",
+                    "$id": "812",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "762",
+                      "$id": "813",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -7512,16 +7916,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "763",
+                      "$id": "814",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "764",
+                          "$id": "815",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/leftStick/x"
                         },
                         {
-                          "$id": "765",
+                          "$id": "816",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7531,11 +7935,11 @@
                     }
                   },
                   {
-                    "$id": "766",
+                    "$id": "817",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "767",
+                      "$id": "818",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -7545,16 +7949,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "768",
+                      "$id": "819",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "769",
+                          "$id": "820",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/leftStick/y"
                         },
                         {
-                          "$id": "770",
+                          "$id": "821",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7566,17 +7970,17 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "771",
+                "$id": "822",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "772",
+                  "$id": "823",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$ref": "762"
+                      "$ref": "813"
                     },
                     {
-                      "$ref": "767"
+                      "$ref": "818"
                     }
                   ]
                 }
@@ -7597,37 +8001,37 @@
         "lastSelected": false
       },
       {
-        "$id": "773",
+        "$id": "824",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Pose select",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "774",
+          "$id": "825",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "775",
+              "$id": "826",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "776",
+                "$id": "827",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "777",
+                    "$id": "828",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "778",
+                      "$id": "829",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "779",
+                          "$id": "830",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "780",
+                          "$id": "831",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7637,20 +8041,20 @@
                     }
                   },
                   {
-                    "$id": "781",
+                    "$id": "832",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "782",
+                      "$id": "833",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "783",
+                          "$id": "834",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "784",
+                          "$id": "835",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7660,20 +8064,20 @@
                     }
                   },
                   {
-                    "$id": "785",
+                    "$id": "836",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "786",
+                      "$id": "837",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "787",
+                          "$id": "838",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "788",
+                          "$id": "839",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7685,14 +8089,14 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "789",
+                "$id": "840",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "790",
+                  "$id": "841",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$id": "791",
+                      "$id": "842",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -7701,7 +8105,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "792",
+                      "$id": "843",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -7710,7 +8114,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "793",
+                      "$id": "844",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -7719,7 +8123,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "794",
+                      "$id": "845",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -7728,7 +8132,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "795",
+                      "$id": "846",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -7755,37 +8159,37 @@
         "lastSelected": true
       },
       {
-        "$id": "796",
+        "$id": "847",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Incremental",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "797",
+          "$id": "848",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "798",
+              "$id": "849",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "799",
+                "$id": "850",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "800",
+                    "$id": "851",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "801",
+                      "$id": "852",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "802",
+                          "$id": "853",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "803",
+                          "$id": "854",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7795,20 +8199,20 @@
                     }
                   },
                   {
-                    "$id": "804",
+                    "$id": "855",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "805",
+                      "$id": "856",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "806",
+                          "$id": "857",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "807",
+                          "$id": "858",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7818,20 +8222,20 @@
                     }
                   },
                   {
-                    "$id": "808",
+                    "$id": "859",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "809",
+                      "$id": "860",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "810",
+                          "$id": "861",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "811",
+                          "$id": "862",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -7843,14 +8247,14 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "812",
+                "$id": "863",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "813",
+                  "$id": "864",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$id": "814",
+                      "$id": "865",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -7860,7 +8264,7 @@
                       "smoothingMaster": 0.0
                     },
                     {
-                      "$id": "815",
+                      "$id": "866",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
