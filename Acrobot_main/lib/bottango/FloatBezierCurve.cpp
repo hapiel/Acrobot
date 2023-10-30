@@ -4,17 +4,28 @@
 #define COMPRESSED_SIGNAL_MAX 8192.0f
 
 FloatBezierCurve::FloatBezierCurve(
-    unsigned long startTimeInMs,
-    long duration,
-    int startY,
-    long startControlX,
-    int startControlY,
-    int endY,
-    long endControlX,
-    int endControlY)
+    //float controllPoints[8]
+    //unsigned long startTimeInMs,
+    //long duration,
+    //int startY,
+    //long startControlX,
+    //int startControlY,
+    //int endY,
+    //long endControlX,
+    //int endControlY
+    )
 {
+    /*this->curveStartTimeInMs = controllPoints[0];
+    this->duration = controllPoints[1];
 
-    this->curveStartTimeInMs = startTimeInMs;
+    this->startY = controllPoints[2];
+    this->startControlX = controllPoints[3];
+    this->startControlY = controllPoints[4];
+
+    this->endY = controllPoints[5];
+    this->endControlX = controllPoints[6];
+    this->endControlY = controllPoints[7];*/
+    /*this->curveStartTimeInMs = startTimeInMs;
     this->duration = duration;
 
     this->startY = startY;
@@ -23,7 +34,20 @@ FloatBezierCurve::FloatBezierCurve(
 
     this->endY = endY;
     this->endControlX = endControlX;
-    this->endControlY = endControlY;
+    this->endControlY = endControlY;*/
+}
+void FloatBezierCurve::setControllPoints(float controllPoints[8])
+{
+    this->curveStartTimeInMs = controllPoints[0];
+    this->duration = controllPoints[1];
+
+    this->startY = controllPoints[2];
+    this->startControlX = controllPoints[3];
+    this->startControlY = controllPoints[4];
+
+    this->endY = controllPoints[5];
+    this->endControlX = controllPoints[6];
+    this->endControlY = controllPoints[7];
 }
 
 float FloatBezierCurve::getValue(unsigned long currentTimeMs)

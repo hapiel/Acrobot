@@ -119,7 +119,7 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
-BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR);
+BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd);
 
 // wifi
 bool wifiConnected = false;

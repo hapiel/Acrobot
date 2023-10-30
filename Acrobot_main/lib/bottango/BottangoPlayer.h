@@ -7,37 +7,65 @@
 #include "utilsAcrobot.h"
 #include "RemoteDebug.h"
 #include "FloatBezierCurve.h"
+#include "SdFat.h"
+#include "sdios.h"
+
+const int bezierBufferLenght = 30;
 
 class BottangoPlayer
 {
 public:
-  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR);
+  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd);
   void update();
   void start();
   void stop();
-  bool enabled = 0;
+  void loadFileAndPlay(char csvDir [256]);
+
 
 private:
-
+  bool enabled = 0;
   unsigned long int starttime;
   unsigned long int currenttime;
   float kp = 10.0;
   float ki = 2.0;
-  float legLBezier_testdata[8] = {0,3000,193.677978515625,750,0.0,166.48681640625,-750,0.0};
-  float legRBezier_testdata[8] = {0,3000,166.48681640625,750,0.0,193.51318359375,-750,0.0};
-  float armLBezier_testdata[8] = {0,3000,158.37890625,750,0.0,201.62109375,-175,0.0};
-  float armRBezier_testdata[8] = {0,3000,201.62109375,750,0.0,158.37890625,-750,-1.93359375};  
-  FloatBezierCurve legLBezier = FloatBezierCurve(legLBezier_testdata[0], legLBezier_testdata[1], legLBezier_testdata[2], legLBezier_testdata[3], legLBezier_testdata[4], legLBezier_testdata[5], legLBezier_testdata[6], legLBezier_testdata[7]);
-  FloatBezierCurve legRBezier = FloatBezierCurve(legRBezier_testdata[0], legRBezier_testdata[1], legRBezier_testdata[2], legRBezier_testdata[3], legRBezier_testdata[4], legRBezier_testdata[5], legRBezier_testdata[6], legRBezier_testdata[7]);
-  FloatBezierCurve armLBezier = FloatBezierCurve(armLBezier_testdata[0], armLBezier_testdata[1], armLBezier_testdata[2], armLBezier_testdata[3], armLBezier_testdata[4], armLBezier_testdata[5], armLBezier_testdata[6], armLBezier_testdata[7]);
-  FloatBezierCurve armRBezier = FloatBezierCurve(armRBezier_testdata[0], armRBezier_testdata[1], armRBezier_testdata[2], armRBezier_testdata[3], armRBezier_testdata[4], armRBezier_testdata[5], armRBezier_testdata[6], armRBezier_testdata[7]);
+
+  void checkEndOfCurve();
+
+  bool armLEnabled = 0;
+  bool armREnabled = 0;
+  bool legLEnabled = 0;
+  bool legREnabled = 0;
+
+  float armLCurveArray[bezierBufferLenght][8];
+  float armRCurveArray[bezierBufferLenght][8];
+  float legLCurveArray[bezierBufferLenght][8];
+  float legRCurveArray[bezierBufferLenght][8];
+
+  unsigned int armLCurveRead = 0;
+  unsigned int armRCurveRead = 0;
+  unsigned int legLCurveRead = 0;
+  unsigned int legRCurveRead = 0;
+  unsigned int armLCurveWrite = 0;
+  unsigned int armRCurveWrite = 0;
+  unsigned int legLCurveWrite = 0;
+  unsigned int legRCurveWrite = 0;
+  unsigned int armLCurveLastMove = 0;
+  unsigned int armRCurveLastMove = 0;
+  unsigned int legLCurveLastMove = 0;
+  unsigned int legRCurveLastMove = 0;
+
+  FloatBezierCurve armLBezier = FloatBezierCurve();
+  FloatBezierCurve armRBezier = FloatBezierCurve();
+  FloatBezierCurve legLBezier = FloatBezierCurve();
+  FloatBezierCurve legRBezier = FloatBezierCurve();
+
   RemoteDebug &Debug;
-  Leg &legL;
-  Leg &legR;
   Arm &armL;
   Arm &armR;
+  Leg &legL;
+  Leg &legR;
+  SdExFat &sd;
 
-  float mapBeziervalue(float value);
 };
 
 #endif // BOTTANGOPLAYER_H
