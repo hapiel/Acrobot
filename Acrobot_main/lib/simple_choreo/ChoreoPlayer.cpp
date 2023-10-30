@@ -225,8 +225,8 @@ void ChoreoPlayer::moveStand()
 {
   pL = 12;
   pR = 12;
-  dL = 3;
-  dR = 3;
+  iL = 3;
+  iR = 3;
   pStand(1000);
 }
 
@@ -234,8 +234,8 @@ void ChoreoPlayer::moveWalk()
 {
   pL = 8;
   pR = 8;
-  dL = 5;
-  dR = 5;
+  iL = 5;
+  iR = 5;
   if (stepTimeBetween(0, 800))
   {
     pStepRightDirect(20);
@@ -251,8 +251,8 @@ void ChoreoPlayer::moveWalkCont(int stepSize, float p)
 {
   pL = p;
   pR = p;
-  dL = 5;
-  dR = 5;
+  iL = 5;
+  iR = 5;
   int timeStep = 1600;
 
   for (int i = 0; i < 100; i++)
@@ -273,8 +273,8 @@ void ChoreoPlayer::moveSplitTwice()
   int duration = 1000;
   pL = 10;
   pR = 10;
-  dL = 5;
-  dR = 5;
+  iL = 5;
+  iR = 5;
 
   if (stepTimeBetween(0, 2000))
   {
@@ -324,12 +324,12 @@ float ChoreoPlayer::moveLinear(float startPos, float endPos, int duration, uint3
   return position;
 }
 
-void ChoreoPlayer::setPPDDLR(float pL, float pR, float dL, float dR)
+void ChoreoPlayer::setPPDDLR(float pL, float pR, float iL, float iR)
 {
   this->pL = pL;
   this->pR = pR;
-  this->dL = dL;
-  this->dR = dR;
+  this->iL = iL;
+  this->iR = iR;
 }
 
 void ChoreoPlayer::setPD(float p, float d)

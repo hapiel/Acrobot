@@ -26,7 +26,7 @@ private:
   bool enabled = 0;
   unsigned long int starttime;
   unsigned long int currenttime;
-  float kp = 10.0;
+  float kp = 5.0;
   float ki = 2.0;
 
   void checkEndOfCurve();
