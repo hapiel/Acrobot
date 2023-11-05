@@ -1,134 +1,198 @@
 #include "BottangoPlayer.h"
 
-
-
-BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd) : Debug(Debug), legL(legL), legR(legR), armL(armL), armR(armR), sd(sd)
-{
-}
+BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, CSV_Parser &cp) : Debug(Debug), legL(legL), legR(legR), armL(armL), armR(armR), sd(sd), cp(cp)
+{}
 
 void BottangoPlayer::update()
 {
+  if(armLEnabled||armREnabled||legLEnabled||legREnabled){
+    while(sumAllReadWritePointers()<(bezierBufferLenght-2))
+    {
+      readAndParseCSVRow();
+    }
+  }
   currenttime = millis()-starttime;
   checkEndOfCurve();
-  if(armLEnabled == 1)
-  {
-    armL.setTarget(armLBezier.getValue(currenttime), kp, ki);
-  }
-  if(armREnabled == 1)
-  {
-    armR.setTarget(armRBezier.getValue(currenttime), kp, ki);
-  }
-  if(legLEnabled == 1)
-  {
-    legL.setTarget(legLBezier.getValue(currenttime), kp, ki);
-  }
-  if(legREnabled == 1)
-  {
-    legR.setTarget(legRBezier.getValue(currenttime), kp, ki);
-  }
+  if(armLEnabled == 1){armL.setTarget(armLBezier.getValue(currenttime), kp, ki);}
+  if(armREnabled == 1){armR.setTarget(armRBezier.getValue(currenttime), kp, ki);}
+  if(legLEnabled == 1){legL.setTarget(legLBezier.getValue(currenttime), kp, ki);}
+  if(legREnabled == 1){legR.setTarget(legRBezier.getValue(currenttime), kp, ki);}
 }
 
 void BottangoPlayer::start()
 {
   starttime = millis();
-  enabled = 1;
+  armLEnabled = true;
+  armREnabled = true;
+  legLEnabled = true;
+  legREnabled = true;
 }
 
 void BottangoPlayer::stop()
 {
-  enabled = 0;
+  armLEnabled = 0;
+  armREnabled = 0;
+  legLEnabled = 0;
+  legREnabled = 0;
+}
+
+void BottangoPlayer::loadFile(char csvDir[256])
+{
+  strcpy(currentFileDir, csvDir);
+  openCSV();
 }
 void BottangoPlayer::checkEndOfCurve()
 {
   if (!armLBezier.isInProgress(currenttime))
   {
-    armLCurveRead++;
-    if(armLCurveRead >= armRCurveLastMove)
+    if(armLCurveRead!=armLCurveWrite){
+      armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
+      armLCurveRead++;
+      if(armLCurveRead >= bezierBufferLenght){
+        armLCurveRead = 0;
+      }
+    }
+    else if(csvDisabledFlag)
     {
-      armLEnabled = 0;
+      legREnabled = false;
     }
-    if(armLCurveRead >= bezierBufferLenght){
-      armLCurveRead = 0;
-    }
-    armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
   }
 
   if (!armRBezier.isInProgress(currenttime))
   {
-    armRCurveRead++;
-    if(armRCurveRead >= armRCurveLastMove)
+    if(armRCurveRead!=armRCurveWrite){
+      armRBezier.setControllPoints(armRCurveArray[armRCurveRead]);
+      armRCurveRead++;
+      if(armRCurveRead >= bezierBufferLenght){
+        armRCurveRead = 0;
+      }
+    }
+    else if(csvDisabledFlag)
     {
-      armREnabled = 0;
+      legREnabled = false;
     }
-    if(armRCurveRead >= bezierBufferLenght){
-      armRCurveRead = 0;
-    }
-    armRBezier.setControllPoints(armRCurveArray[armRCurveRead]);
   }
 
   if (!legLBezier.isInProgress(currenttime))
   {
-    legLCurveRead++;
-    if(legLCurveRead >= legLCurveLastMove)
+    if(legLCurveRead!=legLCurveWrite){
+      legLBezier.setControllPoints(legLCurveArray[legLCurveRead]);
+      legLCurveRead++;
+      if(legLCurveRead >= bezierBufferLenght){
+        legLCurveRead = 0;
+      }
+    }
+    else if(csvDisabledFlag)
     {
-      legLEnabled = 0;
+      legLEnabled = false;
     }
-    if(legLCurveRead >= bezierBufferLenght){
-      legLCurveRead = 0;
-    }
-    legLBezier.setControllPoints(legLCurveArray[legLCurveRead]);
   }
 
   if (!legRBezier.isInProgress(currenttime))
   {
-    legRCurveRead++;
-    if(legRCurveRead >= legRCurveLastMove)
+    if(legRCurveRead!=legRCurveWrite){
+      legRBezier.setControllPoints(legRCurveArray[legRCurveRead]);
+      legRCurveRead++;
+      if(legRCurveRead >= bezierBufferLenght){
+        legRCurveRead = 0;
+      }
+    }
+    else if(csvDisabledFlag)
     {
-      legREnabled = 0;
+      legREnabled = false;
     }
-    if(legRCurveRead >= bezierBufferLenght){
-      legRCurveRead = 0;
-    }
-    legRBezier.setControllPoints(legRCurveArray[legRCurveRead]);
   }
 }
-void BottangoPlayer::loadFileAndPlay(char csvDir [256])
-{
-  armLCurveRead = 0;
-  armRCurveRead = 0;
-  legLCurveRead = 0;
-  legRCurveRead = 0;
-  armLCurveWrite = 0;
-  armRCurveWrite = 0;
-  legLCurveWrite = 0;
-  legRCurveWrite = 0;
-  
-  char csvLine[128];
-  ExFile csv;
-  csv = sd.open(csvDir,FILE_READ);
-  while(csv.available())
-  {
-    int n = csv.fgets(csvLine,sizeof(csvLine));
-    if (n <= 0) {
-      //error("fgets failed");
-    }
-    if (csvLine[n-1] != '\n' && n == (sizeof(csvLine) - 1)) {
-      //error("line too long");
-    }
-    //if (!parseLine(line)) {
-      //error("parseLine failed");
-    const char s[2] = ",";
-    char *token;
 
-    token = strtok(csvLine, s);
-    int i = 0;
-    char splitLine[10][16];
-    while(token !=NULL)
-    {
-        splitLine[i] = token;  
+void BottangoPlayer::openCSV()
+{
+  csv = sd.open(currentFileDir,FILE_READ);
+  if (!csv) {
+    debugE("File (%s) open failed",currentFileDir);
+    fileReady = 0;
+  }
+  else{
+    csvDisabledFlag = false;
+    fileReady = 1;
+  }
+}
+
+void BottangoPlayer::closeCSV()
+{
+  csv.close();
+}
+
+void BottangoPlayer::readAndParseCSVRow()
+{
+  if(cp.parseRow())
+  {
+    //original types of Ms and durationMs ints, can be optimized by using a struct.
+    char **commandType=         (char**)cp[0];
+    char **motorID =            (char**)cp[1];
+    int *startMs =              (int*)cp[2];
+    int *durationMs =           (int*)cp[3];
+    float *startPosition =      (float*)cp[4];
+    float *startControlPointX = (float*)cp[5];
+    float *startControlPointY = (float*)cp[6];
+    float *endPosition =        (float*)cp[7];
+    float *endControlPointX =   (float*)cp[8];
+    float *endControlPointY =   (float*)cp[9];
+    
+    float controllArray[8] = {startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]};
+    if(commandType[0] == "sC"){
+      if (motorID[0]  == "m_arm_l")
+      {
+        std::copy(std::begin(controllArray),std::end(controllArray),std::begin(armLCurveArray[armLCurveWrite]));
+        armLCurveWrite++;
+        if(armLCurveWrite = bezierBufferLenght){
+          armLCurveWrite = 0;
+        }
+      }
+      else if (motorID[0]  == "m_arm_r")
+      {
+        std::copy(std::begin(controllArray),std::end(controllArray),std::begin(armRCurveArray[armRCurveWrite]));
+        armRCurveWrite++;
+        if(armRCurveWrite = bezierBufferLenght){
+          armRCurveWrite = 0;
+        }
+      }
+      else if (motorID[0]  == "m_leg_l")
+      {
+        std::copy(std::begin(controllArray),std::end(controllArray),std::begin(legLCurveArray[legLCurveWrite]));
+        legLCurveWrite++;
+        if(legLCurveWrite = bezierBufferLenght){
+          legLCurveWrite = 0;
+        }
+      }
+      else if (motorID[0]  == "m_leg_r")
+      {
+        std::copy(std::begin(controllArray),std::end(controllArray),std::begin(legRCurveArray[legRCurveWrite]));
+        legRCurveWrite++;
+        if(legRCurveWrite = bezierBufferLenght){
+          legRCurveWrite = 0;
+        }
+      }
     }
-      token
-  } 
+  }
+  else{
+    closeCSV();
+    fileReady = true;
+    enabled = false;
+    csvDisabledFlag = true;
+  }
+}
+
+int BottangoPlayer::sumAllReadWritePointers()
+{
+  int deltaPointersArmL = armLCurveWrite - armLCurveRead;
+  if(deltaPointersArmL<0)deltaPointersArmL + bezierBufferLenght;
+  int deltaPointersArmR = armRCurveWrite - armRCurveRead;
+  if(deltaPointersArmR<0)deltaPointersArmR + bezierBufferLenght;
+  int deltaPointersLegL = legLCurveWrite - legLCurveRead;
+  if(deltaPointersLegL<0)deltaPointersLegL + bezierBufferLenght;
+  int deltaPointersLegR = legRCurveWrite - legRCurveRead;
+  if(deltaPointersLegR<0)deltaPointersLegR + bezierBufferLenght;
+  return(deltaPointersArmL+deltaPointersArmR+deltaPointersLegL+deltaPointersLegR);
 }
 
 
