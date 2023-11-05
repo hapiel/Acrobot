@@ -9,27 +9,60 @@
 #include "FloatBezierCurve.h"
 #include "SdFat.h"
 #include "sdios.h"
+#include <CSV_Parser.h>
 
-const int bezierBufferLenght = 30;
+const int bezierBufferLenght = 10;
 
 class BottangoPlayer
 {
 public:
-  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd);
+  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, CSV_Parser &cp);
   void update();
+
   void start();
   void stop();
-  void loadFileAndPlay(char csvDir [256]);
 
+  void loadFile(char csvDir [256]);
+  void loadNextFile(char csvDir [256]);
+  bool checkNextFileReady();
+
+  void setMotorKpKi(float kp = 5.0, float ki = 2.0);
 
 private:
-  bool enabled = 0;
+  FloatBezierCurve armLBezier = FloatBezierCurve();
+  FloatBezierCurve armRBezier = FloatBezierCurve();
+  FloatBezierCurve legLBezier = FloatBezierCurve();
+  FloatBezierCurve legRBezier = FloatBezierCurve();
+
+  RemoteDebug &Debug;
+  Arm &armL;
+  Arm &armR;
+  Leg &legL;
+  Leg &legR;
+
+  SdExFat &sd;
+  ExFile csv;
+  CSV_Parser cp;
+
+
+  float readNextCSVLine();
+  void checkEndOfCurve();
+  void openCSV();
+  void closeCSV();
+  void readAndParseCSVRow();
+  int sumAllReadWritePointers();
+
+  char currentFileDir[256];
+  char nextFileDir[256];
+  bool enabled = false;
+  bool csvDisabledFlag = false;
+  bool fileReady = false;
   unsigned long int starttime;
   unsigned long int currenttime;
   float kp = 5.0;
   float ki = 2.0;
 
-  void checkEndOfCurve();
+  int csvRowIndex = 0;
 
   bool armLEnabled = 0;
   bool armREnabled = 0;
@@ -53,19 +86,6 @@ private:
   unsigned int armRCurveLastMove = 0;
   unsigned int legLCurveLastMove = 0;
   unsigned int legRCurveLastMove = 0;
-
-  FloatBezierCurve armLBezier = FloatBezierCurve();
-  FloatBezierCurve armRBezier = FloatBezierCurve();
-  FloatBezierCurve legLBezier = FloatBezierCurve();
-  FloatBezierCurve legRBezier = FloatBezierCurve();
-
-  RemoteDebug &Debug;
-  Arm &armL;
-  Arm &armR;
-  Leg &legL;
-  Leg &legR;
-  SdExFat &sd;
-
 };
 
 #endif // BOTTANGOPLAYER_H

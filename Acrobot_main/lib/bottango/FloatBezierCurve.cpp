@@ -127,7 +127,7 @@ bool FloatBezierCurve::isInProgress(unsigned long currentTimeMs)
 {
     return currentTimeMs >= getStartTimeMs() && currentTimeMs <= getEndTimeMs();
 }
-
+    
 float FloatBezierCurve::getStartMovement()
 {
     return startY ;

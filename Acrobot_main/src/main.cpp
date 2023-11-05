@@ -60,6 +60,8 @@ The project should be built in platformio
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
 #include "BottangoPlayer.h"
+#define CSV_PARSER_DONT_IMPORT_SD
+#include "CSV_Parser.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -91,7 +93,16 @@ SPIClass spi = SPIClass(VSPI);
 #define SD_CONFIG SdSpiConfig(CS, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
 // only allow exFAT sd, can be changed, see library.
 SdExFat sd;
-ExFile file;
+ExFile bezierCSVfile;
+CSV_Parser cp("ssffffffff");
+
+//nodig voor csv parser
+char feedRowParser() {
+  return bezierCSVfile.read();
+}
+bool rowParserFinished() {
+  return ((bezierCSVfile.available()>0)?false:true);
+}
 
 // custom libraries
 Joystick joystick;
@@ -119,7 +130,7 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
-BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd);
+BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd, cp);
 
 // wifi
 bool wifiConnected = false;
@@ -153,7 +164,8 @@ MAIN_MENU(
 
 SUB_MENU(bezierPage, mainMenu,
          ITEM_COMMAND("beziercurve_test", []()
-                      { bottangoPlayer.start(); }),
+                      { bottangoPlayer.loadFile("Stand.csv");
+                        bottangoPlayer.start(); }),
          ITEM_BASIC(menu.motorTargA),
          ITEM_BASIC(menu.motorTargL));
 
