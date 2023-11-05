@@ -54,7 +54,7 @@ for animation in data[0]["Animations"]:
         csvwriter = csv.writer(csvfile)
         
         # Write header row
-        header_row = ["Commando type", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
+        header_row = ["Command", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
         csvwriter.writerow(header_row)
 
         # Write animation commands to the CSV file
