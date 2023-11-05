@@ -37,6 +37,8 @@ os.makedirs(csv_directory, exist_ok=True)
 def fMap(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
+
+
 # Iterate through each animation in the JSON data
 for animation in data[0]["Animations"]:
     # Get animation name and commands
@@ -50,6 +52,10 @@ for animation in data[0]["Animations"]:
     csv_file_path = os.path.join(csv_directory, f"{animation_name}.csv")
     with open(csv_file_path, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
+        
+        # Write header row
+        header_row = ["Command", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
+        csvwriter.writerow(header_row)
 
         # Write animation commands to the CSV file
         for row in animation_array:
