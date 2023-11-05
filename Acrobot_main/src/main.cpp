@@ -38,8 +38,6 @@ The project should be built in platformio
 #include "ItemToggle.h"
 #include "ItemCommand.h"
 #include "LcdMenu.h" // needs to be after item-imports!!!
-#include "SdFat.h"
-#include "sdios.h"
 #include "SPI.h"
 
 // custom libraries
@@ -93,15 +91,15 @@ SPIClass spi = SPIClass(VSPI);
 #define SD_CONFIG SdSpiConfig(CS, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
 // only allow exFAT sd, can be changed, see library.
 SdExFat sd;
-ExFile bezierCSVfile;
+ExFile file;
 CSV_Parser cp("ssffffffff");
 
-//nodig voor csv parser
+// nodig voor csv parser
 char feedRowParser() {
-  return bezierCSVfile.read();
+  return file.read();
 }
 bool rowParserFinished() {
-  return ((bezierCSVfile.available()>0)?false:true);
+  return ((file.available()>0)?false:true);
 }
 
 // custom libraries
@@ -130,7 +128,7 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
-BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd, cp);
+BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd, file, cp);
 
 // wifi
 bool wifiConnected = false;
@@ -163,6 +161,12 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(bezierPage, mainMenu,
+          ITEM_COMMAND("open file", []()
+                      { if (file.open("Stand.csv", FILE_WRITE)){
+                        Serial.println("File opened");
+                      } else {
+                        Serial.println("File failed to open");
+                      }}),
          ITEM_COMMAND("beziercurve_test", []()
                       { bottangoPlayer.loadFile("Stand.csv");
                         bottangoPlayer.start(); }),

@@ -16,14 +16,14 @@ const int bezierBufferLenght = 10;
 class BottangoPlayer
 {
 public:
-  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, CSV_Parser &cp);
+  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, ExFile &file, CSV_Parser &cp);
   void update();
 
   void start();
   void stop();
 
-  void loadFile(char csvDir [256]);
-  void loadNextFile(char csvDir [256]);
+  void loadFile(const char *csvDir);
+  void loadNextFile(char csvDir[256]);
   bool checkNextFileReady();
 
   void setMotorKpKi(float kp = 5.0, float ki = 2.0);
@@ -41,9 +41,8 @@ private:
   Leg &legR;
 
   SdExFat &sd;
-  ExFile csv;
-  CSV_Parser cp;
-
+  ExFile &file;
+  CSV_Parser &cp;
 
   float readNextCSVLine();
   void checkEndOfCurve();
