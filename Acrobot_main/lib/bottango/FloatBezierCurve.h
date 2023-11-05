@@ -6,20 +6,21 @@ class FloatBezierCurve
 {
 public:
     FloatBezierCurve(
-        unsigned long startTimeInMs,
-        long duration,
-        int startY,
-        long startControlX,
-        int startControlY,
-        int endY,
-        long endControlX,
-        int endControlY);
+        //unsigned long startTimeInMs,
+        //long duration,
+        //int startY,
+        //long startControlX,
+        //int startControlY,
+        //int endY,
+        //long endControlX,
+        //int endControlY
+        );
 
     /** returns a value in the range [startPosition - endPosition] */
+    void setControllPoints(float controllPoints[8]);
     virtual float getValue(unsigned long currentTimeMs);
 
     virtual bool isInProgress(unsigned long currentTimeMs);
-
 
     virtual unsigned long getEndTimeMs();
 
