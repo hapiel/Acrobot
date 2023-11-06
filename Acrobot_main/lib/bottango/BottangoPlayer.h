@@ -7,8 +7,7 @@
 #include "utilsAcrobot.h"
 #include "RemoteDebug.h"
 #include "FloatBezierCurve.h"
-#include "SdFat.h"
-#include "sdios.h"
+#include "SD.h"
 #include <CSV_Parser.h>
 
 const int bezierBufferLenght = 10;
@@ -16,7 +15,7 @@ const int bezierBufferLenght = 10;
 class BottangoPlayer
 {
 public:
-  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, ExFile &file, CSV_Parser &cp);
+  BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL,  Arm &armR, File &file, CSV_Parser &cp);
   void update();
 
   void start();
@@ -40,8 +39,7 @@ private:
   Leg &legL;
   Leg &legR;
 
-  SdExFat &sd;
-  ExFile &file;
+  File &file;
   CSV_Parser &cp;
 
   float readNextCSVLine();

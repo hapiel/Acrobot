@@ -39,6 +39,8 @@ The project should be built in platformio
 #include "ItemCommand.h"
 #include "LcdMenu.h" // needs to be after item-imports!!!
 #include "SPI.h"
+#define CSV_PARSER_DONT_IMPORT_SD
+#include "CSV_Parser.h"
 
 // custom libraries
 #include "utilsAcrobot.h"
@@ -58,8 +60,6 @@ The project should be built in platformio
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
 #include "BottangoPlayer.h"
-#define CSV_PARSER_DONT_IMPORT_SD
-#include "CSV_Parser.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -86,20 +86,18 @@ TwoWire wire(0);
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
-// need custom SPI class because of incorrect wiring
-SPIClass spi = SPIClass(VSPI);
-#define SD_CONFIG SdSpiConfig(CS, DEDICATED_SPI, SD_SCK_MHZ(16), &spi)
-// only allow exFAT sd, can be changed, see library.
-SdExFat sd;
-ExFile file;
+
+File file;
 CSV_Parser cp("ssffffffff");
 
-// nodig voor csv parser
-char feedRowParser() {
+// needed for csv_parser library
+char feedRowParser()
+{
   return file.read();
 }
-bool rowParserFinished() {
-  return ((file.available()>0)?false:true);
+bool rowParserFinished()
+{
+  return ((file.available() > 0) ? false : true);
 }
 
 // custom libraries
@@ -128,7 +126,7 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
-BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, sd, file, cp);
+BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
 
 // wifi
 bool wifiConnected = false;
@@ -161,17 +159,14 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(bezierPage, mainMenu,
-          ITEM_COMMAND("open file", []()
-                      { if (file.open("Stand.csv", FILE_WRITE)){
-                        Serial.println("File opened");
-                      } else {
-                        Serial.println("File failed to open");
-                      }}),
-         ITEM_COMMAND("beziercurve_test", []()
-                      { bottangoPlayer.loadFile("Stand.csv");
+         ITEM_COMMAND("beziercurve_stand", []()
+                      { bottangoPlayer.loadFile("/Stand.csv");
                         bottangoPlayer.start(); }),
          ITEM_BASIC(menu.motorTargA),
-         ITEM_BASIC(menu.motorTargL));
+         ITEM_BASIC(menu.motorTargL),
+         ITEM_COMMAND("beziercurve_pod", []()
+                      { bottangoPlayer.loadFile("/Podcheska.csv");
+                        bottangoPlayer.start(); }));
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE", []()
@@ -297,10 +292,10 @@ void inits()
   batterySensor.init();
 
   debugI("Next init: SPI");
-  spi.begin(SCK, MISO, MOSI, CS);
+  SPI.begin(SCK, MISO, MOSI, CS);
 
   debugI("Next init: SD card");
-  if (!sd.begin(SD_CONFIG))
+  if (!SD.begin(CS))
   {
     debugE("SD card init FAILED!");
   }
@@ -392,53 +387,6 @@ void taskMain(void *parameter)
     updates();
     wifiConnection(); // restore wifi variables
 
-    // control legs, temp system
-    // if (joystick.getButtonR1())
-    // {
-    //   choreoPlayer.stop();
-    //   if (joystick.getMiscPSPressed())
-    //   {
-    //     legR.startCalibration();
-    //   }
-    //   float position = fMap(joystick.getAxisRYCorrected(), -128, 128, 90, 270);
-    //   legR.setTarget(position, menu.getP(), menu.getD());
-    // }
-
-    // if (joystick.getButtonL1())
-    // {
-    //   choreoPlayer.stop();
-    //   if (joystick.getMiscPSPressed())
-    //   {
-    //     legL.startCalibration();
-    //   }
-
-    //   float legPos = fMap(joystick.getAxisLYCorrected(), -128, 128, 90, 270);
-    //   legL.setTarget(legPos, menu.getP(), menu.getD());
-    // }
-
-    // if (joystick.getButtonCrossPressed())
-    // {
-
-    //   legR.stop();
-    //   legL.stop();
-    //   choreoPlayer.stop();
-    // }
-
-    // if (joystick.getButtonSquarePressed())
-    // {
-
-    //   choreoPlayer.start(CHOREO_STANDING);
-    // }
-
-    // if (joystick.getButtonTrianglePressed())
-    // {
-    //   choreoPlayer.start(MUSIC_SEQUENCE_4);
-    // }
-    // if (joystick.getButtonCirclePressed())
-    // {
-    //   choreoPlayer.start(ACT_MILA);
-    // }
-
     // debug messages
     static long executionTimer1 = 0;
     if (runEvery(1000, executionTimer1))
@@ -447,6 +395,7 @@ void taskMain(void *parameter)
     }
 
     Debug.handle(); // needs to be in bottom of loop
+
 
     vTaskDelay(10);
   }
@@ -466,11 +415,13 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 50000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 50000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-  vTaskDelete(NULL);
+  // taskMain(NULL);
+  // taskI2C(NULL);
+  vTaskDelay(100);
 }

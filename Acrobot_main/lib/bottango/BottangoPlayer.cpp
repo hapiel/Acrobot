@@ -1,6 +1,6 @@
 #include "BottangoPlayer.h"
 
-BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, SdExFat &sd, ExFile &file, CSV_Parser &cp) : Debug(Debug), legL(legL), legR(legR), armL(armL), armR(armR), sd(sd), file(file), cp(cp)
+BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp) : Debug(Debug), legL(legL), legR(legR), armL(armL), armR(armR), file(file), cp(cp)
 {
 }
 
@@ -8,16 +8,24 @@ void BottangoPlayer::update()
 {
   if (armLEnabled || armREnabled || legLEnabled || legREnabled)
   {
-    while (sumAllReadWritePointers() < (bezierBufferLenght - 2))
+    // temp loop exit condition
+    Serial.println("start while");
+    int i = 0;
+    while (sumAllReadWritePointers() < (bezierBufferLenght - 2) && i < 10)
     {
+      i++;
       readAndParseCSVRow();
     }
+    Serial.println("end while");
   }
   currenttime = millis() - starttime;
   checkEndOfCurve();
   if (armLEnabled == 1)
   {
+    Serial.println("armL");
+    Serial.println(currenttime);
     armL.setTarget(armLBezier.getValue(currenttime), kp, ki);
+    Serial.println("armL set");
   }
   if (armREnabled == 1)
   {
@@ -40,7 +48,6 @@ void BottangoPlayer::start()
   armREnabled = true;
   legLEnabled = true;
   legREnabled = true;
-  Serial.println("Started");
 }
 
 void BottangoPlayer::stop()
@@ -53,18 +60,17 @@ void BottangoPlayer::stop()
 
 void BottangoPlayer::loadFile(const char *csvDir)
 {
-  Serial.println("Loading file");
   strcpy(currentFileDir, csvDir);
-  Serial.println("File copied");
   openCSV();
-  Serial.println("File loaded");
 }
 void BottangoPlayer::checkEndOfCurve()
 {
   if (!armLBezier.isInProgress(currenttime))
   {
+    Serial.println("armL not in progress");
     if (armLCurveRead != armLCurveWrite)
     {
+      Serial.println("armL read != write");
       armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
       armLCurveRead++;
       if (armLCurveRead >= bezierBufferLenght)
@@ -74,7 +80,7 @@ void BottangoPlayer::checkEndOfCurve()
     }
     else if (csvDisabledFlag)
     {
-      legREnabled = false;
+      armLEnabled = false;
     }
   }
 
@@ -91,7 +97,7 @@ void BottangoPlayer::checkEndOfCurve()
     }
     else if (csvDisabledFlag)
     {
-      legREnabled = false;
+      armREnabled = false;
     }
   }
 
@@ -132,19 +138,17 @@ void BottangoPlayer::checkEndOfCurve()
 
 void BottangoPlayer::openCSV()
 {
-  Serial.println("Opening file");
-  Serial.println(currentFileDir);
-  if (!file.open(currentFileDir, O_RDONLY)){
-    debugE("File (%s) open failed", currentFileDir);
+  file = SD.open(currentFileDir,FILE_READ);
+  if (!file) {
+    debugE("File (%s) open failed",currentFileDir);
     fileReady = 0;
   }
-  else
-  {
+  else{
     csvDisabledFlag = false;
     fileReady = 1;
-    Serial.println("File ready");
   }
 }
+
 
 void BottangoPlayer::closeCSV()
 {

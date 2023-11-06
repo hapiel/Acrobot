@@ -5,6 +5,8 @@
 #include "WiFi.h"
 #include "Wire.h"
 #include "WiFiClientSecure.h"
+#define CSV_PARSER_DONT_IMPORT_SD
+#include "CSV_Parser.h"
 
 #define SCK  22
 #define MISO  19
