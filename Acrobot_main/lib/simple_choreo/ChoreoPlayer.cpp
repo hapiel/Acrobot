@@ -16,9 +16,11 @@ void ChoreoPlayer::update()
     if (currentChoreo[choreoStepCounter].time != UINT32_MAX)
     { // stops at last step
       choreoStepCounter++;
-      posLStepStart = legL.getPosition();
-      posRStepStart = legR.getPosition();
-      debugD("posL: %f, posR: %f", posLStepStart, posRStepStart);
+      posLegLStepStart = legL.getPosition();
+      posLegRStepStart = legR.getPosition();
+      posArmLStepStart = armL.getPosition();
+      posArmRStepStart = armR.getPosition();
+      debugD("posL: %f, posR: %f", posLegLStepStart, posLegRStepStart);
     }
   }
   currentChoreo[max(0, choreoStepCounter - 1)].move(); // catch weird exception with max();
@@ -88,6 +90,12 @@ void ChoreoPlayer::start(ChoreoName choreoName)
     break;
   case MUSIC_SEQUENCE_8:
     launchChoreo(musicSequence8);
+    break;
+  case CHOREO_ARM_TEST:
+    launchChoreo(armTestChoreo);
+    break;
+  case CHOREO_LETS_DANCE0:
+    launchChoreo(letsDanceChoreo0);
     break;
   default:
     break;
@@ -165,58 +173,81 @@ void ChoreoPlayer::pKickLeftDirect(int16_t degrees)
 
 void ChoreoPlayer::pLRDirect(int16_t degreesL, int16_t degreesR)
 {
-  legL.setTarget(degreesL, pL, pR);
-  legR.setTarget(degreesR, pL, pR);
+  legL.setTarget(degreesL, pL, dL);
+  legR.setTarget(degreesR, pR, dR);
+}
+
+void ChoreoPlayer::pArmsDirect(int16_t degreesL, int16_t degreesR)
+{
+  armL.setTarget(degreesL, pA, dA);
+  armR.setTarget(degreesR, pA, dA);
+}
+
+void ChoreoPlayer::pArmLDirect(int16_t degrees)
+{
+  armL.setTarget(degrees, pA, dA);
+}
+
+void ChoreoPlayer::pArmRDirect(int16_t degrees)
+{
+  armR.setTarget(degrees, pA, dA);
 }
 
 void ChoreoPlayer::pBow(int16_t upperBodyDegrees, int16_t duration)
 {
 
-  float posL = moveLinear(posLStepStart, upperBodyDegrees, duration);
-  float posR = moveLinear(posRStepStart, upperBodyDegrees, duration);
+  float posL = moveLinear(posLegLStepStart, upperBodyDegrees, duration);
+  float posR = moveLinear(posLegRStepStart, upperBodyDegrees, duration);
   pLRDirect(posL, posR);
 }
 
 void ChoreoPlayer::pStepRight(int16_t degreesFromCenter, int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, balanceAngle + degreesFromCenter, duration);
-  float posR = moveLinear(posRStepStart, balanceAngle - degreesFromCenter, duration);
+  float posL = moveLinear(posLegLStepStart, balanceAngle + degreesFromCenter, duration);
+  float posR = moveLinear(posLegRStepStart, balanceAngle - degreesFromCenter, duration);
   pLRDirect(posL, posR);
 }
 
 void ChoreoPlayer::pStepLeft(int16_t degreesFromCenter, int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, balanceAngle - degreesFromCenter, duration);
-  float posR = moveLinear(posRStepStart, balanceAngle + degreesFromCenter, duration);
+  float posL = moveLinear(posLegLStepStart, balanceAngle - degreesFromCenter, duration);
+  float posR = moveLinear(posLegRStepStart, balanceAngle + degreesFromCenter, duration);
   pLRDirect(posL, posR);
 }
 
 void ChoreoPlayer::pKickRight(int16_t degrees, int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, balanceAngle, duration);
-  float posR = moveLinear(posRStepStart, degrees, duration);
+  float posL = moveLinear(posLegLStepStart, balanceAngle, duration);
+  float posR = moveLinear(posLegRStepStart, degrees, duration);
   pLRDirect(posL, posR);
 }
 
 void ChoreoPlayer::pKickLeft(int16_t degrees, int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, degrees, duration);
-  float posR = moveLinear(posRStepStart, balanceAngle, duration);
+  float posL = moveLinear(posLegLStepStart, degrees, duration);
+  float posR = moveLinear(posLegRStepStart, balanceAngle, duration);
   pLRDirect(posL, posR);
 }
 
 void ChoreoPlayer::pStand(int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, balanceAngle, duration);
-  float posR = moveLinear(posRStepStart, balanceAngle, duration);
+  float posL = moveLinear(posLegLStepStart, balanceAngle, duration);
+  float posR = moveLinear(posLegRStepStart, balanceAngle, duration);
   pLRDirect(posL, posR);
 }
 
-void ChoreoPlayer::pLR(int16_t degreesL, int16_t degreesR, int16_t duration)
+void ChoreoPlayer::pLegsLR(int16_t degreesL, int16_t degreesR, int16_t duration)
 {
-  float posL = moveLinear(posLStepStart, degreesL, duration);
-  float posR = moveLinear(posRStepStart, degreesR, duration);
+  float posL = moveLinear(posLegLStepStart, degreesL, duration);
+  float posR = moveLinear(posLegRStepStart, degreesR, duration);
   pLRDirect(posL, posR);
+}
+
+void ChoreoPlayer::pArmsLR(int16_t degreesL, int16_t degreesR, int16_t duration)
+{
+  float posL = moveLinear(posArmLStepStart, degreesL, duration);
+  float posR = moveLinear(posArmRStepStart, degreesR, duration);
+  pArmsDirect(posL, posR);
 }
 
 // - MOVES
@@ -279,8 +310,8 @@ void ChoreoPlayer::moveSplitTwice()
   if (stepTimeBetween(0, 2000))
   {
 
-    float posR = moveLinear(posRStepStart, 90, duration);
-    float posL = moveLinear(posLStepStart, 270, duration);
+    float posR = moveLinear(posLegRStepStart, 90, duration);
+    float posL = moveLinear(posLegLStepStart, 270, duration);
 
     pLRDirect(posL, posR);
   }
@@ -335,4 +366,14 @@ void ChoreoPlayer::setPPDDLR(float pL, float pR, float dL, float dR)
 void ChoreoPlayer::setPD(float p, float d)
 {
   setPPDDLR(p, p, d, d);
+}
+
+void ChoreoPlayer::setPALDAL(float pA, float pL, float dA, float dL)
+{
+  this->pL = pL;
+  this->pR = pL;
+  this->dL = dL;
+  this->dR = dL;
+  this->pA = pA;
+  this->dA = dA;
 }
