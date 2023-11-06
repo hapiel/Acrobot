@@ -10,11 +10,13 @@ void BottangoPlayer::update()
   {
     // temp loop exit condition
     Serial.println("start while");
-    int i = 0;
-    while (sumAllReadWritePointers() < (bezierBufferLenght - 2) && i < 10)
+    // int i = 0;
+    while (sumAllReadWritePointers() < (bezierBufferLenght - 2) ) //&& i < 10)
     {
-      i++;
+      // i++;
       readAndParseCSVRow();
+      Serial.println(sumAllReadWritePointers());
+      delay(20);
     }
     Serial.println("end while");
   }
@@ -61,13 +63,14 @@ void BottangoPlayer::stop()
 void BottangoPlayer::loadFile(const char *csvDir)
 {
   strcpy(currentFileDir, csvDir);
+  Serial.println(currentFileDir);
   openCSV();
 }
 void BottangoPlayer::checkEndOfCurve()
 {
   if (!armLBezier.isInProgress(currenttime))
   {
-    Serial.println("armL not in progress");
+    // Serial.println("armL not in progress");
     if (armLCurveRead != armLCurveWrite)
     {
       Serial.println("armL read != write");
@@ -144,6 +147,7 @@ void BottangoPlayer::openCSV()
     fileReady = 0;
   }
   else{
+    Serial.println("openCSV else");
     csvDisabledFlag = false;
     fileReady = 1;
   }
@@ -162,8 +166,8 @@ void BottangoPlayer::readAndParseCSVRow()
     // original types of Ms and durationMs ints, can be optimized by using a struct.
     char **commandType = (char **)cp[0];
     char **motorID = (char **)cp[1];
-    int *startMs = (int *)cp[2];
-    int *durationMs = (int *)cp[3];
+    float *startMs = (float *)cp[2];
+    float *durationMs = (float *)cp[3];
     float *startPosition = (float *)cp[4];
     float *startControlPointX = (float *)cp[5];
     float *startControlPointY = (float *)cp[6];
@@ -172,40 +176,52 @@ void BottangoPlayer::readAndParseCSVRow()
     float *endControlPointY = (float *)cp[9];
 
     float controllArray[8] = {startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]};
-    if (commandType[0] == "sC")
+
+    Serial.printf("cmd: %s, id: %s, startMS: %f, durationMS: %f, startPosition: %f, startControlPointX: %f, startControlPointY: %f, endPosition: %f, endControlPointX: %f, endControlPointY: %f\n", commandType[0], motorID[0], startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]);
+
+    Serial.printf("0: %f, 1: %f, 2: %f, 3: %f, 4: %f, 5: %f, 6: %f, 7: %f\n", controllArray[0], controllArray[1], controllArray[2], controllArray[3], controllArray[4], controllArray[5], controllArray[6], controllArray[7]);
+
+    if (strcmp(commandType[0], "sC") == 0)
+    Serial.println("sC");
     {
-      if (motorID[0] == "m_arm_l")
+      if (strcmp(motorID[0], "m_arm_l") == 0)
       {
+        Serial.println("m_arm_l");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(armLCurveArray[armLCurveWrite]));
         armLCurveWrite++;
-        if (armLCurveWrite = bezierBufferLenght)
+        if (armLCurveWrite == bezierBufferLenght)
         {
           armLCurveWrite = 0;
         }
       }
-      else if (motorID[0] == "m_arm_r")
+      else if (strcmp(motorID[0], "m_arm_r") == 0)
       {
+        Serial.println("m_arm_r");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(armRCurveArray[armRCurveWrite]));
         armRCurveWrite++;
-        if (armRCurveWrite = bezierBufferLenght)
+        Serial.printf("armRCurveWrite: %i, armRCurveRead: %i\n", armRCurveWrite, armRCurveRead);
+        if (armRCurveWrite == bezierBufferLenght)
         {
           armRCurveWrite = 0;
         }
+        Serial.printf("armRCurveWrite: %i, armRCurveRead: %i\n", armRCurveWrite, armRCurveRead);
       }
-      else if (motorID[0] == "m_leg_l")
+      else if (strcmp(motorID[0], "m_leg_l") == 0)
       {
+        Serial.println("m_leg_l");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(legLCurveArray[legLCurveWrite]));
         legLCurveWrite++;
-        if (legLCurveWrite = bezierBufferLenght)
+        if (legLCurveWrite == bezierBufferLenght)
         {
           legLCurveWrite = 0;
         }
       }
-      else if (motorID[0] == "m_leg_r")
+      else if (strcmp(motorID[0], "m_leg_r") == 0)
       {
+        Serial.println("m_leg_r");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(legRCurveArray[legRCurveWrite]));
         legRCurveWrite++;
-        if (legRCurveWrite = bezierBufferLenght)
+        if (legRCurveWrite == bezierBufferLenght)
         {
           legRCurveWrite = 0;
         }

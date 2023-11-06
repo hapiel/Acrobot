@@ -162,6 +162,8 @@ SUB_MENU(bezierPage, mainMenu,
          ITEM_COMMAND("beziercurve_stand", []()
                       { bottangoPlayer.loadFile("/Stand.csv");
                         bottangoPlayer.start(); }),
+          ITEM_COMMAND("feedrowparser", []()
+                      {Serial.println(feedRowParser()); }),
          ITEM_BASIC(menu.motorTargA),
          ITEM_BASIC(menu.motorTargL),
          ITEM_COMMAND("beziercurve_pod", []()
