@@ -19,6 +19,8 @@ enum ChoreoName
   CHOREO_NONE,
   CHOREO_ARM_TEST,
   CHOREO_LETS_DANCE0,
+  CHOREO_LETS_DANCE1,
+  CHOREO_LETS_DANCE2,
   CHOREO_STANDING,
   CHOREO_THREE_STEP,
   CHOREO_WALK_CONT,
@@ -137,8 +139,8 @@ private:
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
 
-  ChoreographyStep letsDanceChoreo0[50] = {
-    {0, [this](){ setPALDAL(20,20); pStand(300); pArmsLR(180, 180); }},
+  ChoreographyStep letsDanceChoreo0[40] = {
+    {0, [this](){ setPALDAL(30,30); pStand(100); pArmsLR(180, 180, 2000); }},
     {4290, [this](){ pBow(190, 600);pArmsLR(0, 180, 1200); }},
     {6380, [this](){ pArmsLR(0, 85, 600); }},
     {6980, [this](){ pStand(600); pArmsLR(0, 0, 600);}},                  // arms up
@@ -151,32 +153,80 @@ private:
     {22200, [this](){ pStepRight(16, 300); }},
     {23250, [this](){ pStepLeft(16, 300); }},
     {24400, [this](){ pStand(300); pArmsLR(160, 160, 800) ;}}, // end salsa
-    {25340, [this](){ pBow(200, 200); pArmsLR(145, 145, 200);}},
-    {25580, [this](){ pBow(170, 200); pArmsLR(175, 175, 200);}},
-    {25820, [this](){ pBow(200, 200); pArmsLR(165, 165, 200);}},
-    {26030, [this](){ pBow(170, 200); pArmsLR(195, 195, 200);}},
+    {25340, [this](){ pBow(200, 200); pArmsLR(145, 145, 200);}},,
+    {25820, [this](){ pBow(170, 200); pArmsLR(195, 195, 200);}},
     {26310, [this](){ pBow(200, 200); pArmsLR(165, 165, 200);}},
-    {26580, [this](){ pBow(170, 200); pArmsLR(195, 195, 200);}},
-    {26860, [this](){ pBow(200, 200); pArmsLR(165, 165, 200);}},
-    {27120, [this](){ pBow(170, 200); pArmsLR(195, 195, 200);}},
+    {26860, [this](){ pBow(170, 200); pArmsLR(195, 195, 200);}},
     {27410, [this](){ pBow(200, 200); pArmsLR(165, 165, 200);}}, // end air hump
     {27680, [this](){ pStand(200); pArmsLR(180, -170, 1600); }}, // arm swing around
-    {31200, [this](){ pKickRight(200, 300);  }},
+    {30500, [this](){ pKickRight(210, 300);  }},
     {31500, [this](){ pKickRight(80, 300);  }},
     {31800, [this](){ pStepRight(95, 300); pArmsLR(110, 110, 2000); }},
     {32500, [this](){ pBow(150, 450); pArmsLR(110, 110, 1200); }},
-    {33800, [this](){ pBow(190, 450); pArmsLR(0, 0, 600); }}, // superman bird on shoulder
-    {38200, [this](){ pBow(135, 450); pArmsLR(90, 90, 500); }},
+    {34200, [this](){ pBow(205, 450); pArmsLR(0, 0, 800); }}, // superman bird on shoulder
+    {38200, [this](){ setPALDAL(20,60); pBow(135, 450); pArmsLR(90, 90, 500); }},
     {39200, [this](){ pBow(135, 450); pArmsLR(45, 45, 500); }},
-    {42200, [this](){ pBow(90, 2000); pArmsLR(0, 0, 2000); }},
-    {44200, [this](){ pBow(180, 2300); pArmsLR(30, 30, 2300); }}, // handstand on knees
-    {50400, [this](){ pBow(35, 2300); pArmsLR(-20, -20, 1000); }},
-    {52400, [this](){ pBow(27, 2300); pArmsLR(120, 120, 1000); }},
-    {53400, [this](){ pBow(50, 2300); pArmsLR(160, 160, 1000); }}, // L sit
-    {55000, [this](){ pStand(1800); pArmsLR(180, 180, 1000); }},
-
+    {42200, [this](){ pBow(90, 2000); pArmsLR(20, 20, 2000); }},
+    {44200, [this](){ pBow(170, 2300); pArmsLR(20, 20, 2300); }}, // handstand on knees
+    {50400, [this](){ pBow(35, 1500); pArmsLR(-10, -10, 1000); }},
+    {52400, [this](){ pBow(27, 1000); pArmsLR(120, 120, 1200); }},
+    {53600, [this](){ pBow(50, 2300); pArmsLR(160, 160, 1000); }}, // L sit
+    {56000, [this](){ pStand(1800); pArmsLR(180, 180, 1000); }},
+    {59000, [this](){ pArmsLR(135, 90, 1000); }}, // prep for pitch
+    {59999, [this](){ launchChoreo(letsDanceChoreo1); }},
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
+
+  ChoreographyStep letsDanceChoreo1[35] = {
+    {0, [this](){ setPALDAL(45,35); pStand(300); pArmsLR(135, 90, 300); }},
+    {1500, [this](){ pKickRight(90, 700); pArmsLR(120, 120, 2000); }}, // pitch prep
+    {4700, [this](){ pKickRight(70, 200); pArmsLR(70, 70, 200); }},
+    {5600, [this](){ pKickRight(90, 200); pArmsLR(100, 100, 200); }}, // tempo
+    {6400, [this](){ pStand(500); pArmsLR(0, 0, 1200); }},
+    {8200, [this](){ pLegsLR(80, 195, 1600); pArmsLR(10, -5, 1600); }}, // leg up
+    {11900, [this](){ pStand(2000); pArmsLR(180, 180, 2000); }},
+    {20400, [this](){ setPALDAL(50,35); pLegsLR(205, 27, 8000); pArmsLR(190, 20, 8000); }},
+    {32300, [this](){ pStand(4000); pArmsLR(180, 180, 4000); }}, //tempo
+    {38100, [this](){ setPALDAL(35,35); pArmsLR(150, 150, 300); }},
+    {38700, [this](){ pArmsLR(170, 170, 300); }},
+    {39250, [this](){ pArmsLR(0, 0, 600); }}, // extended f2h
+    {43410, [this](){ pArmsLR(100, 100, 1000); }},
+    {46400, [this](){ pArmsLR(60, 60, 300); }},  // tempo
+    {47000, [this](){ pArmsLR(80, 80, 300); }},  
+
+    {47600, [this](){ pArmsLR(0, 0, 300); }}, 
+    {47900, [this](){ pBow(110, 400) ;pArmsLR(-90, -90, 350); }}, 
+    {52200, [this](){ pStand(1600) ;pArmsLR(180, 180, 2000); }}, 
+    {59999, [this](){ launchChoreo(letsDanceChoreo2); }},
+    {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
+  }; 
+
+  ChoreographyStep letsDanceChoreo2[50] = {
+    {0, [this](){ setPALDAL(45,55); pStand(800); pArmsLR(180, 180, 2000); }},
+    {3100 , [this](){ pArmsLR(150, 150, 2000); }}, // begin floor h2h
+    {6000 , [this](){ pBow(120, 2000); pArmsLR(80, 80, 2000); }}, // 
+    {9000 , [this](){ pBow(140, 2000); pArmsLR(135, 135, 2000); }},
+    {12000 , [this](){ pBow(90, 2000); pArmsLR(110, 110, 2000); }},
+    {15000 , [this](){ pBow(35, 2000); pArmsLR(-30, -30, 4000); }},
+    {19000 , [this](){ pBow(180, 2000); pArmsLR(0, 0, 2000); }},
+    {33500 , [this](){ pBow(180, 2000); pArmsLR(-20, 0, 400); }},
+    {34000 , [this](){ pBow(180, 2000); pArmsLR(180, 0, 2000); }},
+
+    {41400 , [this](){ pStepLeft(90, 2000); pArmsLR(180, 0, 2200); }},
+    {45200 , [this](){ pStepLeft(80, 2000); pArmsLR(0, 0, 900); }},
+    {46100 , [this](){ pBow(270, 4000); pArmsLR(-55, -55, 4000); }}, // mexican 
+    {52400 , [this](){ pStand(2000); pArmsLR(-180, -180, 2000); }},
+    {59000 , [this](){ pStand(2000); pArmsLR(-160, -160, 1000); }},
+
+    {60000 , [this](){ pBow(180, 700); pArmsLR(0, 0, 700); }},
+    {60600 , [this](){ pBow(130, 1000); pArmsLR(150, 150, 1300); }},
+    {64000 , [this](){ pStand(1000); pArmsLR(180, 180, 700); }},
+
+
+    {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
+  }; 
+
+
 
 
 
@@ -219,7 +269,7 @@ private:
   };
 
   ChoreographyStep standingChoreo[2] = {
-    {0, [this](){ setPD(12, 2); pStand(1000); }},
+    {0, [this](){ setPD(12, 2); pStand(1000); pArmsLR(180, 180, 1000); }}, 
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
 

@@ -10,5 +10,5 @@ Arm::Arm(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, boo
     posMin = 360 - posMax;
   }
   calibrationDegreesLow = 167; // minimum value just outside of calibration range. 167 for sleeveless, 170 for sleeved. 167 is probably fine for both.
-  calibrationTreshold = 11000; //  10700 for arms, margin is super small
+  calibrationTreshold = 10850; //  10700 for arms, margin is super small
 }

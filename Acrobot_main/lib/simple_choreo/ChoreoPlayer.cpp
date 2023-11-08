@@ -97,6 +97,12 @@ void ChoreoPlayer::start(ChoreoName choreoName)
   case CHOREO_LETS_DANCE0:
     launchChoreo(letsDanceChoreo0);
     break;
+  case CHOREO_LETS_DANCE1:
+    launchChoreo(letsDanceChoreo1);
+    break;
+  case CHOREO_LETS_DANCE2:
+    launchChoreo(letsDanceChoreo2);
+    break;
   default:
     break;
   }

@@ -195,7 +195,7 @@ SUB_MENU(joystickPage, mainMenu,
                       { joystickControl.setMode(MODE_TELEPRESENCE); }),
          ITEM_COMMAND("Pose", []()
                       { joystickControl.setMode(MODE_POSE); }));
-                      
+
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()
                       { menu.PAdjust(2); }),
@@ -207,9 +207,13 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.DAdjust(-0.5); }));
 
 SUB_MENU(sequencePage, mainMenu,
-          ITEM_COMMAND("lets dance", []()
+         ITEM_COMMAND("lets dance", []()
                       { choreoPlayer.start(CHOREO_LETS_DANCE0); }),
-          ITEM_COMMAND("Arm_test", []()
+         ITEM_COMMAND("lets dance1", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE1); }),
+         ITEM_COMMAND("lets dance2", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE2); }),
+         ITEM_COMMAND("Arm_test", []()
                       { choreoPlayer.start(CHOREO_ARM_TEST); }),
          ITEM_COMMAND("Stand", []()
                       { choreoPlayer.start(CHOREO_STANDING); }),
