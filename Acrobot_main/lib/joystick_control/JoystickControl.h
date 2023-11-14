@@ -42,7 +42,7 @@ private:
   Arm &armL;
   Arm &armR;
   ChoreoPlayer &choreoPlayer;
-  JoystickControlMode controlMode = MODE_ABSOLUTE_90_LIMITED;
+  JoystickControlMode controlMode = MODE_SUMMATIVE_90;
   Menu &menu;
 
   long prevUpdateTime = 0;

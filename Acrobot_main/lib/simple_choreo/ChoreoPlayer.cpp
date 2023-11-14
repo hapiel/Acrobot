@@ -94,6 +94,9 @@ void ChoreoPlayer::start(ChoreoName choreoName)
   case CHOREO_ARM_TEST:
     launchChoreo(armTestChoreo);
     break;
+  case CHOREO_LETS_DANCE_DELAY:
+    launchChoreo(letsDanceDelayChoreo);
+    break;
   case CHOREO_LETS_DANCE0:
     launchChoreo(letsDanceChoreo0);
     break;
@@ -102,6 +105,9 @@ void ChoreoPlayer::start(ChoreoName choreoName)
     break;
   case CHOREO_LETS_DANCE2:
     launchChoreo(letsDanceChoreo2);
+    break;
+  case CHOREO_AWAKENING:
+    launchChoreo(awakeningChoreo);
     break;
   default:
     break;

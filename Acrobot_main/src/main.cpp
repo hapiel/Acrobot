@@ -207,6 +207,12 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.DAdjust(-0.5); }));
 
 SUB_MENU(sequencePage, mainMenu,
+         ITEM_COMMAND("awakening", []()
+                      { choreoPlayer.start(CHOREO_AWAKENING); }),
+         ITEM_COMMAND("lets DELAY", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE_DELAY); }),
+         ITEM_COMMAND("Stand", []()
+                      { choreoPlayer.start(CHOREO_STANDING); }),
          ITEM_COMMAND("lets dance", []()
                       { choreoPlayer.start(CHOREO_LETS_DANCE0); }),
          ITEM_COMMAND("lets dance1", []()
@@ -215,8 +221,6 @@ SUB_MENU(sequencePage, mainMenu,
                       { choreoPlayer.start(CHOREO_LETS_DANCE2); }),
          ITEM_COMMAND("Arm_test", []()
                       { choreoPlayer.start(CHOREO_ARM_TEST); }),
-         ITEM_COMMAND("Stand", []()
-                      { choreoPlayer.start(CHOREO_STANDING); }),
          ITEM_COMMAND("walk cont", []()
                       { choreoPlayer.start(CHOREO_WALK_CONT); }),
          ITEM_COMMAND("Mila start", []()
