@@ -12,8 +12,8 @@ void EStop::set() {
     }
 
 void EStop::unSet(){
-      digitalWrite(pin, HIGH);
-      pinMode(pin, INPUT);
+      digitalWrite(pin, LOW);
+      pinMode(pin, INPUT_PULLDOWN);
       isSet = false;
       debugD("ESTOP: unset");
     }
