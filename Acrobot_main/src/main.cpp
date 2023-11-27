@@ -81,7 +81,6 @@ The project should be built in platformio
 #define CS 18
 
 // external libraries
-TwoWire wire(0);
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
@@ -99,7 +98,7 @@ Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 Motor motorArmL(ARM_L_ID, canHandler, Debug);
 Motor motorArmR(ARM_R_ID, canHandler, Debug);
-HallSensor hallSensor(wire, Debug);
+HallSensor hallSensor(Wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
 Arm armL(motorArmL, hallSensor, ARM_L_ID, 28.64, true);
@@ -303,7 +302,7 @@ void inits()
   eStop.init();
 
   debugI("Next init: Wire");
-  wire.begin(SDA_PIN, SCL_PIN);
+  Wire.begin(SDA_PIN, SCL_PIN);
 
   debugI("Next init: ADS & HallSensor");
   hallSensor.init();

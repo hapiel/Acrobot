@@ -10,7 +10,7 @@
 class HallSensor
 {
 public:
-  HallSensor(TwoWire &wire, RemoteDebug &Debug);
+  HallSensor(TwoWire &Wire, RemoteDebug &Debug);
   void init();
   void update();
 
@@ -20,7 +20,7 @@ public:
 
 private:
   RemoteDebug &Debug;
-  TwoWire &wire;
+  TwoWire &Wire;
   ADS1115 *ADS;
   uint8_t address = 0x48;
   static const uint8_t SENSOR_COUNT = 4;
