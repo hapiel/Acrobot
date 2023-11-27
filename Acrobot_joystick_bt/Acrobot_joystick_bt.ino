@@ -16,6 +16,9 @@ We're controlling this project with a PS5 controller
 */
 
 #include <Bluepad32.h>
+#include "uni_virtual_device.h"
+
+
 
 #define DEBUG_LED_RED 25
 #define DEBUG_LED_GREEN 32
@@ -95,6 +98,7 @@ void setDebugLed(int red, int green, int blue) {
 
 // Arduino setup function. Runs in CPU 1
 void setup() {
+  uni_virtual_device_set_enabled(false);
   initDebugLed();
   Serial.begin(115200);
   Serial2.begin(115200);
