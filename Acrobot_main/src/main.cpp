@@ -107,7 +107,7 @@ Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
 Motor motorArmL(ARM_L_ID, canHandler, Debug);
 Motor motorArmR(ARM_R_ID, canHandler, Debug);
-HallSensor hallSensor(wire, Debug);
+HallSensor hallSensor(Wire, Debug);
 Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
 Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
 Arm armL(motorArmL, hallSensor, ARM_L_ID, 28.64, true);
@@ -313,7 +313,7 @@ void inits()
   eStop.init();
 
   debugI("Next init: Wire");
-  wire.begin(SDA_PIN, SCL_PIN);
+  Wire.begin(SDA_PIN, SCL_PIN);
 
   debugI("Next init: ADS & HallSensor");
   hallSensor.init();
