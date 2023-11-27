@@ -1,8 +1,8 @@
 #include "HallSensor.h"
 
-HallSensor::HallSensor(TwoWire &wire, RemoteDebug &Debug) : wire(wire), Debug(Debug)
+HallSensor::HallSensor(TwoWire &Wire, RemoteDebug &Debug) : Wire(Wire), Debug(Debug)
 {
-  ADS = new ADS1115(address, &wire);
+  ADS = new ADS1115(address, &Wire);
   motorIDToSensorTable[ARM_L_ID - 1] = 2;
   motorIDToSensorTable[ARM_R_ID - 1] = 0;
   motorIDToSensorTable[LEG_L_ID - 1] = 3;  // temp value, needs to be corrected when legs are moved.
