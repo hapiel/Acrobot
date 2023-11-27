@@ -66,7 +66,7 @@ void Limb::stop()
 
 void Limb::startCalibration()
 {
-  if (state == STATE_OFF){
+  if (state == STATE_ON){
     return;
   }
   state = STATE_CALIBRATION;

@@ -96,7 +96,7 @@ private:
   void setPD(float p, float d = 5);
   void setPALDAL(float pA, float pL, float dA = 5, float dL = 5);
 
-  float balanceAngle = 186;
+  float balanceAngle = 184;
 
   // poses
   void pBowDirect(int16_t upperBodyDegrees = 135);
@@ -141,50 +141,62 @@ private:
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
 
+  // ademhaling zitten kleiner & langzamer & meer op achter
+  // extra stappen lopen
+  // sterker ja knikken
+  // langer wachten met opstaan.
+
   ChoreographyStep awakeningChoreo[60] = {
-    {0, [this](){ setPALDAL(20,20); pBow(80, 4000); pArmsLR(125, 125, 4000); }}, // start seated
-    {6000, [this](){ pBow(90, 1200); pArmsLR(135, 135,  1200); }},
-    {8000, [this](){ pBow(80, 1200); pArmsLR(125, 125,  1200); }},
-    {10000, [this](){ pBow(90, 1200); pArmsLR(135, 135, 1200); }},
-    {12000, [this](){ pBow(80, 1200); pArmsLR(125, 125, 1200); }},
-    {14000, [this](){ pBow(90, 1200); pArmsLR(135, 135, 1200); }},
-    {16000, [this](){ pBow(80, 1200); pArmsLR(125, 125, 1200); }},
-    {18000, [this](){ pBow(90, 1200); pArmsLR(135, 135, 1200); }},
-    {20000, [this](){ pBow(80, 1200); pArmsLR(125, 125, 1200); }},
-    {25000, [this](){ pBow(90, 2000); pArmsLR(125, 70,  2500); }},
-    {30000, [this](){ pBow(180,3000); pArmsLR(180, 120, 3000); }},
-    {35000, [this](){ pBow(191,1200); pArmsLR(183, 177, 1200); }},
-    {37000, [this](){ pBow(181,1200); pArmsLR(177, 183, 1200); }},
-    {39000, [this](){ pBow(191,1200); pArmsLR(183, 177, 1200); }},
-    {41000, [this](){ pBow(181,1200); pArmsLR(177, 183, 1200); }},
-    {43000, [this](){ pBow(191,1200); pArmsLR(183, 177, 1200); }},
-    {45000, [this](){ pBow(181,1200); pArmsLR(177, 183, 1200); }},
-    {47000, [this](){ pBow(191,1200); pArmsLR(183, 177, 1200); }},
-    {49000, [this](){ pBow(181,1200); pArmsLR(177, 183, 1200); }},
-    {51000, [this](){ pBow(191,1200); pArmsLR(180, 125, 2000); }},
-    {56000, [this](){ setPALDAL(25,20); pStepLeft(10,1200); pArmsLR(180, 125, 1200); }}, // start walking
-    {59000, [this](){ pStepRight(11,1200); pArmsLR(160, 200, 2000); }},
-    {62000, [this](){ pStepLeft(11,1200); pArmsLR(200, 160, 1200); }},
-    {64000, [this](){ pStepRight(15,1200); pArmsLR(150, 210, 1200); }},
-    {66000, [this](){ pStepLeft(15,1200); pArmsLR(210, 150, 1200); }},
-    {68000, [this](){ pStepRight(15,1200); pArmsLR(150, 210, 1200); }},
-    {69500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
-    {71000, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
-    {72500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
-    {74000, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
-    {75500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
-    {76000, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
-    {77500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
-    {79000, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
-    {80500, [this](){ pBow(181,1200); pArmsLR(180, 180, 1200); }},
-    {82500, [this](){ pBow(191,1200); pArmsLR(180, 180, 2000); }},
-    {86000, [this](){ pBow(110,3000); pArmsLR(140, 140, 4000); }}, // bow
-    {91000, [this](){ pBow(191,3000); pArmsLR(180, 180, 3500); }},
-    {93000, [this](){ pBow(181,1200); pArmsLR(180, 180, 1200); }},
-    {95000, [this](){ pBow(191,1200); pArmsLR(180, 180, 1200); }},
-    {97000, [this](){ pBow(184,1200); pArmsLR(180, 180, 1200); }}, // whisper
-    {110000, [this](){ pBow(170,300); pArmsLR(180, 180, 1200); }},
-    {111000, [this](){ pBow(186,300); pArmsLR(180, 180, 1200); }},
+    {0, [this](){  }},  // wait
+    {9000 + 0, [this](){ setPALDAL(20,20); pBow(80, 4000); pArmsLR(125, 125, 4000); }}, // start seated
+    {9000 + 6000, [this](){ pBow(93, 1200); pArmsLR(135, 135,  1200); }},
+    {9000 + 8500, [this](){ pBow(85, 1200); pArmsLR(125, 125,  1200); }},
+    {9000 + 11000, [this](){ pBow(93, 1200); pArmsLR(135, 135, 1200); }},
+    {9000 + 13500, [this](){ pBow(85, 1200); pArmsLR(125, 125, 1200); }},
+    {9000 + 15000, [this](){ pBow(93, 1200); pArmsLR(135, 135, 1200); }},
+    {9000 + 17500, [this](){ pBow(85, 1200); pArmsLR(125, 125, 1200); }},
+    {9000 + 20000, [this](){ pBow(93, 1200); pArmsLR(135, 135, 1200); }},
+    {9000 + 22500, [this](){ pBow(85, 1200); pArmsLR(125, 125, 1200); }},
+    {9000 + 27500, [this](){ setPALDAL(26,20); pBow(93, 2000); pArmsLR(125, 70,  2500); }}, // raise arm
+    {9000 + 37500, [this](){ pBow(185,3000); pArmsLR(180, 120, 3000); }}, 
+    {9000 + 35000 + 7500, [this](){ pBow(188,1200); pArmsLR(183, 177, 1200); }},
+    {9000 + 37000 + 7500, [this](){ pBow(183,1200); pArmsLR(177, 183, 1200); }},
+    {9000 + 39000 + 7500, [this](){ pBow(188,1200); pArmsLR(183, 177, 1200); }},
+    {9000 + 41000 + 7500, [this](){ pBow(183,1200); pArmsLR(177, 183, 1200); }},
+    {9000 + 43000 + 7500, [this](){ pBow(188,1200); pArmsLR(183, 177, 1200); }},
+    {9000 + 45000 + 7500, [this](){ pBow(183,1200); pArmsLR(177, 183, 1200); }},
+    {9000 + 47000 + 7500, [this](){ pBow(188,1200); pArmsLR(183, 177, 1200); }},
+    {9000 + 49000 + 7500, [this](){ pBow(183,1200); pArmsLR(177, 183, 1200); }},
+    {9000 + 51000 + 7500, [this](){ pBow(188,1200); pArmsLR(180, 125, 2000); }},
+    {9000 + 56000 + 7500, [this](){ pStepLeft(10,1200); pArmsLR(180, 125, 1200); }}, // start walking
+    {9000 + 59000 + 7500, [this](){ pStepRight(11,1200); pArmsLR(160, 200, 2000); }},
+    {9000 + 62000 + 7500, [this](){ pStepLeft(11,1200); pArmsLR(200, 160, 1200); }},
+    {9000 + 64000 + 7500, [this](){ pStepRight(15,1200); pArmsLR(150, 210, 1200); }},
+    {9000 + 66000 + 7500, [this](){ pStepLeft(15,1200); pArmsLR(210, 150, 1200); }},
+    {9000 + 68000 + 7500, [this](){ pStepRight(15,1200); pArmsLR(150, 210, 1200); }},
+    {9000 + 69500 + 7500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
+    {9000 + 71000 + 7500, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
+    {9000 + 72500 + 7500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
+    {9000 + 74000 + 7500, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
+    {9000 + 75500 + 7500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
+    {9000 + 76000 + 8500, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
+    {9000 + 77500 + 8500, [this](){ pStepLeft(20,1000); pArmsLR(210, 150, 1000); }},
+    {9000 + 79000 + 8500, [this](){ pStepRight(20,1000); pArmsLR(150, 210, 1000); }},
+    {9000 + 80500 + 8500, [this](){ pStepLeft(20,1000); pArmsLR(200, 160, 1000); }},
+    {9000 + 82000 + 8500, [this](){ pStepRight(20,1000); pArmsLR(160, 200, 1000); }},
+    {9000 + 83500 + 8500, [this](){ pStepLeft(20,1000); pArmsLR(200, 160, 1000); }},
+    {9000 + 85000 + 8500, [this](){ pStepRight(20,1000); pArmsLR(160, 200, 1000); }},
+    {9000 + 86500 + 8500, [this](){ pStepLeft(20,1000); pArmsLR(200, 160, 1000); }},
+    {9000 + 88000 + 8500, [this](){ pStepRight(20,1000); pArmsLR(160, 200, 1000); }},
+    {9000 + 80500 + 17500, [this](){ pBow(183,1200); pArmsLR(180, 180, 1200); }},
+    {9000 + 82500 + 17500, [this](){ pBow(188,1200); pArmsLR(180, 180, 2000); }},
+    {9000 + 86000 + 17500, [this](){ pBow(110,3000); pArmsLR(140, 140, 4000); }}, // bow
+    {9000 + 91000 + 17500, [this](){ pBow(188,3000); pArmsLR(180, 180, 3500); }},
+    {9000 + 95000 + 17500, [this](){ pBow(183,1200); pArmsLR(180, 180, 1200); }},
+    {9000 + 97000 + 17500, [this](){ pBow(188,1200); pArmsLR(180, 180, 1200); }},
+    {9000 + 99000 + 17500, [this](){ pBow(186,1200); pArmsLR(180, 180, 1200); }}, // whisper
+    {9000 + 111000+ 17500, [this](){ pBow(170,150); pArmsLR(180, 180, 1200); }},
+    {9000 + 111600+ 17500, [this](){ pBow(186,150); pArmsLR(180, 180, 1200); }},
     {UINT32_MAX, nullptr} // Sentinel value indicating the end of the array
   };
 

@@ -31,10 +31,10 @@ void JoystickControl::update()
     modeLegsRelative();
     break;
   case MODE_SUMMATIVE_90:
-    modeSummative(90, speedSummativeMode);
+    modeSummative(95, speedSummativeMode);
     break;
   case MODE_SUMMATIVE_90_FAST:
-    modeSummative(90, speedSummativeFastMode);
+    modeSummative(95, speedSummativeFastMode);
     break;
   case MODE_SUMMATIVE_140:
     modeSummative(140, speedSummativeMode);
@@ -53,7 +53,7 @@ void JoystickControl::update()
     modeSynch(140, speedSummativeMode);
     break;
   case MODE_SYNCH_90:
-    modeSynch(90, speedSummativeMode);
+    modeSynch(95, speedSummativeMode);
     break;
   default:
     break;
