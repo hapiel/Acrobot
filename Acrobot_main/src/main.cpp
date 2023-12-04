@@ -404,8 +404,8 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 90000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 50000, NULL, 1, NULL, 1);
 }
 
 void loop()

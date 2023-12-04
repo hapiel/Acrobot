@@ -26,6 +26,7 @@ private:
   static const uint8_t SENSOR_COUNT = 4;
   int motorIDToSensorTable[SENSOR_COUNT]; // ID-1, so motor ID 1 is stored in array[0]. Values are set in constructor
   int16_t sensorValueOfId[SENSOR_COUNT] ;
+  SemaphoreHandle_t mutex; 
 
 };
 
