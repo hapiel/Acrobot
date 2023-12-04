@@ -1154,13 +1154,13 @@
                                         },
                                         "HomeLocalRotation": {
                                           "w": 0.9988166,
-                                          "x": 0.00107335334,
+                                          "x": 0.00107335346,
                                           "y": 0.04098969,
-                                          "z": 0.0261549465,
+                                          "z": 0.0261549484,
                                           "eulerAngles": {
                                             "x": 0.0,
                                             "y": 4.70000029,
-                                            "z": 3.00000167
+                                            "z": 3.000002
                                           }
                                         },
                                         "HomeLocalPosition": {
@@ -6097,7 +6097,7 @@
                     "OutTangent": {
                       "$id": "521",
                       "$type": "BotTangoSerial.Point, Assembly-CSharp",
-                      "X": 0.108333334,
+                      "X": 0.075,
                       "Y": 0.0
                     },
                     "Frame": 0
@@ -6109,12 +6109,12 @@
                     "animationTrack": {
                       "$ref": "516"
                     },
-                    "Movement": 0.9354188,
+                    "Movement": 0.5,
                     "HandleType": "AutoSmooth",
                     "InTangent": {
                       "$id": "523",
                       "$type": "BotTangoSerial.Point, Assembly-CSharp",
-                      "X": -0.108333334,
+                      "X": -0.075,
                       "Y": 0.0
                     },
                     "OutTangent": {
@@ -6123,7 +6123,7 @@
                       "X": 1.0,
                       "Y": 0.0
                     },
-                    "Frame": 13
+                    "Frame": 9
                   }
                 ]
               }
@@ -12118,14 +12118,635 @@
         },
         "DurationInSeconds": 140.0,
         "DurationInMS": 140000
+      },
+      {
+        "$id": "1271",
+        "$type": "TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp",
+        "FPS": 30,
+        "durationInFrames": 600,
+        "name": "armtest",
+        "loop": false,
+        "workAreaStart": 0,
+        "workAreaEnd": 600,
+        "recordAreaStart": 0,
+        "recordAreaEnd": 600,
+        "animationTracks": {
+          "$id": "1272",
+          "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotAnimationTrack, Assembly-CSharp]], mscorlib",
+          "$values": [
+            {
+              "$id": "1273",
+              "$type": "DimensionalAnimationTrack, Assembly-CSharp",
+              "internalTracks": {
+                "$id": "1274",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp]], mscorlib",
+                "$values": [
+                  {
+                    "$id": "1275",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1276",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1277",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1278",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1279",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1280",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1281",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1282",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1283",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1284",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1285",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1286",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1287",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1288",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1289",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1290",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1291",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1292",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1293",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1294",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1295",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1296",
+                          "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                          "unbound": false,
+                          "animationTrack": {
+                            "$ref": "1293"
+                          },
+                          "Movement": 0.0,
+                          "HandleType": "AutoSmooth",
+                          "InTangent": {
+                            "$id": "1297",
+                            "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                            "X": -1.0,
+                            "Y": 0.0
+                          },
+                          "OutTangent": {
+                            "$id": "1298",
+                            "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                            "X": 2.01666665,
+                            "Y": 0.0
+                          },
+                          "Frame": 0
+                        },
+                        {
+                          "$id": "1299",
+                          "$type": "TonicNorth.Bottango.Articulation.MovementKeyframe, Assembly-CSharp",
+                          "unbound": false,
+                          "animationTrack": {
+                            "$ref": "1293"
+                          },
+                          "Movement": 0.154898137,
+                          "HandleType": "AutoSmooth",
+                          "InTangent": {
+                            "$id": "1300",
+                            "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                            "X": -4.48484945,
+                            "Y": -0.0149179529
+                          },
+                          "OutTangent": {
+                            "$id": "1301",
+                            "$type": "BotTangoSerial.Point, Assembly-CSharp",
+                            "X": 0.9999945,
+                            "Y": 0.00332628144
+                          },
+                          "Frame": 242
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "$id": "1302",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1303",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1304",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1305",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1306",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1307",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1308",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1309",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1310",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1311",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1312",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1313",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1314",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1315",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1316",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1317",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1318",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1319",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1320",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1321",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1322",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1323",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1324",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1325",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1326",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1327",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1328",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1329",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1330",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1331",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1332",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1333",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1334",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1335",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1336",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1337",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  },
+                  {
+                    "$id": "1338",
+                    "$type": "TonicNorth.Bottango.Articulation.MovementAnimationTrack, Assembly-CSharp",
+                    "unbound": false,
+                    "parentDimensionalTrack": {
+                      "$ref": "1273"
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    },
+                    "parentClip": {
+                      "$ref": "1271"
+                    },
+                    "ungraphableOverried": false,
+                    "markers": {
+                      "$id": "1339",
+                      "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    },
+                    "cachedAnimatableName": "",
+                    "keyframes": {
+                      "$id": "1340",
+                      "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                      "$values": []
+                    }
+                  }
+                ]
+              },
+              "unbound": false,
+              "animatable": {
+                "$ref": "173"
+              },
+              "parentClip": {
+                "$ref": "1271"
+              },
+              "ungraphableOverried": false,
+              "markers": {
+                "$id": "1341",
+                "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+                "$values": []
+              },
+              "cachedAnimatableName": "",
+              "keyframes": {
+                "$id": "1342",
+                "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotKeyframe, Assembly-CSharp]], mscorlib",
+                "$values": []
+              }
+            }
+          ]
+        },
+        "markers": {
+          "$id": "1343",
+          "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
+          "$values": []
+        },
+        "DurationInSeconds": 20.0,
+        "DurationInMS": 20000
       }
     ]
   },
   "projectDefaults": {
-    "$id": "1271",
+    "$id": "1344",
     "$type": "ProjectDefaults+Defaults, Assembly-CSharp",
     "colorPresets": {
-      "$id": "1272",
+      "$id": "1345",
       "$type": "System.Collections.Generic.List`1[[UnityEngine.Color, UnityEngine.CoreModule]], mscorlib",
       "$values": [
         {
@@ -12170,7 +12791,7 @@
     "lastExportedConfig": null,
     "apiPort": 59224,
     "ltcSettings": {
-      "$id": "1273",
+      "$id": "1346",
       "$type": "LTCSettings, Assembly-CSharp",
       "lastDeviceName": "",
       "frameRate": "FPS_30_00",
@@ -12182,7 +12803,7 @@
       "jogWiggle": 500
     },
     "defaultClips": {
-      "$id": "1274",
+      "$id": "1347",
       "$type": "System.Collections.Generic.List`1[[TonicNorth.Bottango.Articulation.BotAnimationClip, Assembly-CSharp]], mscorlib",
       "$values": []
     },
@@ -12202,23 +12823,23 @@
     }
   },
   "serialControllerMetaDatas": {
-    "$id": "1275",
+    "$id": "1348",
     "$type": "System.Collections.Generic.List`1[[SerialControllerMetaData, Assembly-CSharp]], mscorlib",
     "$values": [
       {
-        "$id": "1276",
+        "$id": "1349",
         "$type": "SerialControllerMetaData, Assembly-CSharp",
         "Name": "Default Driver",
         "communicationType": "Serial",
         "communicationTypeMetaData": {
-          "$id": "1277",
+          "$id": "1350",
           "$type": "SerialCommunicationType_USBSerial_MetaData, Assembly-CSharp",
           "SearchQuery": "",
           "SearchExactPath": "",
           "UseExactPath": true,
           "BaudRate": 115200,
           "sharedSerialAPIMetadata": {
-            "$id": "1278",
+            "$id": "1351",
             "$type": "SharedBottangoSerialAPIMetaData, Assembly-CSharp",
             "signalRange": "Default_16",
             "driverSignalPrecision": "Default",
@@ -12235,7 +12856,7 @@
         "LiveOnLaunch": true,
         "LastSuccessfulPort": "None",
         "Effectors": {
-          "$id": "1279",
+          "$id": "1352",
           "$type": "System.Collections.Generic.List`1[[IHardwareEffector, Assembly-CSharp]], mscorlib",
           "$values": [
             {
@@ -12256,24 +12877,24 @@
     ]
   },
   "controlSchemes": {
-    "$id": "1280",
+    "$id": "1353",
     "$type": "System.Collections.Generic.List`1[[ControlScheme, Assembly-CSharp]], mscorlib",
     "$values": [
       {
-        "$id": "1281",
+        "$id": "1354",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Basic controller",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "1282",
+          "$id": "1355",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "1283",
+              "$id": "1356",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "1284",
+                "$id": "1357",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "RangedAbsolute",
                 "inverted": false,
@@ -12283,16 +12904,16 @@
                 "smoothingMaster": 0.486729324
               },
               "inputProviders": {
-                "$id": "1285",
+                "$id": "1358",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1286",
+                    "$id": "1359",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/rightStick/y"
                   },
                   {
-                    "$id": "1287",
+                    "$id": "1360",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -12302,11 +12923,11 @@
               }
             },
             {
-              "$id": "1288",
+              "$id": "1361",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "1289",
+                "$id": "1362",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "RangedAbsolute",
                 "inverted": false,
@@ -12316,16 +12937,16 @@
                 "smoothingMaster": 0.270405173
               },
               "inputProviders": {
-                "$id": "1290",
+                "$id": "1363",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1291",
+                    "$id": "1364",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/rightStick/x"
                   },
                   {
-                    "$id": "1292",
+                    "$id": "1365",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -12335,11 +12956,11 @@
               }
             },
             {
-              "$id": "1293",
+              "$id": "1366",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "1294",
+                "$id": "1367",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "Incremental",
                 "inverted": false,
@@ -12349,16 +12970,16 @@
                 "smoothingMaster": 0.199351147
               },
               "inputProviders": {
-                "$id": "1295",
+                "$id": "1368",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1296",
+                    "$id": "1369",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/leftStick/y"
                   },
                   {
-                    "$id": "1297",
+                    "$id": "1370",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -12368,11 +12989,11 @@
               }
             },
             {
-              "$id": "1298",
+              "$id": "1371",
               "$type": "ControlMap_Movement, Assembly-CSharp",
               "live": true,
               "controlAxisSerializedConfiguration": {
-                "$id": "1299",
+                "$id": "1372",
                 "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "controlType": "Incremental",
                 "inverted": false,
@@ -12382,16 +13003,16 @@
                 "smoothingMaster": 0.2038439
               },
               "inputProviders": {
-                "$id": "1300",
+                "$id": "1373",
                 "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1301",
+                    "$id": "1374",
                     "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                     "binding": "<Gamepad>/leftStick/x"
                   },
                   {
-                    "$id": "1302",
+                    "$id": "1375",
                     "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                   }
                 ]
@@ -12411,28 +13032,28 @@
         "lastSelected": false
       },
       {
-        "$id": "1303",
+        "$id": "1376",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "poseblending",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "1304",
+          "$id": "1377",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "1305",
+              "$id": "1378",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "1306",
+                "$id": "1379",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1307",
+                    "$id": "1380",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "1308",
+                      "$id": "1381",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "RangedAbsolute",
                       "inverted": false,
@@ -12442,16 +13063,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "1309",
+                      "$id": "1382",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1310",
+                          "$id": "1383",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/rightStick/x"
                         },
                         {
-                          "$id": "1311",
+                          "$id": "1384",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -12461,11 +13082,11 @@
                     }
                   },
                   {
-                    "$id": "1312",
+                    "$id": "1385",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "1313",
+                      "$id": "1386",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "RangedAbsolute",
                       "inverted": false,
@@ -12475,16 +13096,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "1314",
+                      "$id": "1387",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1315",
+                          "$id": "1388",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/rightStick/y"
                         },
                         {
-                          "$id": "1316",
+                          "$id": "1389",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -12496,17 +13117,17 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "1317",
+                "$id": "1390",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "1318",
+                  "$id": "1391",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$ref": "1308"
+                      "$ref": "1381"
                     },
                     {
-                      "$ref": "1313"
+                      "$ref": "1386"
                     }
                   ]
                 }
@@ -12517,19 +13138,19 @@
               "DeviceConnected": false
             },
             {
-              "$id": "1319",
+              "$id": "1392",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "1320",
+                "$id": "1393",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1321",
+                    "$id": "1394",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "1322",
+                      "$id": "1395",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -12539,16 +13160,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "1323",
+                      "$id": "1396",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1324",
+                          "$id": "1397",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/leftStick/x"
                         },
                         {
-                          "$id": "1325",
+                          "$id": "1398",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -12558,11 +13179,11 @@
                     }
                   },
                   {
-                    "$id": "1326",
+                    "$id": "1399",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": {
-                      "$id": "1327",
+                      "$id": "1400",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -12572,16 +13193,16 @@
                       "smoothingMaster": 0.0
                     },
                     "inputProviders": {
-                      "$id": "1328",
+                      "$id": "1401",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1329",
+                          "$id": "1402",
                           "$type": "ControlMapInputProvider_InputSystem, Assembly-CSharp",
                           "binding": "<Gamepad>/leftStick/y"
                         },
                         {
-                          "$id": "1330",
+                          "$id": "1403",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -12593,17 +13214,17 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "1331",
+                "$id": "1404",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "1332",
+                  "$id": "1405",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$ref": "1322"
+                      "$ref": "1395"
                     },
                     {
-                      "$ref": "1327"
+                      "$ref": "1400"
                     }
                   ]
                 }
@@ -12624,452 +13245,38 @@
         "lastSelected": false
       },
       {
-        "$id": "1333",
+        "$id": "1406",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Pose select",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "1334",
+          "$id": "1407",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "1335",
+              "$id": "1408",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": false,
               "subMaps": {
-                "$id": "1336",
+                "$id": "1409",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1337",
+                    "$id": "1410",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": false,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "1338",
+                      "$id": "1411",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
-                        {
-                          "$id": "1339",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1340",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1341",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1342",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1343",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1344",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1345",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1346",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1347",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1348",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1349",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1350",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1351",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1352",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1353",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1354",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1355",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1356",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1357",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1358",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1359",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1360",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1361",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1362",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1363",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1364",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1365",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1366",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1367",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1368",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1369",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1370",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1371",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1372",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1373",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1374",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1375",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1376",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1377",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1378",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1379",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1380",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1381",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1382",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1383",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1384",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1385",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1386",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1387",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1388",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1389",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1390",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1391",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1392",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1393",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1394",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1395",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1396",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1397",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1398",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1399",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1400",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1401",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1402",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1403",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1404",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1405",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1406",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1407",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1408",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1409",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": false,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1410",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1411",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
                         {
                           "$id": "1412",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1413",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
                     },
@@ -13078,20 +13285,434 @@
                     }
                   },
                   {
-                    "$id": "1413",
+                    "$id": "1414",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1415",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1416",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1417",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1418",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1419",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1420",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1421",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1422",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1423",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1424",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1425",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1426",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1427",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1428",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1429",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1430",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1431",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1432",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1433",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1434",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1435",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1436",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1437",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1438",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1439",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1440",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1441",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1442",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1443",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1444",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1445",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1446",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1447",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1448",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1449",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1450",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1451",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1452",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1453",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1454",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1455",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1456",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1457",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1458",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1459",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1460",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1461",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1462",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1463",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1464",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1465",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1466",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1467",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1468",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1469",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1470",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1471",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1472",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1473",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1474",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1475",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1476",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1477",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1478",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1479",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1480",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1481",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1482",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": false,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1483",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1484",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1485",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1486",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "1414",
+                      "$id": "1487",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1415",
+                          "$id": "1488",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "1416",
+                          "$id": "1489",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -13103,14 +13724,14 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "1417",
+                "$id": "1490",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "1418",
+                  "$id": "1491",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$id": "1419",
+                      "$id": "1492",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -13119,7 +13740,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "1420",
+                      "$id": "1493",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -13128,7 +13749,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "1421",
+                      "$id": "1494",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -13137,7 +13758,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "1422",
+                      "$id": "1495",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -13146,7 +13767,7 @@
                       "speed": 100.0
                     },
                     {
-                      "$id": "1423",
+                      "$id": "1496",
                       "$type": "DigitalButtomMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "SingleButtonReturnToNeutral",
                       "min": 0.0,
@@ -13173,452 +13794,38 @@
         "lastSelected": true
       },
       {
-        "$id": "1424",
+        "$id": "1497",
         "$type": "ControlScheme, Assembly-CSharp",
         "name": "Incremental",
         "curveFitError": 0.035,
         "controlMaps": {
-          "$id": "1425",
+          "$id": "1498",
           "$type": "System.Collections.Generic.List`1[[ILiveControlMap, Assembly-CSharp]], mscorlib",
           "$values": [
             {
-              "$id": "1426",
+              "$id": "1499",
               "$type": "ControlMap_DimensionalMovement, Assembly-CSharp",
               "live": true,
               "subMaps": {
-                "$id": "1427",
+                "$id": "1500",
                 "$type": "System.Collections.Generic.List`1[[ControlMap_Movement, Assembly-CSharp]], mscorlib",
                 "$values": [
                   {
-                    "$id": "1428",
+                    "$id": "1501",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "1429",
+                      "$id": "1502",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
-                        {
-                          "$id": "1430",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1431",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1432",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1433",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1434",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1435",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1436",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1437",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1438",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1439",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1440",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1441",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1442",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1443",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1444",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1445",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1446",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1447",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1448",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1449",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1450",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1451",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1452",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1453",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1454",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1455",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1456",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1457",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1458",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1459",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1460",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1461",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1462",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1463",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1464",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1465",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1466",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1467",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1468",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1469",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1470",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1471",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1472",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1473",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1474",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1475",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1476",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1477",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1478",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1479",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1480",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1481",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1482",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1483",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1484",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1485",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1486",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1487",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1488",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1489",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1490",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1491",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1492",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1493",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1494",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1495",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1496",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1497",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1498",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
-                        {
-                          "$id": "1499",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        }
-                      ]
-                    },
-                    "animatable": {
-                      "$ref": "173"
-                    }
-                  },
-                  {
-                    "$id": "1500",
-                    "$type": "ControlMap_Movement, Assembly-CSharp",
-                    "live": true,
-                    "controlAxisSerializedConfiguration": null,
-                    "inputProviders": {
-                      "$id": "1501",
-                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
-                      "$values": [
-                        {
-                          "$id": "1502",
-                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
-                        },
                         {
                           "$id": "1503",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1504",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
                     },
@@ -13627,20 +13834,434 @@
                     }
                   },
                   {
-                    "$id": "1504",
+                    "$id": "1505",
                     "$type": "ControlMap_Movement, Assembly-CSharp",
                     "live": true,
                     "controlAxisSerializedConfiguration": null,
                     "inputProviders": {
-                      "$id": "1505",
+                      "$id": "1506",
                       "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
                       "$values": [
                         {
-                          "$id": "1506",
+                          "$id": "1507",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         },
                         {
-                          "$id": "1507",
+                          "$id": "1508",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1509",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1510",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1511",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1512",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1513",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1514",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1515",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1516",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1517",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1518",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1519",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1520",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1521",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1522",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1523",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1524",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1525",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1526",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1527",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1528",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1529",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1530",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1531",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1532",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1533",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1534",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1535",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1536",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1537",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1538",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1539",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1540",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1541",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1542",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1543",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1544",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1545",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1546",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1547",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1548",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1549",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1550",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1551",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1552",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1553",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1554",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1555",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1556",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1557",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1558",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1559",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1560",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1561",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1562",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1563",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1564",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1565",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1566",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1567",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1568",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1569",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1570",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1571",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1572",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1573",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1574",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1575",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1576",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        }
+                      ]
+                    },
+                    "animatable": {
+                      "$ref": "173"
+                    }
+                  },
+                  {
+                    "$id": "1577",
+                    "$type": "ControlMap_Movement, Assembly-CSharp",
+                    "live": true,
+                    "controlAxisSerializedConfiguration": null,
+                    "inputProviders": {
+                      "$id": "1578",
+                      "$type": "System.Collections.Generic.List`1[[IControlMapInputProvider, Assembly-CSharp]], mscorlib",
+                      "$values": [
+                        {
+                          "$id": "1579",
+                          "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
+                        },
+                        {
+                          "$id": "1580",
                           "$type": "ControlMapInputProvider_Unset, Assembly-CSharp"
                         }
                       ]
@@ -13652,14 +14273,14 @@
                 ]
               },
               "controlAxisSerializedConfiguration": {
-                "$id": "1508",
+                "$id": "1581",
                 "$type": "DimensionalMovementWrapperControlAxis_SerializedConfiguration, Assembly-CSharp",
                 "subConfigurations": {
-                  "$id": "1509",
+                  "$id": "1582",
                   "$type": "System.Collections.Generic.List`1[[ILiveControlAxisSerializedConfiguration, Assembly-CSharp]], mscorlib",
                   "$values": [
                     {
-                      "$id": "1510",
+                      "$id": "1583",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
@@ -13669,7 +14290,7 @@
                       "smoothingMaster": 0.0
                     },
                     {
-                      "$id": "1511",
+                      "$id": "1584",
                       "$type": "StickMovementControlAxis_SerializedConfiguration, Assembly-CSharp",
                       "controlType": "Absolute",
                       "inverted": false,
