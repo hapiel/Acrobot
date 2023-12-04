@@ -386,7 +386,7 @@ void taskMain(void *parameter)
 
     Debug.handle(); // needs to be in bottom of loop
 
-    vTaskDelay(10);
+    vTaskDelay(1);
   }
 }
 
