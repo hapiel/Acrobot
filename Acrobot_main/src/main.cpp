@@ -541,15 +541,15 @@ void inits()
 
 
   // webserver
-  server.on("/list", HTTP_GET, printDirectory);
-  server.on("/edit", HTTP_DELETE, handleDelete);
-  server.on("/edit", HTTP_PUT, handleCreate);
-  server.on("/edit", HTTP_POST, []() {
-    returnOK();
-  }, handleFileUpload);
-  server.onNotFound(handleNotFound);
+  // server.on("/list", HTTP_GET, printDirectory);
+  // server.on("/edit", HTTP_DELETE, handleDelete);
+  // server.on("/edit", HTTP_PUT, handleCreate);
+  // server.on("/edit", HTTP_POST, []() {
+  //   returnOK();
+  // }, handleFileUpload);
+  // server.onNotFound(handleNotFound);
 
-  server.begin();
+  // server.begin();
   // webserver end
 
 
@@ -598,7 +598,7 @@ void updates()
   choreoPlayer.update();
 
   // webserver
-  server.handleClient();
+  // server.handleClient();
 }
 
 void updatesI2C()
