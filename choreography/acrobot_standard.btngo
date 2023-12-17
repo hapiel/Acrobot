@@ -1,4 +1,4 @@
-{
+﻿{
   "$id": "1",
   "$type": "ProjectHolder, Assembly-CSharp",
   "saveVersion": "10",
@@ -10687,6 +10687,13 @@
                 "$id": "1095",
                 "$type": "System.Collections.Generic.List`1[[AnimationMarker, Assembly-CSharp]], mscorlib",
                 "$values": []
+              }
+            },
+            {
+              "$id": "437",
+              "$type": "PartHolder, Assembly-CSharp",
+              "part": {
+                "$ref": "98"
               },
               "cachedAnimatableName": "",
               "keyframes": {
