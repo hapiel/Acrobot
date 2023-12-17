@@ -27,6 +27,7 @@ public:
 
   void setMotorKpKi(float kp = 5.0, float ki = 2.0);
 
+  void closeCSV();
 private:
   FloatBezierCurve armLBezier = FloatBezierCurve();
   FloatBezierCurve armRBezier = FloatBezierCurve();
@@ -45,7 +46,6 @@ private:
   float readNextCSVLine();
   void checkEndOfCurve();
   void openCSV();
-  void closeCSV();
   void readAndParseCSVRow();
   int sumAllReadWritePointers();
 

@@ -21,6 +21,8 @@ public:
     virtual float getValue(unsigned long currentTimeMs);
 
     virtual bool isInProgress(unsigned long currentTimeMs);
+    virtual bool isFinished(unsigned long currentTimeMs);
+    virtual bool notStarted(unsigned long currentTimeMs);
 
     virtual unsigned long getEndTimeMs();
 

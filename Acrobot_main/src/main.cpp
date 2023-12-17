@@ -27,8 +27,7 @@ The project should be built in platformio
 #include <Arduino.h>
 #include "Wire.h"
 #include "SPI.h"
-#include "SdFat.h"
-#include "sdios.h"
+#include "SD.h"
 #include "RemoteDebug.h" //https://github.com/JoaoLopesF/RemoteDebug , using fork: https://github.com/karol-brejna-i/RemoteDebug
 #include "WiFi.h"
 #include "DNSServer.h"
@@ -38,7 +37,6 @@ The project should be built in platformio
 #include "ItemToggle.h"
 #include "ItemCommand.h"
 #include "LcdMenu.h" // needs to be after item-imports!!!
-#include "SPI.h"
 #define CSV_PARSER_DONT_IMPORT_SD
 #include "CSV_Parser.h"
 
@@ -80,9 +78,9 @@ The project should be built in platformio
 #define MISO 19
 #define MOSI 23
 #define CS 18
+#define LEDcl 13
 
 // external libraries
-TwoWire wire(0);
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
@@ -159,6 +157,15 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(bezierPage, mainMenu,
+          ITEM_COMMAND("long_curve_test", []()
+                      { bottangoPlayer.loadFile("/long_animation_test.csv");
+                      }),
+          ITEM_COMMAND("player start", []()
+                      { bottangoPlayer.start();
+                      }),
+          ITEM_COMMAND("stopfile", []()
+                      { bottangoPlayer.closeCSV();
+                      }),
          ITEM_COMMAND("beziercurve_stand", []()
                       { bottangoPlayer.loadFile("/Stand.csv");
                         bottangoPlayer.start(); }),
@@ -167,8 +174,12 @@ SUB_MENU(bezierPage, mainMenu,
          ITEM_BASIC(menu.motorTargA),
          ITEM_BASIC(menu.motorTargL),
          ITEM_COMMAND("beziercurve_pod", []()
+                      { bottangoPlayer.loadFile("/armtest.csv");
+                        bottangoPlayer.start(); }),
+         ITEM_COMMAND("Podcheska", []()
                       { bottangoPlayer.loadFile("/Podcheska.csv");
                         bottangoPlayer.start(); }));
+
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE", []()
@@ -186,7 +197,7 @@ SUB_MENU(statusPage, mainMenu,
          ITEM_BASIC(menu.statusMem));
 
 SUB_MENU(motorPage, mainMenu,
-         ITEM_BASIC("   ArL ArR LeL LeR"),
+         ITEM_BASIC("ArL ArR LeL LeR"),
          ITEM_BASIC(menu.motorTemp),
          ITEM_BASIC(menu.motorAmp),
          ITEM_BASIC(menu.motorPosA),
@@ -279,6 +290,7 @@ void initDebug()
 
 void inits()
 {
+  pinMode(LEDcl, OUTPUT);
   Serial.begin(115200); // Initialize Serial for USB communication
 
   Serial.println("Next init: wifi");
@@ -313,6 +325,7 @@ void inits()
   eStop.init();
 
   debugI("Next init: Wire");
+  Wire.setClock(400000);
   Wire.begin(SDA_PIN, SCL_PIN);
 
   debugI("Next init: ADS & HallSensor");
@@ -372,7 +385,9 @@ void updates()
   menu.update();
   statusChecker.update();
   choreoPlayer.update();
+  digitalWrite(LEDcl, HIGH);
   bottangoPlayer.update();
+  digitalWrite(LEDcl, LOW);
 }
 
 void updatesI2C()
@@ -385,7 +400,8 @@ void taskMain(void *parameter)
 {
   for (;;)
   {
-
+    
+    //printf("main debug 1\n");
     updates();
     wifiConnection(); // restore wifi variables
 
@@ -397,9 +413,7 @@ void taskMain(void *parameter)
     }
 
     Debug.handle(); // needs to be in bottom of loop
-
-
-    vTaskDelay(10);
+    vTaskDelay(1);
   }
 }
 
@@ -407,9 +421,8 @@ void taskI2C(void *parameter)
 {
   for (;;)
   {
-
+    //Serial.printf("i2c update 1\n");
     updatesI2C();
-
     vTaskDelay(10);
   }
 }
@@ -417,13 +430,14 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 50000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 50000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 1300000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-  // taskMain(NULL);
-  // taskI2C(NULL);
-  vTaskDelay(100);
+  //vTaskDelete(NULL);  
+  taskMain(NULL);
+  taskI2C(NULL);
+  //vTaskDelay(100);
 }

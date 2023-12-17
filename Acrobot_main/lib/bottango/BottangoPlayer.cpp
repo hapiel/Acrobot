@@ -6,40 +6,71 @@ BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &ar
 
 void BottangoPlayer::update()
 {
+  static int armRupdatecounter = 0;
+  static int armLupdatecounter = 0;
+  static int legRupdatecounter = 0;
+  static int legLupdatecounter = 0;
   if (armLEnabled || armREnabled || legLEnabled || legREnabled)
   {
     // temp loop exit condition
-    Serial.println("start while");
-    // int i = 0;
-    while (sumAllReadWritePointers() < (bezierBufferLenght - 2) ) //&& i < 10)
+    int deltaPointersArmL = armLCurveWrite - armLCurveRead;
+    if (deltaPointersArmL < 0)
+      {deltaPointersArmL += bezierBufferLenght;}
+    int deltaPointersArmR = armRCurveWrite - armRCurveRead;
+    if (deltaPointersArmR < 0)
+      {deltaPointersArmR += bezierBufferLenght;}
+    int deltaPointersLegL = legLCurveWrite - legLCurveRead;
+    if (deltaPointersLegL < 0)
+      {deltaPointersLegL += bezierBufferLenght;}
+    int deltaPointersLegR = legRCurveWrite - legRCurveRead;
+    if (deltaPointersLegR < 0)
+      {deltaPointersLegR += bezierBufferLenght;}
+    Serial.printf("deltaPointers ArmL: %d\n",deltaPointersArmL);
+    Serial.printf("deltaPointers ArmR: %d\n",deltaPointersArmR);
+    Serial.printf("deltaPointers ArmL: %d\n",deltaPointersLegL);
+    Serial.printf("deltaPointers ArmR: %d\n",deltaPointersLegR);
+    while (sumAllReadWritePointers() < (bezierBufferLenght - 4) && fileReady == true)// && i < 10)
     {
-      // i++;
       readAndParseCSVRow();
-      Serial.println(sumAllReadWritePointers());
-      delay(20);
+      Serial.printf("curves in buffers: %d.\n",sumAllReadWritePointers());
+      //delay(20);
     }
-    Serial.println("end while");
+  }
+  else{
+    starttime = millis();
   }
   currenttime = millis() - starttime;
   checkEndOfCurve();
-  if (armLEnabled == 1)
+  Serial.printf("curves in  %d, file ready: %d\n",sumAllReadWritePointers(), fileReady);
+  //Serial.printf("armL enabled: %d\n",armLEnabled);
+  Serial.printf("current time: %d, start time: %d\n", currenttime, starttime);
+  Serial.printf("armL enabled: %d, start Y: %f, start time: %d, end time: %d\n",armLEnabled,armLBezier.getStartMovement(),armLBezier.getStartTimeMs(),armLBezier.getEndTimeMs());
+  //Serial.printf("armR enabled: %d, start Y: %f, start time: %d, end time: %d\n",armREnabled,armRBezier.getStartMovement(),armRBezier.getStartTimeMs(),armRBezier.getEndTimeMs());
+  //Serial.printf("legL enabled: %d, start Y: %f, start time: %d, end time: %d\n",legLEnabled,legLBezier.getStartMovement(),legLBezier.getStartTimeMs(),legLBezier.getEndTimeMs());
+  //Serial.printf("legR enabled: %d, start Y: %f, start time: %d, end time: %d\n",legREnabled,legRBezier.getStartMovement(),legRBezier.getStartTimeMs(),legRBezier.getEndTimeMs());
+  if (armLEnabled == 1 & armLBezier.isInProgress(currenttime))
   {
-    Serial.println("armL");
-    Serial.println(currenttime);
     armL.setTarget(armLBezier.getValue(currenttime), kp, ki);
-    Serial.println("armL set");
+    //Serial.printf("armLupdatecounter: %d\n", armLupdatecounter);
+    armLupdatecounter++;
   }
-  if (armREnabled == 1)
+  if (armREnabled == 1 & armLBezier.isInProgress(currenttime))
   {
     armR.setTarget(armRBezier.getValue(currenttime), kp, ki);
+    //Serial.printf("armRupdatecounter: %d\n", armRupdatecounter);
+    armRupdatecounter++;
   }
-  if (legLEnabled == 1)
+  if (legLEnabled == 1 & armLBezier.isInProgress(currenttime))
   {
     legL.setTarget(legLBezier.getValue(currenttime), kp, ki);
+    //Serial.printf("legLupdatecounter: %d\n", legLupdatecounter);
+    legLupdatecounter++;
   }
-  if (legREnabled == 1)
+  if (legREnabled == 1 & armLBezier.isInProgress(currenttime))
   {
     legR.setTarget(legRBezier.getValue(currenttime), kp, ki);
+    //Serial.printf("legRupdatecounter: %d\n", legRupdatecounter);
+    legRupdatecounter++;
   }
 }
 
@@ -68,29 +99,30 @@ void BottangoPlayer::loadFile(const char *csvDir)
 }
 void BottangoPlayer::checkEndOfCurve()
 {
-  if (!armLBezier.isInProgress(currenttime))
+  if (armLBezier.isFinished(currenttime))
   {
-    // Serial.println("armL not in progress");
     if (armLCurveRead != armLCurveWrite)
     {
-      Serial.println("armL read != write");
+      Serial.printf("armL setControllPoints, read: %d, write: %d\n", armLCurveRead, armLCurveWrite);
       armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
       armLCurveRead++;
       if (armLCurveRead >= bezierBufferLenght)
       {
         armLCurveRead = 0;
       }
+      
     }
     else if (csvDisabledFlag)
     {
-      armLEnabled = false;
+      armLEnabled = false;//hier is ergens een probleem met 2e bestand inladen
     }
   }
 
-  if (!armRBezier.isInProgress(currenttime))
+  if (armRBezier.isFinished(currenttime))
   {
     if (armRCurveRead != armRCurveWrite)
     {
+      Serial.printf("armR setControllPoints, read: %d, write: %d\n", armRCurveRead, armRCurveWrite);
       armRBezier.setControllPoints(armRCurveArray[armRCurveRead]);
       armRCurveRead++;
       if (armRCurveRead >= bezierBufferLenght)
@@ -103,11 +135,11 @@ void BottangoPlayer::checkEndOfCurve()
       armREnabled = false;
     }
   }
-
-  if (!legLBezier.isInProgress(currenttime))
+  if (legLBezier.isFinished(currenttime))
   {
     if (legLCurveRead != legLCurveWrite)
     {
+      Serial.printf("legL setControllPoints, read: %d, write: %d\n", legLCurveRead, legLCurveWrite);
       legLBezier.setControllPoints(legLCurveArray[legLCurveRead]);
       legLCurveRead++;
       if (legLCurveRead >= bezierBufferLenght)
@@ -120,11 +152,11 @@ void BottangoPlayer::checkEndOfCurve()
       legLEnabled = false;
     }
   }
-
-  if (!legRBezier.isInProgress(currenttime))
+  if (legRBezier.isFinished(currenttime))
   {
     if (legRCurveRead != legRCurveWrite)
     {
+      Serial.printf("legR setControllPoints, read: %d, write: %d\n", legRCurveRead, legRCurveWrite);
       legRBezier.setControllPoints(legRCurveArray[legRCurveRead]);
       legRCurveRead++;
       if (legRCurveRead >= bezierBufferLenght)
@@ -144,12 +176,12 @@ void BottangoPlayer::openCSV()
   file = SD.open(currentFileDir,FILE_READ);
   if (!file) {
     debugE("File (%s) open failed",currentFileDir);
-    fileReady = 0;
+    fileReady = false;
   }
   else{
     Serial.println("openCSV else");
     csvDisabledFlag = false;
-    fileReady = 1;
+    fileReady = true;
   }
 }
 
@@ -161,8 +193,12 @@ void BottangoPlayer::closeCSV()
 
 void BottangoPlayer::readAndParseCSVRow()
 {
+  Serial.printf("time: %d,", millis());
+  unsigned long int timebefore = millis();
   if (cp.parseRow())
   {
+  unsigned long int timeafter = millis();
+  Serial.printf("read duration: %d\n", timeafter);
     // original types of Ms and durationMs ints, can be optimized by using a struct.
     char **commandType = (char **)cp[0];
     char **motorID = (char **)cp[1];
@@ -177,8 +213,8 @@ void BottangoPlayer::readAndParseCSVRow()
 
     float controllArray[8] = {startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]};
 
-    Serial.printf("cmd: %s, id: %s, startMS: %f, durationMS: %f, startPosition: %f, startControlPointX: %f, startControlPointY: %f, endPosition: %f, endControlPointX: %f, endControlPointY: %f\n", commandType[0], motorID[0], startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]);
-
+    //Serial.printf("cmd: %s, id: %s, startMS: %f, durationMS: %f, startPosition: %f, startControlPointX: %f, startControlPointY: %f, endPosition: %f, endControlPointX: %f, endControlPointY: %f\n", commandType[0], motorID[0], startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]);
+    Serial.printf("reading csv row, data:\n");
     Serial.printf("0: %f, 1: %f, 2: %f, 3: %f, 4: %f, 5: %f, 6: %f, 7: %f\n", controllArray[0], controllArray[1], controllArray[2], controllArray[3], controllArray[4], controllArray[5], controllArray[6], controllArray[7]);
 
     if (strcmp(commandType[0], "sC") == 0)
@@ -186,7 +222,7 @@ void BottangoPlayer::readAndParseCSVRow()
     {
       if (strcmp(motorID[0], "m_arm_l") == 0)
       {
-        Serial.println("m_arm_l");
+        Serial.println("Added: m_arm_l\n");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(armLCurveArray[armLCurveWrite]));
         armLCurveWrite++;
         if (armLCurveWrite == bezierBufferLenght)
@@ -196,19 +232,17 @@ void BottangoPlayer::readAndParseCSVRow()
       }
       else if (strcmp(motorID[0], "m_arm_r") == 0)
       {
-        Serial.println("m_arm_r");
+        Serial.println("Added: m_arm_r");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(armRCurveArray[armRCurveWrite]));
         armRCurveWrite++;
-        Serial.printf("armRCurveWrite: %i, armRCurveRead: %i\n", armRCurveWrite, armRCurveRead);
         if (armRCurveWrite == bezierBufferLenght)
         {
           armRCurveWrite = 0;
         }
-        Serial.printf("armRCurveWrite: %i, armRCurveRead: %i\n", armRCurveWrite, armRCurveRead);
       }
       else if (strcmp(motorID[0], "m_leg_l") == 0)
       {
-        Serial.println("m_leg_l");
+        Serial.println("Added: m_leg_l");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(legLCurveArray[legLCurveWrite]));
         legLCurveWrite++;
         if (legLCurveWrite == bezierBufferLenght)
@@ -218,7 +252,7 @@ void BottangoPlayer::readAndParseCSVRow()
       }
       else if (strcmp(motorID[0], "m_leg_r") == 0)
       {
-        Serial.println("m_leg_r");
+        Serial.println("Added: m_leg_r");
         std::copy(std::begin(controllArray), std::end(controllArray), std::begin(legRCurveArray[legRCurveWrite]));
         legRCurveWrite++;
         if (legRCurveWrite == bezierBufferLenght)
@@ -226,12 +260,17 @@ void BottangoPlayer::readAndParseCSVRow()
           legRCurveWrite = 0;
         }
       }
+      else{
+        Serial.printf("motor id not found: ");
+        Serial.println(motorID[0]);
+      }
     }
   }
   else
   {
+    Serial.println("end of file");
     closeCSV();
-    fileReady = true;
+    fileReady = false;
     enabled = false;
     csvDisabledFlag = true;
   }
@@ -241,16 +280,16 @@ int BottangoPlayer::sumAllReadWritePointers()
 {
   int deltaPointersArmL = armLCurveWrite - armLCurveRead;
   if (deltaPointersArmL < 0)
-    deltaPointersArmL + bezierBufferLenght;
+    deltaPointersArmL += bezierBufferLenght;
   int deltaPointersArmR = armRCurveWrite - armRCurveRead;
   if (deltaPointersArmR < 0)
-    deltaPointersArmR + bezierBufferLenght;
+    deltaPointersArmR += bezierBufferLenght;
   int deltaPointersLegL = legLCurveWrite - legLCurveRead;
   if (deltaPointersLegL < 0)
-    deltaPointersLegL + bezierBufferLenght;
+    deltaPointersLegL += bezierBufferLenght;
   int deltaPointersLegR = legRCurveWrite - legRCurveRead;
   if (deltaPointersLegR < 0)
-    deltaPointersLegR + bezierBufferLenght;
+    deltaPointersLegR += bezierBufferLenght;
   return (deltaPointersArmL + deltaPointersArmR + deltaPointersLegL + deltaPointersLegR);
 }
 
