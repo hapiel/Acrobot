@@ -10,7 +10,7 @@
 #include "SD.h"
 #include <CSV_Parser.h>
 
-const int bezierBufferLenght = 10;
+const int bezierBufferLenght = 30;
 
 class BottangoPlayer
 {
@@ -28,6 +28,7 @@ public:
   void setMotorKpKi(float kp = 5.0, float ki = 2.0);
 
   void closeCSV();
+  void increaseReadByOne();
 private:
   FloatBezierCurve armLBezier = FloatBezierCurve();
   FloatBezierCurve armRBezier = FloatBezierCurve();
@@ -54,6 +55,17 @@ private:
   bool enabled = false;
   bool csvDisabledFlag = false;
   bool fileReady = false;
+
+  bool resetTime = false;
+  bool armLWaitingOnNextFile = false;
+  bool armRWaitingOnNextFile = false;
+  bool legLWaitingOnNextFile = false;
+  bool legRWaitingOnNextFile = false;
+
+  bool endOfFile = false;
+  
+  bool ForceRead = false;
+
   unsigned long int starttime;
   unsigned long int currenttime;
   float kp = 5.0;

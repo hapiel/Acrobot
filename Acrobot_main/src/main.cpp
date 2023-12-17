@@ -157,6 +157,14 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(bezierPage, mainMenu,
+          ITEM_COMMAND("slowstart", []()
+                      { bottangoPlayer.start();
+                        bottangoPlayer.loadFile("/testlongslowmovement.csv");
+                      }),
+          ITEM_COMMAND("differentstart", []()
+                      { bottangoPlayer.start();
+                        bottangoPlayer.loadFile("/differentStart.csv");
+                      }),
           ITEM_COMMAND("long_curve_test", []()
                       { bottangoPlayer.loadFile("/long_animation_test.csv");
                       }),
@@ -165,6 +173,9 @@ SUB_MENU(bezierPage, mainMenu,
                       }),
           ITEM_COMMAND("stopfile", []()
                       { bottangoPlayer.closeCSV();
+                      }),
+          ITEM_COMMAND("readIndex", []()
+                      { bottangoPlayer.increaseReadByOne();
                       }),
          ITEM_COMMAND("beziercurve_stand", []()
                       { bottangoPlayer.loadFile("/Stand.csv");

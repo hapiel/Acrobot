@@ -4,6 +4,8 @@ BottangoPlayer::BottangoPlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &ar
 {
 }
 
+
+
 void BottangoPlayer::update()
 {
   static int armRupdatecounter = 0;
@@ -81,6 +83,8 @@ void BottangoPlayer::start()
   armREnabled = true;
   legLEnabled = true;
   legREnabled = true;
+  ForceRead == true;
+  Serial.printf("Forceread = %d\n", ForceRead);
 }
 
 void BottangoPlayer::stop()
@@ -99,18 +103,36 @@ void BottangoPlayer::loadFile(const char *csvDir)
 }
 void BottangoPlayer::checkEndOfCurve()
 {
-  if (armLBezier.isFinished(currenttime))
+  Serial.printf("checking forceread\n");
+  if (ForceRead==true){
+    Serial.printf("ForceRead = %d\n", ForceRead);
+  }
+  
+  if (armLBezier.isFinished(currenttime)||ForceRead == true)
   {
+    Serial.printf("ForceRead = %d\n", ForceRead);
     if (armLCurveRead != armLCurveWrite)
     {
-      Serial.printf("armL setControllPoints, read: %d, write: %d\n", armLCurveRead, armLCurveWrite);
-      armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
-      armLCurveRead++;
-      if (armLCurveRead >= bezierBufferLenght)
-      {
-        armLCurveRead = 0;
+      Serial.printf("armL setControllPoints, read: %d, write: %d, forceread: %d\n", armLCurveRead, armLCurveWrite, ForceRead);
+      unsigned int lastArmLCurveRead;
+      if (armLCurveRead == 0){
+        unsigned int lastArmLCurveRead = 10;
       }
-      
+      else{
+        unsigned int lastArmLCurveRead = armLCurveRead -1;
+      }
+      if(false){// (armLCurveArray[armLCurveRead][0]<armLCurveArray[lastArmLCurveRead][0]&&resetTime==false){
+        //hier meot gewachten worden tot de alle curves klaar zijn, dan tijd nul, dan next file
+        armLWaitingOnNextFile = true;
+      }
+      else{
+        armLBezier.setControllPoints(armLCurveArray[armLCurveRead]);
+        armLCurveRead++;
+        if (armLCurveRead >= bezierBufferLenght)
+        {
+          armLCurveRead = 0;
+        }
+      }
     }
     else if (csvDisabledFlag)
     {
@@ -118,11 +140,11 @@ void BottangoPlayer::checkEndOfCurve()
     }
   }
 
-  if (armRBezier.isFinished(currenttime))
+  if (armRBezier.isFinished(currenttime)||ForceRead == true)
   {
     if (armRCurveRead != armRCurveWrite)
     {
-      Serial.printf("armR setControllPoints, read: %d, write: %d\n", armRCurveRead, armRCurveWrite);
+      Serial.printf("armR setControllPoints, read: %d, write: %d, forceread: %d\n", armRCurveRead, armRCurveWrite, ForceRead);
       armRBezier.setControllPoints(armRCurveArray[armRCurveRead]);
       armRCurveRead++;
       if (armRCurveRead >= bezierBufferLenght)
@@ -135,11 +157,11 @@ void BottangoPlayer::checkEndOfCurve()
       armREnabled = false;
     }
   }
-  if (legLBezier.isFinished(currenttime))
+  if (legLBezier.isFinished(currenttime)||ForceRead == true)
   {
     if (legLCurveRead != legLCurveWrite)
     {
-      Serial.printf("legL setControllPoints, read: %d, write: %d\n", legLCurveRead, legLCurveWrite);
+      Serial.printf("legL setControllPoints, read: %d, write: %d, forceread: %d\n", legLCurveRead, legLCurveWrite, ForceRead);
       legLBezier.setControllPoints(legLCurveArray[legLCurveRead]);
       legLCurveRead++;
       if (legLCurveRead >= bezierBufferLenght)
@@ -152,11 +174,11 @@ void BottangoPlayer::checkEndOfCurve()
       legLEnabled = false;
     }
   }
-  if (legRBezier.isFinished(currenttime))
+  if (legRBezier.isFinished(currenttime)||ForceRead == true)
   {
     if (legRCurveRead != legRCurveWrite)
     {
-      Serial.printf("legR setControllPoints, read: %d, write: %d\n", legRCurveRead, legRCurveWrite);
+      Serial.printf("legR setControllPoints, read: %d, write: %d, forceread: %d\n", legRCurveRead, legRCurveWrite, ForceRead);
       legRBezier.setControllPoints(legRCurveArray[legRCurveRead]);
       legRCurveRead++;
       if (legRCurveRead >= bezierBufferLenght)
@@ -169,6 +191,7 @@ void BottangoPlayer::checkEndOfCurve()
       legREnabled = false;
     }
   }
+  ForceRead = false;
 }
 
 void BottangoPlayer::openCSV()
@@ -182,6 +205,8 @@ void BottangoPlayer::openCSV()
     Serial.println("openCSV else");
     csvDisabledFlag = false;
     fileReady = true;
+    ForceRead = true;
+    starttime = millis();
   }
 }
 
@@ -291,5 +316,10 @@ int BottangoPlayer::sumAllReadWritePointers()
   if (deltaPointersLegR < 0)
     deltaPointersLegR += bezierBufferLenght;
   return (deltaPointersArmL + deltaPointersArmR + deltaPointersLegL + deltaPointersLegR);
+}
+
+void BottangoPlayer::increaseReadByOne()
+{
+  ForceRead == true;
 }
 
