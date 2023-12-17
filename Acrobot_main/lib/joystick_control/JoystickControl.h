@@ -8,6 +8,7 @@
 #include "Arm.h"
 #include "ChoreoPlayer.h"
 #include "menu.h"
+#include "EStop.h"
 
 enum JoystickControlMode
 {
@@ -29,7 +30,7 @@ enum JoystickControlMode
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu);
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop);
   void update();
 
   void setMode(JoystickControlMode mode);
@@ -44,6 +45,7 @@ private:
   ChoreoPlayer &choreoPlayer;
   JoystickControlMode controlMode = MODE_SUMMATIVE_90;
   Menu &menu;
+  EStop &eStop;
 
   long prevUpdateTime = 0;
   int deltaT = 0;
@@ -72,7 +74,7 @@ private:
   float teleK = 0.01;  // Local joint damping gain, makes it heavier to push arm
 
   // these are partial modes, that can be overlayed? How to call this
-  void submodeCalibrate();
+  void submodeStopChoreo();
   void submodeStop();
   void submodeStand();
   void submodeMenu();

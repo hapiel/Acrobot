@@ -110,7 +110,7 @@ DebugLed debugLed;
 ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
-JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
+JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
 
 // wifi
 bool wifiConnected = false;
