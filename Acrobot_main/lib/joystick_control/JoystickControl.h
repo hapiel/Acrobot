@@ -8,6 +8,7 @@
 #include "Arm.h"
 #include "ChoreoPlayer.h"
 #include "menu.h"
+#include "EStop.h"
 
 enum JoystickControlMode
 {
@@ -21,13 +22,15 @@ enum JoystickControlMode
   MODE_SUMMATIVE_90_FAST,
   MODE_SUMMATIVE_140,
   MODE_POSE,
+  MODE_SYNCH_90,
+  MODE_SYNCH_140,
   MODE_TELEPRESENCE
 };
 
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu);
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop);
   void update();
 
   void setMode(JoystickControlMode mode);
@@ -40,8 +43,9 @@ private:
   Arm &armL;
   Arm &armR;
   ChoreoPlayer &choreoPlayer;
-  JoystickControlMode controlMode = MODE_ABSOLUTE_90_LIMITED;
+  JoystickControlMode controlMode = MODE_SUMMATIVE_90;
   Menu &menu;
+  EStop &eStop;
 
   long prevUpdateTime = 0;
   int deltaT = 0;
@@ -62,6 +66,7 @@ private:
   float speedSummativeMode = .3;
   float speedSummativeFastMode = .5;
   float speedTriggerMax = .12;
+  float speedSynchMode = .4;
 
   // Define constants for the control gains
   float teleKp = 0.02; // Proportional gain
@@ -69,7 +74,7 @@ private:
   float teleK = 0.01;  // Local joint damping gain, makes it heavier to push arm
 
   // these are partial modes, that can be overlayed? How to call this
-  void submodeCalibrate();
+  void submodeStopChoreo();
   void submodeStop();
   void submodeStand();
   void submodeMenu();
@@ -83,6 +88,7 @@ private:
   void modeSummative(int rotDegrees, float speed);
   void modePose();
   void modeTelepresence();
+  void modeSynch(int rotDegrees, float speed);
 
   float adjustByDisplacement(float currentVal, float target, float displacement);
   float calcTelepresenceTorque(float angleDiff, float velDiff, float localVel);

@@ -16,10 +16,15 @@ We're controlling this project with a PS5 controller
 */
 
 #include <Bluepad32.h>
+#include "uni_virtual_device.h"
+
+
 
 #define DEBUG_LED_RED 25
 #define DEBUG_LED_GREEN 32
 #define DEBUG_LED_BLUE 33
+
+#define ESTOP_SET_PIN 5
 
 
 GamepadPtr myGamepads[BP32_MAX_GAMEPADS];
@@ -95,6 +100,10 @@ void setDebugLed(int red, int green, int blue) {
 
 // Arduino setup function. Runs in CPU 1
 void setup() {
+  //temp code to configure estop
+  //pinMode(ESTOP_SET_PIN, INPUT_PULLDOWN);
+
+  uni_virtual_device_set_enabled(false);
   initDebugLed();
   Serial.begin(115200);
   Serial2.begin(115200);

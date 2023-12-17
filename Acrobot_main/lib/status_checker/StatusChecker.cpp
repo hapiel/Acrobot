@@ -25,7 +25,7 @@ void StatusChecker::checkBattery()
     }
 
     debugLed.setR(128); // doesn't reset, so other functions can trigger red too.
-    if (batterySensor.getPercentage() <= 15)
+    if (batterySensor.getPercentage() <= 12)
     {
 
       if (lastWarningTime + 1000 < millis())
@@ -37,10 +37,6 @@ void StatusChecker::checkBattery()
       if (millis() % 500 < 50)
       {
         buzzer.buzz(50);
-      }
-      if (batterySensor.getPercentage() <= 13)
-      {
-        eStop.set();
       }
     }
   }

@@ -37,6 +37,7 @@ The project should be built in platformio
 #include "ItemToggle.h"
 #include "ItemCommand.h"
 #include "LcdMenu.h" // needs to be after item-imports!!!
+#include "WebServer.h"
 #define CSV_PARSER_DONT_IMPORT_SD
 #include "CSV_Parser.h"
 
@@ -57,7 +58,7 @@ The project should be built in platformio
 #include "menu.h"
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
-#include "BottangoPlayer.h"
+#include "webserverFunctions.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -73,7 +74,7 @@ The project should be built in platformio
 #define BUTTON_RIGHT 32
 #define BATTERY_SENSOR 36
 
-#define HOST_NAME "Acrobot"
+#define HOST_NAME "acrobot"
 #define SCK 22
 #define MISO 19
 #define MOSI 23
@@ -97,6 +98,9 @@ bool rowParserFinished()
 {
   return ((file.available() > 0) ? false : true);
 }
+// need custom SPI class because of incorrect wiring
+SPIClass spi = SPIClass(VSPI);
+
 
 // custom libraries
 Joystick joystick;
@@ -122,6 +126,7 @@ DebugLed debugLed;
 ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
+JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
 BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
@@ -217,24 +222,26 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(joystickPage, mainMenu,
-         ITEM_COMMAND("90 limited", []()
+         ITEM_COMMAND("Abs 90 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
          ITEM_COMMAND("Summative 90", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
-
-         ITEM_COMMAND("90 unlimited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
-         ITEM_COMMAND("140 limited", []()
+         ITEM_COMMAND("Abs 140 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_140_LIMITED); }),
-         ITEM_COMMAND("20 limited", []()
+         ITEM_COMMAND("Abs 20 limited", []()
                       { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
-         ITEM_COMMAND("Legs relative", []()
-                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
-
-         ITEM_COMMAND("Summative 90 fast", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
+         ITEM_COMMAND("Abs 90 unlimited", []()
+                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
          ITEM_COMMAND("Summative 140", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_140); }),
+         ITEM_COMMAND("Summative 90 fast", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
+         ITEM_COMMAND("Synch 90", []()
+                      { joystickControl.setMode(MODE_SYNCH_90); }),
+         ITEM_COMMAND("Synch 140", []()
+                      { joystickControl.setMode(MODE_SYNCH_140); }),
+         ITEM_COMMAND("Legs relative", []()
+                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
          ITEM_COMMAND("Telepresence Arm", []()
                       { joystickControl.setMode(MODE_TELEPRESENCE); }),
          ITEM_COMMAND("Pose", []()
@@ -251,8 +258,20 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.DAdjust(-0.5); }));
 
 SUB_MENU(sequencePage, mainMenu,
+         ITEM_COMMAND("awakening", []()
+                      { choreoPlayer.start(CHOREO_AWAKENING); }),
+         ITEM_COMMAND("lets DELAY", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE_DELAY); }),
          ITEM_COMMAND("Stand", []()
                       { choreoPlayer.start(CHOREO_STANDING); }),
+         ITEM_COMMAND("lets dance", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE0); }),
+         ITEM_COMMAND("lets dance1", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE1); }),
+         ITEM_COMMAND("lets dance2", []()
+                      { choreoPlayer.start(CHOREO_LETS_DANCE2); }),
+         ITEM_COMMAND("Arm_test", []()
+                      { choreoPlayer.start(CHOREO_ARM_TEST); }),
          ITEM_COMMAND("walk cont", []()
                       { choreoPlayer.start(CHOREO_WALK_CONT); }),
          ITEM_COMMAND("Mila start", []()
@@ -291,6 +310,14 @@ SUB_MENU(aboutPage, mainMenu,
 // ---------
 // MENU SECTION END
 
+
+// webserver
+
+
+
+
+// webserver end
+
 void initDebug()
 {
   Debug.begin(HOST_NAME);         // Initialize the WiFi server
@@ -301,7 +328,7 @@ void initDebug()
 
 void inits()
 {
-  pinMode(LEDcl, OUTPUT);
+
   Serial.begin(115200); // Initialize Serial for USB communication
 
   Serial.println("Next init: wifi");
@@ -326,6 +353,7 @@ void inits()
   }
   else
   {
+    hasSD = true; //webserver
     debugI("SD card init done.");
   }
 
@@ -336,7 +364,6 @@ void inits()
   eStop.init();
 
   debugI("Next init: Wire");
-  Wire.setClock(400000);
   Wire.begin(SDA_PIN, SCL_PIN);
 
   debugI("Next init: ADS & HallSensor");
@@ -354,6 +381,20 @@ void inits()
   debugI("Next init: Menu");
   menu.init(mainMenu);
 
+  debugI("Next init: Webserver");
+  // webserver
+  server.on("/list", HTTP_GET, printDirectory);
+  server.on("/edit", HTTP_DELETE, handleDelete);
+  server.on("/edit", HTTP_PUT, handleCreate);
+  server.on("/edit", HTTP_POST, []() {
+    returnOK();
+  }, handleFileUpload);
+  server.onNotFound(handleNotFound);
+
+  server.begin();
+  // webserver end
+
+
   debugI("Inits Done.");
   buzzer.buzz(40); // short buzz to indicate boot
 }
@@ -370,6 +411,7 @@ void wifiConnection()
         debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
       }
       MDNS.addService("telnet", "tcp", 23);
+      MDNS.addService("http", "tcp", 80);
       debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
     }
   }
@@ -396,9 +438,12 @@ void updates()
   menu.update();
   statusChecker.update();
   choreoPlayer.update();
-  digitalWrite(LEDcl, HIGH);
+  // webserver
+  if (wifiConnected){
+    server.handleClient();
+  }
+
   bottangoPlayer.update();
-  digitalWrite(LEDcl, LOW);
 }
 
 void updatesI2C()
@@ -424,6 +469,7 @@ void taskMain(void *parameter)
     }
 
     Debug.handle(); // needs to be in bottom of loop
+
     vTaskDelay(1);
   }
 }
@@ -441,8 +487,8 @@ void taskI2C(void *parameter)
 void setup()
 {
   inits();
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 1300000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
 }
 
 void loop()

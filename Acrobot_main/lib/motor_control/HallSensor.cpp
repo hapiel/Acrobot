@@ -5,8 +5,9 @@ HallSensor::HallSensor(TwoWire &Wire, RemoteDebug &Debug) : Wire(Wire), Debug(De
   ADS = new ADS1115(address, &Wire);
   motorIDToSensorTable[ARM_L_ID - 1] = 2;
   motorIDToSensorTable[ARM_R_ID - 1] = 0;
-  motorIDToSensorTable[LEG_L_ID - 1] = 3;  // temp value, needs to be corrected when legs are moved.
+  motorIDToSensorTable[LEG_L_ID - 1] = 3;
   motorIDToSensorTable[LEG_R_ID - 1] = 1;
+  mutex = xSemaphoreCreateMutex();
 }
 
 void HallSensor::init()
@@ -17,26 +18,49 @@ void HallSensor::init()
 
 int16_t HallSensor::getValFromID(int motorID)
 {
-  return sensorValueOfId[motorID -1];
+  int16_t val;
+  if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+  {
+    
+    val = sensorValueOfId[motorID - 1];
+    xSemaphoreGive(mutex);
+  }
+
+  return val;
+
 }
 
-
-bool HallSensor::getReadyFromID(int motorID, int16_t calibrationTreshold)
+bool HallSensor::getReadyFromID(int motorID, int16_t calibrationThreshold)
 {
-  return sensorValueOfId[motorID -1] < calibrationTreshold;
+  bool ready;
+  if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+  {
+    ready =  sensorValueOfId[motorID - 1] < calibrationThreshold;
+    xSemaphoreGive(mutex);
+  }
+
+  return ready;
 }
 
-// TODO: Needs mutex
 void HallSensor::update()
 {
   // save to a local variable
-  for (int i = 0; i < 4; i++)
+  int16_t tempSensorValueOfId[SENSOR_COUNT];
+
+  for (int i = 0; i < SENSOR_COUNT; i++)
   {
-    sensorValueOfId[i] = ADS->readADC(motorIDToSensorTable[i]);
+    tempSensorValueOfId[i] = ADS->readADC(motorIDToSensorTable[i]);
     // TODO: Slow function, could be rewritten to ADS continuous mode?
   }
 
-  // store local variable in sensorValueOfId in mutex
-  
 
+  if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+  {
+    for (int i = 0; i < 4; i++)
+    {
+      sensorValueOfId[i] = tempSensorValueOfId[i];
+    }
+    xSemaphoreGive(mutex);
+  }
+  
 }
