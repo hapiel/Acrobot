@@ -57,8 +57,6 @@ private:
   RemoteDebug &Debug;
   Arm &armL;
   Arm &armR;
-  Arm &armL;
-  Arm &armR;
   Leg &legL;
   Leg &legR;
   float posArmLStepStart;

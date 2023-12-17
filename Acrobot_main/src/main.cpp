@@ -59,6 +59,7 @@ The project should be built in platformio
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
 #include "webserverFunctions.h"
+#include "BottangoPlayer.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -127,7 +128,6 @@ ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
-JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu);
 
 BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
 
