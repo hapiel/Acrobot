@@ -6,6 +6,9 @@
 #include <WebServer.h>
 #include <SD.h>
 
+// source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
+
+
 WebServer server(80);
 static bool hasSD = false;
 File uploadFile;
