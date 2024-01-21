@@ -12,6 +12,14 @@ enum State
   STATE_ON
 };
 
+enum LastControlMode
+{
+  CONTROL_MODE_NONE,
+  CONTROL_MODE_TARGET,
+  CONTROL_MODE_VELOCITY,
+  CONTROL_MODE_TORQUE
+};
+
 class Limb
 {
 public:
@@ -45,9 +53,16 @@ protected:
   float posMin;
   float posMax;
   float offset180;
-  float target;
+  float lastTarget;
   bool inverted;
+  const int SAFE_TARGET_RANGE_MIN = 5;
+  const int SAFE_TARGET_RANGE_MAX = 25;
   State state = STATE_OFF;
+  LastControlMode lastControlMode = CONTROL_MODE_NONE;
+  uint32_t targetSafetyLerpStartTime = 0;
+  uint16_t targetSafetyLerpDuration = 1; // to avoid division by 0
+  float targetSafetyLerpOriginalTarget = 0;
+  const int TARGET_SAFETY_DURATION_FACTOR = 10; // probably 3 is enough, starting out on the safe side for testing.
 
   void start();
   void tryCalibration();
@@ -57,11 +72,10 @@ protected:
   float correctOffsetShaftToMotor(float degrees);
   float correctOffsetMotorToShaft(float degrees);
 
-  int16_t calibrationDegreesLow; 
+  int16_t calibrationDegreesLow;
   const int offsetDegrees = 36;
   int16_t offsetGearbox = 0;
-  int16_t calibrationTreshold; 
-
+  int16_t calibrationTreshold;
 };
 
 #endif // LIMB_H
