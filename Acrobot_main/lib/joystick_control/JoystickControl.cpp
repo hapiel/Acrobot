@@ -174,7 +174,7 @@ void JoystickControl::defaultSubmodes()
 
 void JoystickControl::submodeStopChoreo()
 {
-  const int STOP_TRESHOLD = 200;
+  const int STOP_TRESHOLD = 0;
   if (joystick.getButtonCross() || joystick.getButtonL1() || joystick.getL2() > STOP_TRESHOLD || joystick.getButtonR1() || joystick.getR2() > STOP_TRESHOLD)
   {
     choreoPlayer.stop();
