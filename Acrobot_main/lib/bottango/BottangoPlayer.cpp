@@ -101,6 +101,7 @@ void BottangoPlayer::loadFile(const char *csvDir)
   Serial.println(currentFileDir);
   openCSV();
 }
+
 void BottangoPlayer::checkEndOfCurve()
 {
   Serial.printf("checking forceread\n");
@@ -210,7 +211,6 @@ void BottangoPlayer::openCSV()
   }
 }
 
-
 void BottangoPlayer::closeCSV()
 {
   file.close();
@@ -241,7 +241,7 @@ void BottangoPlayer::readAndParseCSVRow()
     //Serial.printf("cmd: %s, id: %s, startMS: %f, durationMS: %f, startPosition: %f, startControlPointX: %f, startControlPointY: %f, endPosition: %f, endControlPointX: %f, endControlPointY: %f\n", commandType[0], motorID[0], startMs[0], durationMs[0], startPosition[0], startControlPointX[0], startControlPointY[0], endPosition[0], endControlPointX[0], endControlPointY[0]);
     Serial.printf("reading csv row, data:\n");
     Serial.printf("0: %f, 1: %f, 2: %f, 3: %f, 4: %f, 5: %f, 6: %f, 7: %f\n", controllArray[0], controllArray[1], controllArray[2], controllArray[3], controllArray[4], controllArray[5], controllArray[6], controllArray[7]);
-
+    
     if (strcmp(commandType[0], "sC") == 0)
     Serial.println("sC");
     {
