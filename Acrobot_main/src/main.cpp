@@ -85,7 +85,6 @@ LcdMenu lcdMenu(3, 20);
 // need custom SPI class because of incorrect wiring
 SPIClass spi = SPIClass(VSPI);
 
-
 // custom libraries
 Joystick joystick;
 CANHandler canHandler;
@@ -94,8 +93,8 @@ Motor motorLegR(LEG_R_ID, canHandler, Debug);
 Motor motorArmL(ARM_L_ID, canHandler, Debug);
 Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(Wire, Debug);
-Leg legL(motorLegL, hallSensor, LEG_L_ID, 37.35, true); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 4.99, false);
+Leg legL(motorLegL, hallSensor, LEG_L_ID, 32.75, true); // offset values
+Leg legR(motorLegR, hallSensor, LEG_R_ID, 0.99, false);
 Arm armL(motorArmL, hallSensor, ARM_L_ID, 28.64, true);
 Arm armR(motorArmR, hallSensor, ARM_R_ID, -3.25, false);
 
@@ -253,11 +252,7 @@ SUB_MENU(aboutPage, mainMenu,
 // ---------
 // MENU SECTION END
 
-
 // webserver
-
-
-
 
 // webserver end
 
@@ -296,7 +291,7 @@ void inits()
   }
   else
   {
-    hasSD = true; //webserver
+    hasSD = true; // webserver
     debugI("SD card init done.");
   }
 
@@ -329,14 +324,14 @@ void inits()
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);
   server.on("/edit", HTTP_PUT, handleCreate);
-  server.on("/edit", HTTP_POST, []() {
-    returnOK();
-  }, handleFileUpload);
+  server.on(
+      "/edit", HTTP_POST, []()
+      { returnOK(); },
+      handleFileUpload);
   server.onNotFound(handleNotFound);
 
   server.begin();
   // webserver end
-
 
   debugI("Inits Done.");
   buzzer.buzz(40); // short buzz to indicate boot
@@ -383,7 +378,8 @@ void updates()
   choreoPlayer.update();
 
   // webserver
-  if (wifiConnected){
+  if (wifiConnected)
+  {
     server.handleClient();
   }
 }

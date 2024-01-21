@@ -10,7 +10,38 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
-  target = posDegrees;
+
+  if (lastControlMode != CONTROL_MODE_TARGET)
+  {
+    lastTarget = getPosition();
+  }
+  
+  lastControlMode = CONTROL_MODE_TARGET;
+
+  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.8 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
+
+  // check if target is within safe range
+  if (lastTarget + safeRange < posDegrees || lastTarget - safeRange > posDegrees)
+  {
+    // if not, start lerp to target
+    targetSafetyLerpOriginalTarget = lastTarget;
+    targetSafetyLerpStartTime = millis();
+    targetSafetyLerpDuration = abs(lastTarget - posDegrees) * TARGET_SAFETY_DURATION_FACTOR;
+  }
+
+  // within lerp time, lerp to target
+  if (targetSafetyLerpStartTime + targetSafetyLerpDuration > millis())
+  {
+    
+
+    float lerpFactor = fMap(millis() - targetSafetyLerpStartTime, 0, targetSafetyLerpDuration, 0, 100);
+
+    posDegrees = fMap(lerpFactor, -1, 100, targetSafetyLerpOriginalTarget, posDegrees);
+
+  }
+
+  lastTarget = posDegrees;
+
   if (inverted)
   {
     posDegrees = 360 - posDegrees;
@@ -21,6 +52,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   float posToSend = degreesToRad(posOffsetCorrected);
 
   float kpToSend = constrain(kp, 0, kpLimit);
+
   // ramp up kp after start
   if (millis() - startTime < startRampDuration)
   {
@@ -28,7 +60,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   }
 
   float kdToSend = constrain(kd, kdMinimum, 5);
-  // ramp down kd
+  // ramp down kd after start
   if (millis() - startTime < startRampDuration)
   {
     kdToSend = max(kdToSend, fMap(millis() - startTime, 0, startRampDuration, kDMinimumStart, kdMinimum));
@@ -39,7 +71,10 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
 
 void Limb::setTorqueUnprotected(float torque)
 {
-  if (inverted){
+  lastControlMode = CONTROL_MODE_TORQUE;
+  
+  if (inverted)
+  {
     torque = -torque;
   }
   motor.setTorque(torque);
@@ -47,7 +82,7 @@ void Limb::setTorqueUnprotected(float torque)
 
 float Limb::getTarget()
 {
-  return target;
+  return lastTarget;
 }
 
 void Limb::start()
@@ -66,7 +101,8 @@ void Limb::stop()
 
 void Limb::startCalibration()
 {
-  if (state == STATE_ON){
+  if (state == STATE_ON)
+  {
     return;
   }
   state = STATE_CALIBRATION;

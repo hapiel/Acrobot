@@ -80,6 +80,7 @@ private:
   void submodeMenu();
   void submodeMenuOption();
   void submodeArmNeutral();
+  void submodeTestPositions();
 
   void defaultSubmodes();
 

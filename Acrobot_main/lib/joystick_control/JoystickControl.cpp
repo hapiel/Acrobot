@@ -166,10 +166,39 @@ void JoystickControl::submodeArmNeutral()
 void JoystickControl::defaultSubmodes()
 {
   submodeStop();
-  submodeStand();
+  // submodeStand();
   submodeMenu();
   submodeArmNeutral();
   submodeStopChoreo();
+  submodeTestPositions();
+}
+
+void JoystickControl::submodeTestPositions()
+{
+  if (joystick.getButtonTriangle())
+  {
+    armLTarget = 180;
+    armRTarget = 180;
+    armL.setTarget(armLTarget, menu.getP(), menu.getD());
+    armR.setTarget(armRTarget, menu.getP(), menu.getD());
+  }
+
+  if (joystick.getButtonCircle())
+  {
+    armLTarget = 90;
+    armRTarget = 90;
+    armL.setTarget(armLTarget, menu.getP(), menu.getD());
+    armR.setTarget(armRTarget, menu.getP(), menu.getD());
+  }
+
+  if (joystick.getButtonSquare())
+  {
+    armLTarget = 199;
+    armRTarget = 199;
+    armL.setTarget(armLTarget, menu.getP(), menu.getD());
+    armR.setTarget(armRTarget, menu.getP(), menu.getD());
+  }
+
 }
 
 void JoystickControl::submodeStopChoreo()
