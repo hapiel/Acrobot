@@ -1,6 +1,6 @@
 #include "Joystick.h"
 
-Joystick::Joystick()
+Joystick::Joystick(RemoteDebug &Debug) : Debug(Debug)
 {
   // Initialize your variables here if needed
 }
@@ -330,6 +330,12 @@ void Joystick::update()
              &gyroX, &gyroY, &gyroZ, &accelX, &accelY, &accelZ, &battery);
 
       lastSeen = millis();
+
+      if (!connected){
+        // new connection
+        debugI("Joystick connected");
+        setColorLED(0, 0, 0);
+      }
       connected = true;
     }
   }

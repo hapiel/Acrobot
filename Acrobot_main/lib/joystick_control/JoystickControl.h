@@ -9,6 +9,7 @@
 #include "ChoreoPlayer.h"
 #include "menu.h"
 #include "EStop.h"
+#include "debugLed.h"
 
 enum JoystickControlMode
 {
@@ -55,10 +56,8 @@ private:
   float armLTarget = 180;
   float armRTarget = 180;
 
-  float armLNeutral = 180;
-  float armRNeutral = 180;
-  float legLNeutral = 185;
-  float legRNeutral = 185;
+  float armNeutral = 180;
+  float legNeutral = 185;
 
   float speedAbsoluteMode = .4;
   float speedUnlimitedMode = 5;
@@ -68,10 +67,22 @@ private:
   float speedTriggerMax = .12;
   float speedSynchMode = .4;
 
+  int variableAngle[3] = {45, 95, 140};
+  int variableSetting = 1;
+  bool synchronized = false;
+
+  bool joystickConnected = false;
+
   // Define constants for the control gains
   float teleKp = 0.02; // Proportional gain
   float teleKd = 0.1;  // Derivative gain, prevents oscilation (or creates oscilation if too high)
   float teleK = 0.01;  // Local joint damping gain, makes it heavier to push arm
+
+  uint8_t ledR = 0;
+  uint8_t ledG = 0;
+  uint8_t ledB = 0;
+
+  void init();
 
   // these are partial modes, that can be overlayed? How to call this
   void submodeStopChoreo();
@@ -79,8 +90,11 @@ private:
   void submodeStand();
   void submodeMenu();
   void submodeMenuOption();
-  void submodeArmNeutral();
+  void submodeArmNeutralDpad();
+  void submodeArmNeutralJoystick();
   void submodeTestPositions();
+  void submodeToggleSynch();
+  void submodeChangeVariableAngle();
 
   void defaultSubmodes();
 
@@ -93,6 +107,8 @@ private:
 
   float adjustByDisplacement(float currentVal, float target, float displacement);
   float calcTelepresenceTorque(float angleDiff, float velDiff, float localVel);
+
+  void setLedValues();
 };
 
 #endif // JOYSTICK_CONTROL_H
