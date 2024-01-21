@@ -3,8 +3,29 @@
 JoystickControl::JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop)
     : Debug(Debug), joystick(joystick), legL(legL), legR(legR), armL(armL), armR(armR), choreoPlayer(choreoPlayer), menu(menu), eStop(eStop) {}
 
+
+
 void JoystickControl::update()
 {
+
+  bool justConnected = joystick.getConnected();
+
+  // new connection
+  if (justConnected && !joystickConnected)
+  {
+    joystickConnected = true;
+    debugI("Joystick connected");
+    setLedValues();
+  }
+
+  // not connected
+  if (!justConnected)
+  {
+    joystickConnected = false;
+    return;
+  }
+
+  setLedValues();
 
   deltaT = millis() - prevUpdateTime;
 
@@ -31,7 +52,7 @@ void JoystickControl::update()
     modeLegsRelative();
     break;
   case MODE_SUMMATIVE_90:
-    modeSummative(95, speedSummativeMode);
+    modeSummative(variableAngle[variableSetting], speedSummativeMode);
     break;
   case MODE_SUMMATIVE_90_FAST:
     modeSummative(95, speedSummativeFastMode);
@@ -71,7 +92,6 @@ void JoystickControl::setMode(JoystickControlMode mode)
   controlMode = mode;
 }
 
-
 void JoystickControl::submodeStop()
 {
   if (joystick.getMiscPSPressed())
@@ -100,7 +120,7 @@ void JoystickControl::submodeStand()
 void JoystickControl::submodeMenu()
 {
 
-  if (!joystick.getButtonL1() && !joystick.getButtonR1() && joystick.getL2() == 0 && joystick.getR2() == 0 )
+  if (!joystick.getButtonL1() && !joystick.getButtonR1() && joystick.getL2() == 0 && joystick.getR2() == 0)
   {
     if (joystick.getDpadUpPressed())
     {
@@ -132,33 +152,67 @@ void JoystickControl::submodeMenuOption()
   }
 }
 
-void JoystickControl::submodeArmNeutral()
+void JoystickControl::submodeArmNeutralDpad()
 {
 
   if (joystick.getButtonL1() || joystick.getL2() > 0)
   {
     if (joystick.getDpadUpPressed())
     {
-      armRNeutral = 0;
-      armLNeutral = 0;
+      armNeutral = 0;
     }
 
     if (joystick.getDpadRightPressed())
     {
-      armRNeutral = 90;
-      armLNeutral = 90;
+      armNeutral = 90;
     }
 
     if (joystick.getDpadDownPressed())
     {
-      armRNeutral = 180;
-      armLNeutral = 180;
+      armNeutral = 180;
     }
 
     if (joystick.getDpadLeftPressed())
     {
-      armRNeutral = 270;
-      armLNeutral = 270;
+      armNeutral = 270;
+    }
+  }
+}
+
+void JoystickControl::submodeArmNeutralJoystick()
+{
+  if (joystick.getButtonL3Pressed())
+  {
+    if (joystick.getAxisLYCorrected() > 10)
+    {
+      if (armNeutral < 430)
+      {
+        armNeutral += 90;
+      }
+    }
+    if (joystick.getAxisLYCorrected() < -10)
+    {
+      if (armNeutral > -90)
+      {
+        armNeutral -= 90;
+      }
+    }
+  }
+  if (joystick.getButtonR3Pressed())
+  {
+    if (joystick.getAxisRYCorrected() > 10)
+    {
+      if (legNeutral < 200)
+      {
+        legNeutral += 90;
+      }
+    }
+    if (joystick.getAxisRYCorrected() < -10)
+    {
+      if (legNeutral > 160)
+      {
+        legNeutral -= 90;
+      }
     }
   }
 }
@@ -166,11 +220,13 @@ void JoystickControl::submodeArmNeutral()
 void JoystickControl::defaultSubmodes()
 {
   submodeStop();
-  // submodeStand();
+  submodeStand();
   submodeMenu();
-  submodeArmNeutral();
+  submodeArmNeutralJoystick();
   submodeStopChoreo();
-  submodeTestPositions();
+  // submodeTestPositions();
+  submodeToggleSynch();
+  submodeChangeVariableAngle();
 }
 
 void JoystickControl::submodeTestPositions()
@@ -198,7 +254,6 @@ void JoystickControl::submodeTestPositions()
     armL.setTarget(armLTarget, menu.getP(), menu.getD());
     armR.setTarget(armRTarget, menu.getP(), menu.getD());
   }
-
 }
 
 void JoystickControl::submodeStopChoreo()
@@ -210,10 +265,29 @@ void JoystickControl::submodeStopChoreo()
   }
 }
 
+void JoystickControl::submodeToggleSynch()
+{
+  if (joystick.getMiscOptionPressed())
+  {
+    synchronized = !synchronized;
+    setLedValues();
+  }
+}
+
+void JoystickControl::submodeChangeVariableAngle()
+{
+  if (joystick.getMiscCreatePressed())
+  {
+    variableSetting++;
+    variableSetting %= 3;
+    setLedValues();
+  }
+}
+
 void JoystickControl::modeAbsolute(int rotDegrees, float speed)
 {
 
-  //legs
+  // legs
   if (joystick.getButtonL1() || joystick.getL2() > 0)
   {
 
@@ -224,8 +298,8 @@ void JoystickControl::modeAbsolute(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    float legLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, legLNeutral - rotDegrees, legLNeutral + rotDegrees);
-    float legRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, legRNeutral - rotDegrees, legRNeutral + rotDegrees);
+    float legLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, legNeutral - rotDegrees, legNeutral + rotDegrees);
+    float legRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, legNeutral - rotDegrees, legNeutral + rotDegrees);
 
     legLTarget = adjustByDisplacement(legLTarget, legLPosJoystick, displacement);
     legRTarget = adjustByDisplacement(legRTarget, legRPosJoystick, displacement);
@@ -234,10 +308,9 @@ void JoystickControl::modeAbsolute(int rotDegrees, float speed)
     legR.setTarget(legRTarget, menu.getP(), menu.getD());
   }
 
-  //arms
+  // arms
   if (joystick.getButtonR1() || joystick.getR2() > 0)
   {
-
 
     if (joystick.getR2() > 0)
     {
@@ -246,8 +319,8 @@ void JoystickControl::modeAbsolute(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    float armLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
-    float armRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, armRNeutral - rotDegrees, armRNeutral + rotDegrees);
+    float armLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, armNeutral - rotDegrees, armNeutral + rotDegrees);
+    float armRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, armNeutral - rotDegrees, armNeutral + rotDegrees);
 
     armLTarget = adjustByDisplacement(armLTarget, armLPosJoystick, displacement);
     armRTarget = adjustByDisplacement(armRTarget, armRPosJoystick, displacement);
@@ -284,6 +357,12 @@ void JoystickControl::modeLegsRelative()
 
 void JoystickControl::modeSummative(int rotDegrees, float speed)
 {
+  // if synch, do that stuff instead
+  if (synchronized)
+  {
+    modeSynch(rotDegrees, speed);
+    return;
+  }
 
   // legs
   if (joystick.getButtonR1() || joystick.getR2() > 0)
@@ -291,8 +370,8 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
     float joyRX = fMap(joystick.getAxisRXCorrected(), -128, 128, -rotDegrees, rotDegrees);
     float joyRY = fMap(joystick.getAxisRYCorrected(), -128, 128, -rotDegrees, rotDegrees);
 
-    float joyLLegTarget = constrain(legLNeutral + joyRY + joyRX, legLNeutral - rotDegrees, legLNeutral + rotDegrees);
-    float joyRLegTarget = constrain(legRNeutral + joyRY - joyRX, legRNeutral - rotDegrees, legRNeutral + rotDegrees);
+    float joyLLegTarget = constrain(legNeutral + joyRY + joyRX, legNeutral - rotDegrees, legNeutral + rotDegrees);
+    float joyRLegTarget = constrain(legNeutral + joyRY - joyRX, legNeutral - rotDegrees, legNeutral + rotDegrees);
 
     if (joystick.getR2() > 0)
     {
@@ -314,8 +393,8 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
     float joyLX = fMap(joystick.getAxisLXCorrected(), -128, 128, -rotDegrees, rotDegrees);
     float joyLY = fMap(joystick.getAxisLYCorrected(), -128, 128, -rotDegrees, rotDegrees);
 
-    float joyLArmTarget = constrain(armLNeutral + joyLY + joyLX, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
-    float joyRArmTarget = constrain(armLNeutral + joyLY - joyLX, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
+    float joyLArmTarget = constrain(armNeutral + joyLY + joyLX, armNeutral - rotDegrees, armNeutral + rotDegrees);
+    float joyRArmTarget = constrain(armNeutral + joyLY - joyLX, armNeutral - rotDegrees, armNeutral + rotDegrees);
 
     if (joystick.getL2() > 0)
     {
@@ -332,14 +411,14 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
   }
 }
 
-void JoystickControl::modeSynch(int rotDegrees, float speed){
+void JoystickControl::modeSynch(int rotDegrees, float speed)
+{
 
   // R moves both legs equally, L moves both arms equally
-    // legs
+  // legs
   if (joystick.getButtonR1() || joystick.getR2() > 0)
   {
-    float joyR = fMap(joystick.getAxisRYCorrected(), -128, 128, legLNeutral - rotDegrees, legLNeutral + rotDegrees);
-
+    float joyR = fMap(joystick.getAxisRYCorrected(), -128, 128, legNeutral - rotDegrees, legNeutral + rotDegrees);
 
     if (joystick.getR2() > 0)
     {
@@ -358,7 +437,7 @@ void JoystickControl::modeSynch(int rotDegrees, float speed){
   // arms
   if (joystick.getButtonL1() || joystick.getL2() > 0)
   {
-    float joyL = fMap(joystick.getAxisLYCorrected(), -128, 128, armLNeutral - rotDegrees, armLNeutral + rotDegrees);
+    float joyL = fMap(joystick.getAxisLYCorrected(), -128, 128, armNeutral - rotDegrees, armNeutral + rotDegrees);
 
     if (joystick.getL2() > 0)
     {
@@ -373,7 +452,6 @@ void JoystickControl::modeSynch(int rotDegrees, float speed){
     armL.setTarget(armLTarget, menu.getP(), menu.getD());
     armR.setTarget(armRTarget, menu.getP(), menu.getD());
   }
-
 }
 
 void JoystickControl::modePose()
@@ -447,7 +525,8 @@ void JoystickControl::modePose()
   legR.setTarget(legRTarget, menu.getP(), menu.getD());
 }
 
-void JoystickControl::modeTelepresence(){
+void JoystickControl::modeTelepresence()
+{
 
   // Variables to store joint angles and angular velocities for arms L and R
   float angleL = armL.getPosition();
@@ -467,7 +546,6 @@ void JoystickControl::modeTelepresence(){
 
   armL.setTorqueUnprotected(torqueL);
   armR.setTorqueUnprotected(torqueR);
-
 }
 
 float JoystickControl::adjustByDisplacement(float currentVal, float target, float displacement)
@@ -494,7 +572,36 @@ float JoystickControl::adjustByDisplacement(float currentVal, float target, floa
   return newVal;
 }
 
-float JoystickControl::calcTelepresenceTorque(float angleDiff, float velDiff, float localVel) {
+float JoystickControl::calcTelepresenceTorque(float angleDiff, float velDiff, float localVel)
+{
   float torque = teleKp * angleDiff + teleKd * velDiff - teleK * localVel;
   return torque;
+}
+
+void JoystickControl::setLedValues()
+{
+  if (synchronized)
+  {
+    ledB = 255;
+  }
+  else
+  {
+    ledB = 0;
+  }
+
+  if (variableSetting == 0)
+  {
+    ledG = 0;
+  }
+  else if (variableSetting == 1)
+  {
+    ledG = 70;
+  }
+  else
+  {
+    ledG = 255;
+  }
+
+
+  joystick.setColorLED(ledR, ledG, ledB);
 }

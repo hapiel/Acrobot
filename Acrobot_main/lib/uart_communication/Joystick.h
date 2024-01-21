@@ -2,11 +2,12 @@
 #define JOYSTICK_H
 
 #include <Arduino.h>
+#include <remoteDebug.h>
 
 class Joystick
 {
 public:
-  Joystick();
+  Joystick(RemoteDebug &Debug);
 
   // Getter functions
   bool getConnected();
@@ -82,11 +83,13 @@ public:
   void update();
 
 private:
+  RemoteDebug &Debug;
+
   int idx, axisLX, axisLY, axisRX, axisRY, brake, throttle, misc, battery;
   unsigned int dpad, buttons;
   long gyroX, gyroY, gyroZ, accelX, accelY, accelZ;
 
-  bool connected;
+  bool connected = false;
   uint32_t lastSeen = 0;
   int timeOut = 300;
   unsigned int prevButtons;

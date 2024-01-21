@@ -2,6 +2,7 @@
 
 DebugLed::DebugLed() {}
 
+
 void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue)
 {
   red = _red;

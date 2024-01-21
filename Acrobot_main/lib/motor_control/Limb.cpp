@@ -89,6 +89,7 @@ void Limb::start()
 {
   motor.start();
   state = STATE_ON;
+  lastControlMode = CONTROL_MODE_NONE;
   startTime = millis();
   motor.setPosition(0, 0, 0);
 }
@@ -97,6 +98,7 @@ void Limb::stop()
 {
   motor.stop();
   state = STATE_OFF;
+  lastControlMode = CONTROL_MODE_NONE; // possibly redundant, better safe than sorry
 }
 
 void Limb::startCalibration()

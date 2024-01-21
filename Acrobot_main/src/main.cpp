@@ -103,7 +103,7 @@ bool rowParserFinished()
 SPIClass spi = SPIClass(VSPI);
 
 // custom libraries
-Joystick joystick;
+Joystick joystick(Debug);
 CANHandler canHandler;
 Motor motorLegL(LEG_L_ID, canHandler, Debug);
 Motor motorLegR(LEG_R_ID, canHandler, Debug);
