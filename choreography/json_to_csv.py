@@ -70,5 +70,16 @@ for animation in data[0]["Animations"]:
                 row_values[9] = fMap(int(row_values[9]), 0, 8192, range_low, range_high) - range_low
                 
             csvwriter.writerow(row_values)
-
+    
+    # Remove the last newline char
+    with open(csv_file_path, "r") as csvfile:
+        lines = csvfile.readlines()
+    
+    if lines:
+        lines[-1] = lines[-1].rstrip("\n")
+        
+        
+    with open(csv_file_path, "w", newline="") as csvfile:
+        csvfile.writelines(lines)
+    
     print(f"CSV file created for animation: {csv_file_path}")

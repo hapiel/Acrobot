@@ -9,7 +9,7 @@
         "Animation Name": "Stand",
         "Animation Commands": "sC,m_arm_r,0,433,4096,108,0,7663,-108,0\\nsC,m_arm_l,0,300,4096,75,0,4096,-75,0\\nsC,m_leg_r,0,300,4187,75,0,4187,-75,0\\nsC,m_leg_l,0,300,4187,75,0,4187,-75,0\\n",
         "Animation Loop Commands": "sC,m_arm_r,20000,418,7663,209,0,4096,-209,0\\n",
-        "Animation Loop Duration MS": 418
+        "Animation Loop Duration MS": 418,
         "Animation Commands": "sC,m_arm_r,0,300,4096,75,0,4096,-75,0\\nsC,m_arm_l,0,300,4096,75,0,4096,-75,0\\nsC,m_leg_r,0,300,4187,75,0,4187,-75,0\\nsC,m_leg_l,0,300,4187,75,0,4187,-75,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
