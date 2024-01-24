@@ -55,14 +55,14 @@ protected:
   float offset180;
   float lastTarget;
   bool inverted;
-  const int SAFE_TARGET_RANGE_MIN = 5;
-  const int SAFE_TARGET_RANGE_MAX = 25;
+  const int SAFE_TARGET_RANGE_MIN = 15;
+  const int SAFE_TARGET_RANGE_MAX = 30;
   State state = STATE_OFF;
   LastControlMode lastControlMode = CONTROL_MODE_NONE;
   uint32_t targetSafetyLerpStartTime = 0;
   uint16_t targetSafetyLerpDuration = 1; // to avoid division by 0
   float targetSafetyLerpOriginalTarget = 0;
-  const int TARGET_SAFETY_DURATION_FACTOR = 10; // probably 3 is enough, starting out on the safe side for testing.
+  const int TARGET_SAFETY_DURATION_FACTOR = 7; // probably 3 is enough, starting out on the safe side for testing.
 
   void start();
   void tryCalibration();

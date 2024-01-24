@@ -18,7 +18,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   
   lastControlMode = CONTROL_MODE_TARGET;
 
-  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.8 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
+  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.6 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
 
   // check if target is within safe range
   if (lastTarget + safeRange < posDegrees || lastTarget - safeRange > posDegrees)

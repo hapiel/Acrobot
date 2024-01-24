@@ -217,7 +217,7 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorAmp),
          ITEM_BASIC(menu.motorPosA),
          ITEM_BASIC(menu.motorTargA),
-         ITEM_BASIC(menu.motorPosL), // should later be swapped with arms
+         ITEM_BASIC(menu.motorPosL), 
          ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(joystickPage, mainMenu,
@@ -299,11 +299,14 @@ SUB_MENU(aboutPage, mainMenu,
          ITEM_BASIC("V2_ Unstable"),
          ITEM_BASIC("Circusstad Festival"),
          ITEM_BASIC("Amarte"),
+         ITEM_BASIC("Gemeente Rotterdam"),
          ITEM_BASIC("::Collaborators::"),
          ITEM_BASIC("Basti Kuhz"),
          ITEM_BASIC("Esmee v/d Ster"),
+         ITEM_BASIC("Luc van Esch"),
          ITEM_BASIC("Mila Baumann"),
          ITEM_BASIC("Marit Adriaanse"),
+         ITEM_BASIC("Edwin Dertien"),
          ITEM_BASIC("Ricard Lopez"));
 
 // ---------
