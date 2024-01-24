@@ -1,0 +1,6 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Start positions ArmL ArmR legL legR,999.0,178.59375,999.0,999.0
+sC,m_arm_r,0,2633,178.59375,658,0.0,91.845703125,-658,0.0
+sC,m_arm_r,2633,634,91.845703125,172,0.0,94.658203125,-241,-3.251953125
+sC,m_arm_r,3267,1866,94.658203125,633,8.61328125,121.640625,-453,0.0
+sC,m_arm_r,5133,2900,121.640625,725,0.0,180.0,-725,0.0

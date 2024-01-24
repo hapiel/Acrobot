@@ -59,7 +59,8 @@ The project should be built in platformio
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
 #include "webserverFunctions.h"
-#include "BottangoPlayer.h"
+// #include "BottangoPlayer.h"
+#include "movePlayer.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -89,6 +90,7 @@ LcdMenu lcdMenu(3, 20);
 
 File file;
 CSV_Parser cp("ssffffffff");
+CSV_Parser cpStart("-ffff");
 
 // needed for csv_parser library
 char feedRowParser()
@@ -128,7 +130,8 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
 
-BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
+// BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
+MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp, cpStart);
 
 // wifi
 bool wifiConnected = false;
@@ -138,8 +141,8 @@ bool wifiConnected = false;
 
 // This section needs to be in the same file that inits the lcdMenu.
 
-extern MenuItem *bezierPage[];
 extern MenuItem *bootPage[];
+extern MenuItem *movePlayerPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
 extern MenuItem *joystickPage[];
@@ -150,8 +153,8 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
-    ITEM_SUBMENU("Curve tester", bezierPage),
     ITEM_SUBMENU("Boot motors", bootPage),
+    ITEM_SUBMENU("MOVE PLAYER", movePlayerPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
     ITEM_SUBMENU("Joystick", joystickPage),
@@ -160,41 +163,52 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
-SUB_MENU(bezierPage, mainMenu,
-          ITEM_COMMAND("slowstart", []()
-                      { bottangoPlayer.start();
-                        bottangoPlayer.loadFile("/testlongslowmovement.csv");
-                      }),
-          ITEM_COMMAND("differentstart", []()
-                      { bottangoPlayer.start();
-                        bottangoPlayer.loadFile("/differentStart.csv");
-                      }),
-          ITEM_COMMAND("long_curve_test", []()
-                      { bottangoPlayer.loadFile("/long_animation_test.csv");
-                      }),
-          ITEM_COMMAND("player start", []()
-                      { bottangoPlayer.start();
-                      }),
-          ITEM_COMMAND("stopfile", []()
-                      { bottangoPlayer.closeCSV();
-                      }),
-          ITEM_COMMAND("readIndex", []()
-                      { bottangoPlayer.increaseReadByOne();
-                      }),
-         ITEM_COMMAND("beziercurve_stand", []()
-                      { bottangoPlayer.loadFile("/Stand.csv");
-                        bottangoPlayer.start(); }),
-          ITEM_COMMAND("feedrowparser", []()
-                      {Serial.println(feedRowParser()); }),
-         ITEM_BASIC(menu.motorTargA),
-         ITEM_BASIC(menu.motorTargL),
-         ITEM_COMMAND("beziercurve_pod", []()
-                      { bottangoPlayer.loadFile("/armtest.csv");
-                        bottangoPlayer.start(); }),
-         ITEM_COMMAND("Podcheska", []()
-                      { bottangoPlayer.loadFile("/Podcheska.csv");
-                        bottangoPlayer.start(); }));
+SUB_MENU(movePlayerPage, mainMenu,
+         ITEM_COMMAND("rightarm_only", []()
+                      { movePlayer.startMove("/TEST_rightarm_only.csv"); }),
+         ITEM_COMMAND("righta_posemixer", []()
+                      { movePlayer.startMove("/TEST_rightarm_posemixer.csv"); }),
+         ITEM_COMMAND("ra non zero start", []()
+                      { movePlayer.startMove("/TEST_rightarm_nonzerostart.csv"); }),
+         ITEM_COMMAND("ra late start", []()
+                      { movePlayer.startMove("/TEST_rightarm_latestart.csv"); }),
+         ITEM_COMMAND("ra weird curve", []()
+                      { movePlayer.startMove("/TEST_rightarm_weirdcurve.csv"); }));
 
+// SUB_MENU(bezierPage, mainMenu,
+//           ITEM_COMMAND("slowstart", []()
+//                       { bottangoPlayer.start();
+//                         bottangoPlayer.loadFile("/testlongslowmovement.csv");
+//                       }),
+//           ITEM_COMMAND("differentstart", []()
+//                       { bottangoPlayer.start();
+//                         bottangoPlayer.loadFile("/differentStart.csv");
+//                       }),
+//           ITEM_COMMAND("long_curve_test", []()
+//                       { bottangoPlayer.loadFile("/long_animation_test.csv");
+//                       }),
+//           ITEM_COMMAND("player start", []()
+//                       { bottangoPlayer.start();
+//                       }),
+//           ITEM_COMMAND("stopfile", []()
+//                       { bottangoPlayer.closeCSV();
+//                       }),
+//           ITEM_COMMAND("readIndex", []()
+//                       { bottangoPlayer.increaseReadByOne();
+//                       }),
+//          ITEM_COMMAND("beziercurve_stand", []()
+//                       { bottangoPlayer.loadFile("/Stand.csv");
+//                         bottangoPlayer.start(); }),
+//           ITEM_COMMAND("feedrowparser", []()
+//                       {Serial.println(feedRowParser()); }),
+//          ITEM_BASIC(menu.motorTargA),
+//          ITEM_BASIC(menu.motorTargL),
+//          ITEM_COMMAND("beziercurve_pod", []()
+//                       { bottangoPlayer.loadFile("/armtest.csv");
+//                         bottangoPlayer.start(); }),
+//          ITEM_COMMAND("Podcheska", []()
+//                       { bottangoPlayer.loadFile("/Podcheska.csv");
+//                         bottangoPlayer.start(); }));
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE", []()
@@ -217,7 +231,7 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorAmp),
          ITEM_BASIC(menu.motorPosA),
          ITEM_BASIC(menu.motorTargA),
-         ITEM_BASIC(menu.motorPosL), 
+         ITEM_BASIC(menu.motorPosL),
          ITEM_BASIC(menu.motorTargL));
 
 SUB_MENU(joystickPage, mainMenu,
@@ -442,7 +456,9 @@ void updates()
     server.handleClient();
   }
 
-  bottangoPlayer.update();
+  movePlayer.update();
+
+  // bottangoPlayer.update();
 }
 
 void updatesI2C()
@@ -455,8 +471,8 @@ void taskMain(void *parameter)
 {
   for (;;)
   {
-    
-    //printf("main debug 1\n");
+
+    // printf("main debug 1\n");
     updates();
     wifiConnection(); // restore wifi variables
 
@@ -477,7 +493,7 @@ void taskI2C(void *parameter)
 {
   for (;;)
   {
-    //Serial.printf("i2c update 1\n");
+    // Serial.printf("i2c update 1\n");
     updatesI2C();
     vTaskDelay(10);
   }
@@ -492,8 +508,8 @@ void setup()
 
 void loop()
 {
-  //vTaskDelete(NULL);  
+  // vTaskDelete(NULL);
   taskMain(NULL);
   taskI2C(NULL);
-  //vTaskDelay(100);
+  // vTaskDelay(100);
 }

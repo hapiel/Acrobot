@@ -56,6 +56,46 @@ for animation in data[0]["Animations"]:
         # Write header row
         header_row = ["Command", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
         csvwriter.writerow(header_row)
+        
+        # get start positions for each motor, 999.0 is default.
+        
+        first_arm_l_pos = 999.0
+        first_arm_r_pos = 999.0
+        first_leg_l_pos = 999.0
+        first_leg_r_pos = 999.0
+        
+        for row in animation_array:
+            row_values = row.split(",")
+            motor_name = row_values[1]
+            if motor_name in controller_data and motor_name == "m_arm_l":
+                range_low, range_high = controller_data[motor_name]
+                first_arm_l_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
+                break
+        
+        for row in animation_array:
+            row_values = row.split(",")
+            motor_name = row_values[1]
+            if motor_name in controller_data and motor_name == "m_arm_r":
+                first_arm_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
+                break
+        
+        for row in animation_array:
+            row_values = row.split(",")
+            motor_name = row_values[1]
+            if motor_name in controller_data and motor_name == "m_leg_l":
+                first_leg_l_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
+                break
+        
+        for row in animation_array:
+            row_values = row.split(",")
+            motor_name = row_values[1]
+            if motor_name in controller_data and motor_name == "m_leg_r":
+                first_leg_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
+                break
+        
+        start_pos_row = ["Start positions ArmL ArmR legL legR", first_arm_l_pos, first_arm_r_pos, first_leg_l_pos, first_leg_r_pos]
+        
+        csvwriter.writerow(start_pos_row)
 
         # Write animation commands to the CSV file
         for row in animation_array:
