@@ -81,7 +81,6 @@ The project should be built in platformio
 #define MISO 19
 #define MOSI 23
 #define CS 18
-#define LEDcl 13
 
 // external libraries
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
@@ -89,8 +88,23 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);
 
 File file;
-CSV_Parser cp("ssffffffff");
-CSV_Parser cpStart("-ffff");
+// no header so that each run is predictable. Otherwise the first line is skipped but only the first time we use this object.
+CSV_Parser cp("ssffffffff", false);
+
+// queue handling for tasks
+QueueHandle_t functionQueue;
+
+using TaskFunction = void (*)();
+
+void executeTasksFromQueue()
+{
+  TaskFunction taskFunction;
+
+  while (xQueueReceive(functionQueue, &taskFunction, 0))
+  {
+    taskFunction(); // Execute the task function
+  }
+}
 
 // needed for csv_parser library
 char feedRowParser()
@@ -131,7 +145,7 @@ Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight,
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
 
 // BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
-MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp, cpStart);
+MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp, cp);
 
 // wifi
 bool wifiConnected = false;
@@ -164,61 +178,56 @@ MAIN_MENU(
     ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(movePlayerPage, mainMenu,
+         ITEM_COMMAND("short", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_startpos_short.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("repeat", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_startpos_repeat.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("rightarm_only", []()
-                      { movePlayer.startMove("/TEST_rightarm_only.csv"); }),
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_rightarm_only.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("righta_posemixer", []()
-                      { movePlayer.startMove("/TEST_rightarm_posemixer.csv"); }),
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_rightarm_posemixer.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("ra non zero start", []()
-                      { movePlayer.startMove("/TEST_rightarm_nonzerostart.csv"); }),
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_rightarm_nonzerostart.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("ra late start", []()
-                      { movePlayer.startMove("/TEST_rightarm_latestart.csv"); }),
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_rightarm_latestart.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("ra weird curve", []()
-                      { movePlayer.startMove("/TEST_rightarm_weirdcurve.csv"); }));
-
-// SUB_MENU(bezierPage, mainMenu,
-//           ITEM_COMMAND("slowstart", []()
-//                       { bottangoPlayer.start();
-//                         bottangoPlayer.loadFile("/testlongslowmovement.csv");
-//                       }),
-//           ITEM_COMMAND("differentstart", []()
-//                       { bottangoPlayer.start();
-//                         bottangoPlayer.loadFile("/differentStart.csv");
-//                       }),
-//           ITEM_COMMAND("long_curve_test", []()
-//                       { bottangoPlayer.loadFile("/long_animation_test.csv");
-//                       }),
-//           ITEM_COMMAND("player start", []()
-//                       { bottangoPlayer.start();
-//                       }),
-//           ITEM_COMMAND("stopfile", []()
-//                       { bottangoPlayer.closeCSV();
-//                       }),
-//           ITEM_COMMAND("readIndex", []()
-//                       { bottangoPlayer.increaseReadByOne();
-//                       }),
-//          ITEM_COMMAND("beziercurve_stand", []()
-//                       { bottangoPlayer.loadFile("/Stand.csv");
-//                         bottangoPlayer.start(); }),
-//           ITEM_COMMAND("feedrowparser", []()
-//                       {Serial.println(feedRowParser()); }),
-//          ITEM_BASIC(menu.motorTargA),
-//          ITEM_BASIC(menu.motorTargL),
-//          ITEM_COMMAND("beziercurve_pod", []()
-//                       { bottangoPlayer.loadFile("/armtest.csv");
-//                         bottangoPlayer.start(); }),
-//          ITEM_COMMAND("Podcheska", []()
-//                       { bottangoPlayer.loadFile("/Podcheska.csv");
-//                         bottangoPlayer.start(); }));
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/TEST_rightarm_weirdcurve.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE", []()
-                      { legR.startCalibration(); legL.startCalibration(); 
-                   armL.startCalibration(), armR.startCalibration(); }),
+                      {
+                        TaskFunction lambdaFunction = []()
+                        {
+                          legR.startCalibration();
+                          legL.startCalibration();
+                          armL.startCalibration();
+                          armR.startCalibration(); 
+                          }; 
+                        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_BASIC(menu.bootAdc),   // adc
          ITEM_BASIC(menu.bootState), // or "ready ready ready"
-         ITEM_BASIC(menu.bootPosA),
-         ITEM_BASIC(menu.bootPosL),
-         ITEM_BASIC(menu.bootRelais));
+         ITEM_BASIC(menu.bootPosA), ITEM_BASIC(menu.bootPosL), ITEM_BASIC(menu.bootRelais));
 
 SUB_MENU(statusPage, mainMenu,
          ITEM_BASIC(menu.statusTemp),
@@ -475,13 +484,7 @@ void taskMain(void *parameter)
     // printf("main debug 1\n");
     updates();
     wifiConnection(); // restore wifi variables
-
-    // debug messages
-    static long executionTimer1 = 0;
-    if (runEvery(1000, executionTimer1))
-    {
-      debugV("* Time: %u:%.2u:%.2u", (millis() / 3600000), (millis() / 60000) % 60, (millis() / 1000) % 60);
-    }
+    executeTasksFromQueue();
 
     Debug.handle(); // needs to be in bottom of loop
 
@@ -495,20 +498,21 @@ void taskI2C(void *parameter)
   {
     // Serial.printf("i2c update 1\n");
     updatesI2C();
-    vTaskDelay(10);
+    vTaskDelay(4);
   }
 }
 
 void setup()
 {
   inits();
+  functionQueue = xQueueCreate(5, sizeof(TaskFunction));
   xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
-  // vTaskDelete(NULL);
+  vTaskDelete(NULL);
   taskMain(NULL);
   taskI2C(NULL);
   // vTaskDelay(100);

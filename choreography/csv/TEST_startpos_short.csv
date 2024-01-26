@@ -1,0 +1,2 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Start positions ArmL ArmR legL legR,999.0,178.59375,999.0,999.0

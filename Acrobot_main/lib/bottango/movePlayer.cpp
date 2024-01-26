@@ -19,12 +19,11 @@ void MovePlayer::update()
     {
       if (limbActive(i))
       {
+        // Serial.print(" a:");
+        // Serial.print(i);
         if (abs(limbs[i]->getTarget() - startPositions[i]) > START_DISTANCE_TOLERANCE)
         {
           readyToMoveCurves = false;
-        }
-        else
-        {
           moveTowardsStart(i);
         }
       }
@@ -85,20 +84,39 @@ bool MovePlayer::loadFile(const char *csvDir)
 void MovePlayer::parseStartCSV()
 {
 
-  if (cpStart.parseRow())
+  Serial.print("T0:");
+  Serial.println(millis());
+
+  // to bypass header
+  String line = file.readStringUntil('\n');
+
+  // debugD("line: %s", line.c_str());
+  
+  Serial.print("T2:");
+  Serial.println(millis());
+
+  if (cp.parseRow() )
   {
-    debugD("Parsing start CSV");
+    Serial.print("T2:");
+    Serial.println(millis());
+    // debugD("Parsing start CSV");
+    // TODO: Very odd bug, the first time this code runs after boot, startCurves() runs before parseStartCSV() seems finished?
     for (int i = 0; i < 4; i++)
     {
-      float *startPosition = (float *)cpStart[i];
-      startPositions[i] = *startPosition;
+      float *startPosition = (float *)cp[i + 2];
+      startPositions[i] = startPosition[0];
     }
+
     debugI("Start positions: ArmL %f, ArmR %f, legL %f, legR %f", startPositions[0], startPositions[1], startPositions[2], startPositions[3]);
+
+
   }
   else
   {
     debugE("Error parsing start CSV");
   }
+
+  file.close();
 }
 
 bool MovePlayer::limbActive(int limbIndex)
@@ -111,6 +129,8 @@ void MovePlayer::moveTowardsStart(int limbIndex)
 {
   float target = startPositions[limbIndex];
   float current = limbs[limbIndex]->getTarget();
+  // Serial.print(" cT:");
+  // Serial.print(current);
   float error = target - current;
 
   // move towards target at speed startMoveSpeed
@@ -119,10 +139,13 @@ void MovePlayer::moveTowardsStart(int limbIndex)
   float moveAngleSign = error > 0 ? 1.0 : -1.0;
   float moveAngleClamped = min(moveAngle, abs(error)) * moveAngleSign;
 
+
   limbs[limbIndex]->setTarget(current + moveAngleClamped, kp, ki);
 }
 
-void MovePlayer::startCurves(){
+void MovePlayer::startCurves()
+{
   state = MOVE_CURVES;
+
   debugI("Starting curves");
 }

@@ -14,7 +14,6 @@ void JoystickControl::update()
   if (justConnected && !joystickConnected)
   {
     joystickConnected = true;
-    debugI("Joystick connected");
     setLedValues();
   }
 
@@ -25,7 +24,6 @@ void JoystickControl::update()
     return;
   }
 
-  setLedValues();
 
   deltaT = millis() - prevUpdateTime;
 

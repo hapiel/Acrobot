@@ -1,0 +1,11 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Start positions ArmL ArmR legL legR,1.0,1.1,1.2,1.3
+Start positions ArmL ArmR legL legR,2.0,2.1,2.2,2.3
+Start positions ArmL ArmR legL legR,3.0,3.1,3.2,3.3
+Start positions ArmL ArmR legL legR,4.0,4.1,4.2,4.3
+Start positions ArmL ArmR legL legR,5.0,5.1,5.2,5.3
+Start positions ArmL ArmR legL legR,6.0,6.1,6.2,6.3
+Start positions ArmL ArmR legL legR,7.0,7.1,7.2,7.3
+Start positions ArmL ArmR legL legR,8.0,8.1,8.2,8.3
+Start positions ArmL ArmR legL legR,9.0,9.1,9.2,9.3
+Start positions ArmL ArmR legL legR,10.0,10.1,10.2,10.3

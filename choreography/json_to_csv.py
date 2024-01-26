@@ -93,7 +93,8 @@ for animation in data[0]["Animations"]:
                 first_leg_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
         
-        start_pos_row = ["Start positions ArmL ArmR legL legR", first_arm_l_pos, first_arm_r_pos, first_leg_l_pos, first_leg_r_pos]
+        # same format as other rows
+        start_pos_row = ["Start positions", "ArmL ArmR legL legR", first_arm_l_pos, first_arm_r_pos, first_leg_l_pos, first_leg_r_pos, 0.0, 0.0, 0.0, 0.0]
         
         csvwriter.writerow(start_pos_row)
 

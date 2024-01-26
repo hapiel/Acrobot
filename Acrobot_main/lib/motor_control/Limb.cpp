@@ -10,7 +10,6 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
-
   if (lastControlMode != CONTROL_MODE_TARGET)
   {
     lastTarget = getPosition();
@@ -91,7 +90,10 @@ void Limb::start()
   state = STATE_ON;
   lastControlMode = CONTROL_MODE_NONE;
   startTime = millis();
+
+  // set motor inactive. Can't be set active immediately after start because of ramping feature in setTarget.
   motor.setPosition(0, 0, 0);
+  
 }
 
 void Limb::stop()
