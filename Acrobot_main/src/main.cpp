@@ -59,8 +59,7 @@ The project should be built in platformio
 #include "ChoreoPlayer.h"
 #include "JoystickControl.h"
 #include "webserverFunctions.h"
-// #include "BottangoPlayer.h"
-#include "movePlayer.h"
+#include "MovePlayer.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -142,10 +141,9 @@ DebugLed debugLed;
 ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
-JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop);
+MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp);
+JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer);
 
-// BottangoPlayer bottangoPlayer(Debug, legL, legR, armL, armR, file, cp);
-MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp, cp);
 
 // wifi
 bool wifiConnected = false;
@@ -159,8 +157,8 @@ extern MenuItem *bootPage[];
 extern MenuItem *movePlayerPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
-extern MenuItem *joystickPage[];
 extern MenuItem *PIPage[];
+extern MenuItem *controlPage[];
 extern MenuItem *sequencePage[];
 extern MenuItem *hardwarePage[];
 extern MenuItem *adsPage[]; // in hardwarpage
@@ -171,8 +169,8 @@ MAIN_MENU(
     ITEM_SUBMENU("MOVE PLAYER", movePlayerPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
-    ITEM_SUBMENU("Joystick", joystickPage),
     ITEM_SUBMENU("Change PI value", PIPage),
+    ITEM_SUBMENU("Control mode", controlPage),
     ITEM_SUBMENU("Sequences", sequencePage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
@@ -243,32 +241,6 @@ SUB_MENU(motorPage, mainMenu,
          ITEM_BASIC(menu.motorPosL),
          ITEM_BASIC(menu.motorTargL));
 
-SUB_MENU(joystickPage, mainMenu,
-         ITEM_COMMAND("Abs 90 limited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_90_LIMITED); }),
-         ITEM_COMMAND("Summative 90", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_90); }),
-         ITEM_COMMAND("Abs 140 limited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_140_LIMITED); }),
-         ITEM_COMMAND("Abs 20 limited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_20_LIMITED); }),
-         ITEM_COMMAND("Abs 90 unlimited", []()
-                      { joystickControl.setMode(MODE_ABSOLUTE_90_UNLIMITED); }),
-         ITEM_COMMAND("Summative 140", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_140); }),
-         ITEM_COMMAND("Summative 90 fast", []()
-                      { joystickControl.setMode(MODE_SUMMATIVE_90_FAST); }),
-         ITEM_COMMAND("Synch 90", []()
-                      { joystickControl.setMode(MODE_SYNCH_90); }),
-         ITEM_COMMAND("Synch 140", []()
-                      { joystickControl.setMode(MODE_SYNCH_140); }),
-         ITEM_COMMAND("Legs relative", []()
-                      { joystickControl.setMode(MODE_LEGS_RELATIVE); }),
-         ITEM_COMMAND("Telepresence Arm", []()
-                      { joystickControl.setMode(MODE_TELEPRESENCE); }),
-         ITEM_COMMAND("Pose", []()
-                      { joystickControl.setMode(MODE_POSE); }));
-
 SUB_MENU(PIPage, mainMenu,
          ITEM_COMMAND(menu.PUpText, []()
                       { menu.PAdjust(2); }),
@@ -278,6 +250,14 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.DAdjust(0.5); }),
          ITEM_COMMAND("D DOWN step: (0.5)", []()
                       { menu.DAdjust(-0.5); }));
+
+SUB_MENU(controlPage, mainMenu,
+         ITEM_COMMAND("Summative", []()
+                      { joystickControl.setMode(MODE_SUMMATIVE_90); }),
+         ITEM_COMMAND("Telepresence Arm", []()
+                      { joystickControl.setMode(MODE_TELEPRESENCE); }),
+         ITEM_COMMAND("Pose", []()
+                      { joystickControl.setMode(MODE_POSE); }));
 
 SUB_MENU(sequencePage, mainMenu,
          ITEM_COMMAND("awakening", []()

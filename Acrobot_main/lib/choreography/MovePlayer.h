@@ -20,25 +20,22 @@ enum MovePlayerState
 class MovePlayer
 {
 public:
-  MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp, CSV_Parser &cpStart);
+  MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp);
   void update();
   void stop();
   void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 5.0, float moveKi = 2.0);
 
 private:
-
-  FloatBezierCurve *curves[4] = {nullptr, nullptr, nullptr, nullptr};
-
   RemoteDebug &Debug;
   File &file;
   CSV_Parser &cp;
-  CSV_Parser &cpStart;
+
   Limb *limbs[4]; // order: 0: ArmL, 1: armR, 2: legL, 3: legR
+  FloatBezierCurve *curves[4] = {nullptr, nullptr, nullptr, nullptr};
 
   MovePlayerState state = IDLE;
 
-  const float START_DISTANCE_TOLERANCE = 3.0;
-
+  const float START_DISTANCE_TOLERANCE = 1.0;
 
   float kp = 5.0;
   float ki = 2.0;
@@ -52,11 +49,9 @@ private:
   bool fileEnded = true;
 
   uint32_t moveStartTime = 0;
-
   uint32_t lastStartMovementTime = 0;
   uint32_t updateMillis = 0;
   uint32_t moveMillis();
-  bool needToReadCurve();
 
   float nextCurve[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -69,6 +64,7 @@ private:
   void moveTowardsStart(int limbIndex);
   void startCurves();
   void readCurve();
+  bool needToReadCurve();
 };
 
 #endif // MOVEPLAYER_H

@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "EStop.h"
 #include "debugLed.h"
+#include "MovePlayer.h"
 
 enum JoystickControlMode
 {
@@ -31,7 +32,7 @@ enum JoystickControlMode
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop);
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop, MovePlayer &movePlayer);
   void update();
 
   void setMode(JoystickControlMode mode);
@@ -47,6 +48,7 @@ private:
   JoystickControlMode controlMode = MODE_SUMMATIVE_90;
   Menu &menu;
   EStop &eStop;
+  MovePlayer &movePlayer;
 
   long prevUpdateTime = 0;
   int deltaT = 0;

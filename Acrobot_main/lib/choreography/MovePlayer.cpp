@@ -1,7 +1,7 @@
-#include "movePlayer.h"
+#include "MovePlayer.h"
 
-MovePlayer::MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp, CSV_Parser &cpStart)
-    : Debug(Debug), file(file), cp(cp), cpStart(cpStart)
+MovePlayer::MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp)
+    : Debug(Debug), file(file), cp(cp)
 {
   limbs[0] = &armL;
   limbs[1] = &armR;
