@@ -25,12 +25,13 @@ public:
   void stop();
   void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 5.0, float moveKi = 2.0);
 
-
 private:
   // FloatBezierCurve armLBezier = FloatBezierCurve(); // replace with array
   // FloatBezierCurve armRBezier = FloatBezierCurve();
   // FloatBezierCurve legLBezier = FloatBezierCurve();
   // FloatBezierCurve legRBezier = FloatBezierCurve();
+
+  FloatBezierCurve *curves[4] = {nullptr, nullptr, nullptr, nullptr};
 
   RemoteDebug &Debug;
   File &file;
@@ -41,6 +42,7 @@ private:
   MovePlayerState state = IDLE;
 
   const float START_DISTANCE_TOLERANCE = 3.0;
+ 
 
   float kp = 5.0;
   float ki = 2.0;
@@ -51,14 +53,26 @@ private:
   bool moveToBeginOnly = false;
   char currentFileDir[256];
 
-  uint32_t lastMoveTime = 0;
+  bool fileEnded = true;
 
+  uint32_t moveStartTime = 0;
+
+  uint32_t lastStartMovementTime = 0;
+  uint32_t updateMillis = 0;
+  uint32_t moveMillis();
+  bool needToReadCurve();
+
+  float nextCurve[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+  const u8_t NO_INDEX = 255;
+  u8_t nextCurveIndex = 255;
 
   bool limbActive(int limbIndex);
   bool loadFile(const char *csvDir);
   void parseStartCSV();
   void moveTowardsStart(int limbIndex);
   void startCurves();
+  void readCurve();
 };
 
 #endif // MOVEPLAYER_H

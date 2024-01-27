@@ -1,31 +1,23 @@
+// original library by Bottango
 
 #include "FloatBezierCurve.h"
 #include "Arduino.h"
-#define COMPRESSED_SIGNAL_MAX 8192.0f
+// #include "Log.h"
+// #include "../BottangoArduinoConfig.h"
+#define COMPRESSED_SIGNAL_MAX 8192.0f // ADDED by Esmee
 
 FloatBezierCurve::FloatBezierCurve(
-    //float controllPoints[8]
-    //unsigned long startTimeInMs,
-    //long duration,
-    //int startY,
-    //long startControlX,
-    //int startControlY,
-    //int endY,
-    //long endControlX,
-    //int endControlY
-    )
+    unsigned long startTimeInMs,
+    long duration,
+    int startY,
+    long startControlX,
+    int startControlY,
+    int endY,
+    long endControlX,
+    int endControlY) : BezierCurve()
 {
-    /*this->curveStartTimeInMs = controllPoints[0];
-    this->duration = controllPoints[1];
 
-    this->startY = controllPoints[2];
-    this->startControlX = controllPoints[3];
-    this->startControlY = controllPoints[4];
-
-    this->endY = controllPoints[5];
-    this->endControlX = controllPoints[6];
-    this->endControlY = controllPoints[7];*/
-    /*this->curveStartTimeInMs = startTimeInMs;
+    this->curveStartTimeInMs = startTimeInMs;
     this->duration = duration;
 
     this->startY = startY;
@@ -34,26 +26,12 @@ FloatBezierCurve::FloatBezierCurve(
 
     this->endY = endY;
     this->endControlX = endControlX;
-    this->endControlY = endControlY;*/
-}
-void FloatBezierCurve::setControllPoints(float controllPoints[8])
-{
-    this->curveStartTimeInMs = controllPoints[0];
-    this->duration = controllPoints[1];
-
-    this->startY = controllPoints[2];
-    this->startControlX = controllPoints[3];
-    this->startControlY = controllPoints[4];
-
-    this->endY = controllPoints[5];
-    this->endControlX = controllPoints[6];
-    this->endControlY = controllPoints[7];
+    this->endControlY = endControlY;
 }
 
 float FloatBezierCurve::getValue(unsigned long currentTimeMs)
 {
-    Serial.println(currentTimeMs - curveStartTimeInMs);
-    return Evaluate(currentTimeMs - curveStartTimeInMs);
+    return Evaluate(constrain(currentTimeMs - curveStartTimeInMs, 0, duration)) / COMPRESSED_SIGNAL_MAX; // added constraint - Daniel
 }
 
 unsigned long FloatBezierCurve::getEndTimeMs()
@@ -68,24 +46,21 @@ unsigned long FloatBezierCurve::getStartTimeMs()
 
 float FloatBezierCurve::Evaluate(unsigned long x)
 {
-    
     float uLower = 0;
     float uUpper = 1;
     float u = lastU;
-    //delay(1000);
-    //Serial.println(x);
-    Serial.printf("start evaluating, start time: %d, current time: %d\n",curveStartTimeInMs, x);
 
-    int whileloopcounter = 0;
+    // print all values
+    // Serial.printf("startTimeInMs: %lu, duration: %li, startY: %i, startControlX: %li, startControlY: %i, endY: %i, endControlX: %li, endControlY: %i\n", curveStartTimeInMs, duration, startY, startControlX, startControlY, endY, endControlX, endControlY);
+    // Serial.printf("x: %lu, uLower: %f, uUpper: %f, u: %f\n", x, uLower, uUpper, u);
+    // delay(2000);
+
     while (true)
-    {   
+    {
+
         float evaluatedX = 0, evaluatedY = 0;
         EvaluateForUX(u, evaluatedX);
-        whileloopcounter++;
-        if (whileloopcounter % 10000 == 0){
-            Serial.printf("evaluating count: %d\n", whileloopcounter);
-            Serial.printf("evaluated X: %f\n",evaluatedX);
-        }
+
         if (abs(evaluatedX - x) < 1)
         {
             EvaluateForUY(u, evaluatedY);
@@ -100,8 +75,9 @@ float FloatBezierCurve::Evaluate(unsigned long x)
         {
             uLower = u;
         }
-        //Serial.printf("uLower: %f, uUpper: %f, u: %f, x: %i, evX, %f, evY, %f\n", uLower, uUpper, u, x, evaluatedX, evaluatedY);
-        //delay(20);
+
+        // Serial.printf("uLower: %f, uUpper: %f, u: %f, x: %i, evX, %f, evY, %f\n", uLower, uUpper, u, x, evaluatedX, evaluatedY);
+
         u = (uUpper - uLower) / 2 + uLower;
     }
 }
@@ -115,7 +91,6 @@ void FloatBezierCurve::EvaluateForUX(float u, float &outx)
     float p22x = lerp(p12x, p13x, u);
 
     outx = lerp(p21x, p22x, u);
-    //Serial.printf("startControlX: %i, duration: %i, endControlX: %i, p11x: %f, p12x: %f, p13x: %f, p21x: %f, p22x: %f, outx: %f\n", startControlX, duration, endControlX, p11x, p12x, p13x, p21x, p22x, outx);
 }
 
 void FloatBezierCurve::EvaluateForUY(float u, float &outy)
@@ -140,21 +115,35 @@ bool FloatBezierCurve::isInProgress(unsigned long currentTimeMs)
     return currentTimeMs >= getStartTimeMs() && currentTimeMs <= getEndTimeMs();
 }
 
-bool FloatBezierCurve::isFinished(unsigned long currentTimeMs)
-{
-    return currentTimeMs > getEndTimeMs();
-}
-
-bool FloatBezierCurve::notStarted(unsigned long currentTimeMs)
-{
-    return currentTimeMs < getStartTimeMs();
-}
-    
 float FloatBezierCurve::getStartMovement()
 {
-    return startY;
+    return startY / COMPRESSED_SIGNAL_MAX;
 }
 float FloatBezierCurve::getEndMovement()
 {
-    return endY;
+    return endY / COMPRESSED_SIGNAL_MAX;
+}
+
+void FloatBezierCurve::dump()
+{
+    // removed as we don't use log library
+    
+    // LOG(F("CURVE[t=("))
+    // LOG_MKBUF
+    // LOG_FLOAT(getStartTimeMs())
+    // LOG(F(","))
+    // LOG_FLOAT(startY)
+    // LOG(F(")/("))
+    // LOG_FLOAT(startControlX)
+    // LOG(F(","))
+    // LOG_FLOAT(startControlY)
+    // LOG(F(")-("))
+    // LOG_FLOAT(getEndTimeMs())
+    // LOG(F(","))
+    // LOG_FLOAT(endY)
+    // LOG(F(")/("))
+    // LOG_FLOAT(endControlX)
+    // LOG(F(","))
+    // LOG_FLOAT(endControlY)
+    // LOG_LN(F(")"))
 }
