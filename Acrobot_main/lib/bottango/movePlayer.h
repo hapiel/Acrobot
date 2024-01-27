@@ -26,10 +26,6 @@ public:
   void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 5.0, float moveKi = 2.0);
 
 private:
-  // FloatBezierCurve armLBezier = FloatBezierCurve(); // replace with array
-  // FloatBezierCurve armRBezier = FloatBezierCurve();
-  // FloatBezierCurve legLBezier = FloatBezierCurve();
-  // FloatBezierCurve legRBezier = FloatBezierCurve();
 
   FloatBezierCurve *curves[4] = {nullptr, nullptr, nullptr, nullptr};
 
@@ -42,13 +38,13 @@ private:
   MovePlayerState state = IDLE;
 
   const float START_DISTANCE_TOLERANCE = 3.0;
- 
+
 
   float kp = 5.0;
   float ki = 2.0;
 
   float startPositions[4];
-  float startMoveSpeed = 50; // degrees/s
+  float startMoveSpeed = 90; // degrees/s
 
   bool moveToBeginOnly = false;
   char currentFileDir[256];

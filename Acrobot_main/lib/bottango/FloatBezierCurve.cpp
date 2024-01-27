@@ -4,7 +4,7 @@
 #include "Arduino.h"
 // #include "Log.h"
 // #include "../BottangoArduinoConfig.h"
-#define COMPRESSED_SIGNAL_MAX 8192.0f // ADDED by Esmee
+#define COMPRESSED_SIGNAL_MAX 1// ADDED by Daniel
 
 FloatBezierCurve::FloatBezierCurve(
     unsigned long startTimeInMs,

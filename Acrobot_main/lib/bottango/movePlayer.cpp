@@ -45,34 +45,34 @@ void MovePlayer::update()
 
     for (int i = 0; i < 4; i++)
     {
-      if (curves[i] != nullptr && limbActive(i))
+      if (curves[i] != nullptr && limbActive(i) && curves[i]->getStartTimeMs() < moveMillis())
       {
         float target = curves[i]->getValue(moveMillis());
         limbs[i]->setTarget(target, kp, ki);
       }
     }
-
-
-    // Implement the logic to move the curves
   }
 }
 
 void MovePlayer::stop()
 {
   state = IDLE;
-  
+
   curves[0] = nullptr;
   curves[1] = nullptr;
   curves[2] = nullptr;
   curves[3] = nullptr;
+  nextCurveIndex = NO_INDEX;
 }
 
 void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, float moveKp, float moveKi)
 {
+  // disable previous curves
   curves[0] = nullptr;
   curves[1] = nullptr;
   curves[2] = nullptr;
   curves[3] = nullptr;
+  nextCurveIndex = NO_INDEX;
 
   if (!loadFile(csvDir))
   {
@@ -144,10 +144,12 @@ void MovePlayer::moveTowardsStart(int limbIndex)
   float current = limbs[limbIndex]->getTarget();
   float error = target - current;
 
-  Serial.printf("target: %f, current: %f, error: %f\n", target, current, error);
+  // Serial.printf("target: %f, current: %f, error: %f\n", target, current, error);
 
   // move towards target at speed startMoveSpeed
   int32_t deltaTime = millis() - lastStartMovementTime;
+  lastStartMovementTime = millis();
+
   float moveAngle = startMoveSpeed * (deltaTime / 1000.0);
   float moveAngleSign = error > 0 ? 1.0 : -1.0;
   float moveAngleClamped = min(moveAngle, abs(error)) * moveAngleSign;
@@ -166,14 +168,10 @@ void MovePlayer::startCurves()
 void MovePlayer::readCurve()
 {
   // create new curve
-  if (nextCurveIndex != NO_INDEX){
+  if (nextCurveIndex != NO_INDEX)
+  {
     curves[nextCurveIndex] = new FloatBezierCurve(nextCurve[0], nextCurve[1], nextCurve[2], nextCurve[3], nextCurve[4], nextCurve[5], nextCurve[6], nextCurve[7]);
   }
-  
-
-
-  // copy next curve to current curve
-  // std::copy(std::begin(nextCurve), std::end(nextCurve), std::begin(currentCurves[nextCurveIndex]));
 
   if (cp.parseRow())
   {
@@ -239,6 +237,5 @@ uint32_t MovePlayer::moveMillis()
 
 bool MovePlayer::needToReadCurve()
 {
-
   return nextCurve[0] < moveMillis() && !fileEnded;
 }
