@@ -17,43 +17,45 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   
   lastControlMode = CONTROL_MODE_TARGET;
 
+  posDegrees = constrain(posDegrees, posMin, posMax);
+
   int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.6 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
 
-  // check if target is within safe range
-  if (lastTarget + safeRange < posDegrees || lastTarget - safeRange > posDegrees)
+  float error = lastTarget - posDegrees;
+  
+  if (abs(error) > safeRange )
   {
-    // if not, start lerp to target
-    targetSafetyLerpOriginalTarget = lastTarget;
-    targetSafetyLerpOriginalKp = lastKp;
-    targetSafetyLerpStartTime = millis();
-    targetSafetyLerpDuration = abs(lastTarget - posDegrees) * TARGET_SAFETY_DURATION_FACTOR;
-  }
+    int32_t deltaTime = millis() - lastSetTargetTime;
+    int deltaConstrained = min(deltaTime, 50); // prevent large jumps if too long between setTarget calls
 
-  // within lerp time, lerp to target
-  if (targetSafetyLerpStartTime + targetSafetyLerpDuration > millis())
-  {
-    
+    float moveAngle = safeMoveSpeed * (deltaConstrained / 1000.0);
+    float moveAngleSign = error < 0 ? 1.0 : -1.0;
+    float moveAngleClamped = min(moveAngle, abs(error)) * moveAngleSign;
 
-    float lerpFactor = fMap(millis() - targetSafetyLerpStartTime, 0, targetSafetyLerpDuration, 0, 100);
+    float target = posDegrees;
 
-    posDegrees = fMap(lerpFactor, -1, 100, targetSafetyLerpOriginalTarget, posDegrees);
+    posDegrees = lastTarget + moveAngleClamped;
+    // Serial.printf("ID: %d, target: %f, lastTarget: %f, error: %f, moveAngleClamped %f, result: %f\n", motorID, target, lastTarget, error, moveAngleClamped, posDegrees);
 
-    // only lerp kp if it's higher than the original kp
-    if (kp > targetSafetyLerpOriginalKp)
-    {
-      kp = fMap(lerpFactor, -1, 100, targetSafetyLerpOriginalKp, kp);
+    if (kp > lastKp){
+      float kpIncrease = safeKpIncrease * (deltaConstrained / 1000.0);
+      float kpIncreaseClamped = min(kpIncrease, kp - lastKp);
+      kp = lastKp + kpIncreaseClamped;
     }
   }
 
+  // within lerp time, lerp to target
+
   lastTarget = posDegrees;
   lastKp = kp;
+  lastSetTargetTime = millis();
 
   if (inverted)
   {
     posDegrees = 360 - posDegrees;
   }
 
-  float posOffsetCorrected = correctOffsetShaftToMotor(constrain(posDegrees, posMin, posMax));
+  float posOffsetCorrected = correctOffsetShaftToMotor(posDegrees);
 
   float posToSend = degreesToRad(posOffsetCorrected);
 

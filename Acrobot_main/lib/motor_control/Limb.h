@@ -50,21 +50,21 @@ protected:
   float kDMinimumStart = 5;     // after starting this value is ramped down to kpMinimum
   int startRampDuration = 2000; // duration in ms to ramp kp and kd
   uint32_t startTime = 0;       // moment the motor starts. Used to ramp
-  float posMin;
-  float posMax;
+  float posMin; // set in children
+  float posMax; // set in children
   float offset180;
   float lastTarget;
   float lastKp;
+  uint32_t lastSetTargetTime = 0;
   bool inverted;
   const int SAFE_TARGET_RANGE_MIN = 15;
   const int SAFE_TARGET_RANGE_MAX = 30;
   State state = STATE_OFF;
   LastControlMode lastControlMode = CONTROL_MODE_NONE;
-  uint32_t targetSafetyLerpStartTime = 0;
-  uint16_t targetSafetyLerpDuration = 1; // to avoid division by 0
-  float targetSafetyLerpOriginalTarget = 0;
-  float targetSafetyLerpOriginalKp = 0;
-  const int TARGET_SAFETY_DURATION_FACTOR = 6; // probably 3 is enough, starting out on the safe side for testing.
+  
+
+  float safeMoveSpeed = 90; // degrees/s
+  float safeKpIncrease = 10; // kp per second
 
   void start();
   void tryCalibration();
