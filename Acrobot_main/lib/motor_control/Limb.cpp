@@ -24,6 +24,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   {
     // if not, start lerp to target
     targetSafetyLerpOriginalTarget = lastTarget;
+    targetSafetyLerpOriginalKp = lastKp;
     targetSafetyLerpStartTime = millis();
     targetSafetyLerpDuration = abs(lastTarget - posDegrees) * TARGET_SAFETY_DURATION_FACTOR;
   }
@@ -37,9 +38,15 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
 
     posDegrees = fMap(lerpFactor, -1, 100, targetSafetyLerpOriginalTarget, posDegrees);
 
+    // only lerp kp if it's higher than the original kp
+    if (kp > targetSafetyLerpOriginalKp)
+    {
+      kp = fMap(lerpFactor, -1, 100, targetSafetyLerpOriginalKp, kp);
+    }
   }
 
   lastTarget = posDegrees;
+  lastKp = kp;
 
   if (inverted)
   {

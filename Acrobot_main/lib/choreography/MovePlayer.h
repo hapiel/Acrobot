@@ -49,7 +49,7 @@ private:
   bool fileEnded = true;
 
   uint32_t moveStartTime = 0;
-  uint32_t lastStartMovementTime = 0;
+  uint32_t lastStartMovementTime[4] = {0,0,0,0};
   uint32_t updateMillis = 0;
   uint32_t moveMillis();
 

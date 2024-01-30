@@ -397,7 +397,7 @@ void inits()
   // webserver end
 
   debugI("Inits Done.");
-  buzzer.buzz(40); // short buzz to indicate boot
+  buzzer.buzz(50); // short buzz to indicate boot
 }
 
 void wifiConnection()

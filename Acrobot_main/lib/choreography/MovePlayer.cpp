@@ -84,7 +84,10 @@ void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, float moveKp, 
   state = MOVE_TO_BEGIN;
 
   parseStartCSV();
-  lastStartMovementTime = millis();
+  for (int i = 0; i < 4; i++)
+  {
+    lastStartMovementTime[i] = millis();
+  }
 }
 
 bool MovePlayer::loadFile(const char *csvDir)
@@ -144,11 +147,11 @@ void MovePlayer::moveTowardsStart(int limbIndex)
   float current = limbs[limbIndex]->getTarget();
   float error = target - current;
 
-  // Serial.printf("target: %f, current: %f, error: %f\n", target, current, error);
+  // Serial.printf("I: %d, targent: %f, current: %f, error: %f\n", limbIndex, target, current, error);
 
   // move towards target at speed startMoveSpeed
-  int32_t deltaTime = millis() - lastStartMovementTime;
-  lastStartMovementTime = millis();
+  int32_t deltaTime = millis() - lastStartMovementTime[limbIndex];
+  lastStartMovementTime[limbIndex] = millis();
 
   float moveAngle = startMoveSpeed * (deltaTime / 1000.0);
   float moveAngleSign = error > 0 ? 1.0 : -1.0;

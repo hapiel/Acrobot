@@ -54,6 +54,7 @@ protected:
   float posMax;
   float offset180;
   float lastTarget;
+  float lastKp;
   bool inverted;
   const int SAFE_TARGET_RANGE_MIN = 15;
   const int SAFE_TARGET_RANGE_MAX = 30;
@@ -62,7 +63,8 @@ protected:
   uint32_t targetSafetyLerpStartTime = 0;
   uint16_t targetSafetyLerpDuration = 1; // to avoid division by 0
   float targetSafetyLerpOriginalTarget = 0;
-  const int TARGET_SAFETY_DURATION_FACTOR = 5; // probably 3 is enough, starting out on the safe side for testing.
+  float targetSafetyLerpOriginalKp = 0;
+  const int TARGET_SAFETY_DURATION_FACTOR = 6; // probably 3 is enough, starting out on the safe side for testing.
 
   void start();
   void tryCalibration();
