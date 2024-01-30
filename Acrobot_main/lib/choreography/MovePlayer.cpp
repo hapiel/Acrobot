@@ -159,6 +159,10 @@ void MovePlayer::moveTowardsStart(int limbIndex)
 
 void MovePlayer::startCurves()
 {
+  if (moveToBeginOnly)
+  {
+    return;
+  }
   state = MOVE_CURVES;
   moveStartTime = millis();
   nextCurve[0] = 0;

@@ -320,7 +320,7 @@ void Joystick::update()
   {
 
     receivedData = Serial2.readStringUntil('\n'); // Read data until newline character
-    if (receivedData.length() == 190)             // check for corruption
+    if (receivedData.length() >= 190 && receivedData.length() <= 193)             // check for corruption
     {
       // Serial.println(receivedData.c_str());
       // Interpret the received data
@@ -337,6 +337,8 @@ void Joystick::update()
         setColorLED(0, 0, 0);
       }
       connected = true;
+    } else {
+      debugE("Received non-joystick data. Len: %d, data: %s", receivedData.length(), receivedData.c_str());
     }
   }
 

@@ -339,7 +339,7 @@ void inits()
   initDebug(); // AFTER WIFI!
 
   debugI("Next init: Serial2 with joystick");
-  Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
+  Serial2.begin(57600); // Initialize UART2 for receiving data from joystick
 
   debugI("Next init: Battery sensor");
   batterySensor.init();
