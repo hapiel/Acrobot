@@ -48,6 +48,14 @@ float BatterySensor::getVoltage()
 
 
 void BatterySensor::update(){
-  batterySamples.add(analogRead(pin));
+
+  updateCounter++;
+  updateCounter %= 10;
+  
+  // don't run too often, slow function.
+  if (updateCounter == 0){
+    batterySamples.add(analogRead(pin));
+  }
+  
 }
 

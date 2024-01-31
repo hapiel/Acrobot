@@ -491,6 +491,7 @@ void updates()
   menu.update();
   statusChecker.update();
   choreoPlayer.update();
+
   // webserver
   if (wifiConnected)
   {
@@ -498,8 +499,6 @@ void updates()
   }
 
   movePlayer.update();
-
-  // bottangoPlayer.update();
 }
 
 void updatesI2C()
@@ -510,40 +509,20 @@ void updatesI2C()
 
 void taskMain(void *parameter)
 {
-  uint32_t lastTime = 0;
   for (;;)
   {
-    uint32_t loopStart = millis();
-
-    // printf("main debug 1\n");
     updates();
     wifiConnection(); // restore wifi variables
     executeTasksFromQueue();
-
     Debug.handle(); // needs to be in bottom of loop
-
-    uint32_t loopEnd = millis();
-
-    Serial.printf("main: %d, between: %d\n", loopEnd - loopStart, loopStart - lastTime);
-    lastTime = loopEnd;
-
   }
 }
 
 void taskI2C(void *parameter)
 {
-  int32_t lastTime = 0;
-  
   for (;;)
   {
-    uint32_t loopStart = millis();
     updatesI2C();
-
-    uint32_t loopEnd = millis();
-
-    Serial.printf("i2c: %d, between: %d\n", loopEnd - loopStart, loopStart - lastTime);
-    lastTime = loopEnd;
-
     vTaskDelay(5);
   }
 }
@@ -561,5 +540,4 @@ void loop()
   vTaskDelete(NULL);
   taskMain(NULL);
   taskI2C(NULL);
-  // vTaskDelay(100);
 }
