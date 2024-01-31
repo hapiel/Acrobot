@@ -106,7 +106,7 @@ void setup() {
   uni_virtual_device_set_enabled(false);
   initDebugLed();
   Serial.begin(115200);
-  Serial2.begin(57600);
+  Serial2.begin(115200);
   Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
   const uint8_t *addr = BP32.localBdAddress();
   Serial.printf("BD Addr: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2],
@@ -177,9 +177,9 @@ void loop() {
 
     if (myGamepad && myGamepad->isConnected()) {
       Serial2.printf(
-        "idx=%d, dpad: 0x%02x, buttons: 0x%04x, axis L: %4d, %4d, axis R: "
-        "%4d, %4d, brake: %4d, throttle: %4d, misc: 0x%02x, gyro x:%6d y:%6d "
-        "z:%6d, accel x:%6d y:%6d z:%6d bat:%3d\n",
+        "i%d d%02x b%04x aL%4d %4d aR%4d %4d "
+        "b%4d t%4d m%02x gx%6d y%6d z%6d "
+        "ax%6d y%6d z%6d b%3d\n",
         i,                         // Gamepad Index
         myGamepad->dpad(),         // DPAD
         myGamepad->buttons(),      // bitmask of pressed buttons
@@ -206,8 +206,7 @@ void loop() {
   // Detailed info here:
   // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
-  // vTaskDelay(1);
-  delay(1);
+  delay(20);
 }
 
 void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {

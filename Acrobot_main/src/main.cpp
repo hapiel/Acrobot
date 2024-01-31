@@ -391,7 +391,7 @@ void inits()
   initDebug(); // AFTER WIFI!
 
   debugI("Next init: Serial2 with joystick");
-  Serial2.begin(57600); // Initialize UART2 for receiving data from joystick
+  Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
 
   debugI("Next init: Battery sensor");
   batterySensor.init();
@@ -510,8 +510,10 @@ void updatesI2C()
 
 void taskMain(void *parameter)
 {
+  uint32_t lastTime = 0;
   for (;;)
   {
+    uint32_t loopStart = millis();
 
     // printf("main debug 1\n");
     updates();
@@ -520,17 +522,29 @@ void taskMain(void *parameter)
 
     Debug.handle(); // needs to be in bottom of loop
 
-    vTaskDelay(1);
+    uint32_t loopEnd = millis();
+
+    Serial.printf("main: %d, between: %d\n", loopEnd - loopStart, loopStart - lastTime);
+    lastTime = loopEnd;
+
   }
 }
 
 void taskI2C(void *parameter)
 {
+  int32_t lastTime = 0;
+  
   for (;;)
   {
-    // Serial.printf("i2c update 1\n");
+    uint32_t loopStart = millis();
     updatesI2C();
-    vTaskDelay(4);
+
+    uint32_t loopEnd = millis();
+
+    Serial.printf("i2c: %d, between: %d\n", loopEnd - loopStart, loopStart - lastTime);
+    lastTime = loopEnd;
+
+    vTaskDelay(5);
   }
 }
 
