@@ -1,7 +1,7 @@
 #include "Arm.h"
 
-Arm::Arm(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, bool inverted)
-  : Limb(motor, hallSensor, motorID, offset180, inverted)
+Arm::Arm(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted)
+  : Limb(motor, hallSensor, Debug, debugLed, motorID, offset180, inverted)
 {
   posMin = -180;
   posMax = 540;

@@ -4,6 +4,8 @@
 #include "Motor.h"
 #include "HallSensor.h"
 #include "utilsAcrobot.h"
+#include "DebugLed.h"
+#include "RemoteDebug.h"
 
 enum State
 {
@@ -23,7 +25,7 @@ enum LastControlMode
 class Limb
 {
 public:
-  Limb(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, bool inverted);
+  Limb(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted);
   void setTarget(float posDegrees, float kp, float kd);
   void stop();
   void update();
@@ -42,6 +44,8 @@ public:
 protected:
   Motor &motor;
   HallSensor &hallSensor;
+  RemoteDebug &Debug;
+  DebugLed &debugLed;
   int motorID;
   float kpLimit = 100;      // safety feature, can be increased later to 500
   float kPLimitStart = 0.1; // during calibration this value is ramped up to end, then limit.

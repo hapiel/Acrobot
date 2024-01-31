@@ -1,7 +1,6 @@
 #include "DebugLed.h"
 
-DebugLed::DebugLed() {}
-
+DebugLed::DebugLed()  {}
 
 void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue)
 {
@@ -9,6 +8,15 @@ void DebugLed::setRGB(uint8_t _red, uint8_t _green, uint8_t _blue)
   green = _green;
   blue = _blue;
   colorsChanged = true;
+}
+
+void DebugLed::setRTemp(uint8_t _red, uint16_t ms)
+{
+  redTimer = millis() + ms;
+
+  redTimerActive = true;
+  setR(_red);
+  
 }
 
 void DebugLed::setR(uint8_t _red)
@@ -56,6 +64,10 @@ void DebugLed::update()
   {
     flickerOn = false;
     colorsChanged = true;
+  }
+
+  if(redTimerActive && redTimer < millis()){
+    setR(0);
   }
 
   // update colors

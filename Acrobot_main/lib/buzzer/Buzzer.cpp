@@ -16,5 +16,5 @@ void Buzzer::update()
 void Buzzer::buzz(uint16_t ms)
 {
   timer = millis() + ms;
-  debugD("BUZZER: beep %u", ms);
+  debugW("BUZZER: beep %u", ms);
 }

@@ -6,7 +6,7 @@
 class Leg : public Limb
 {
 public:
-  Leg(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, bool inverted);
+  Leg(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted);
   // Additional functions specific to Leg can be declared here
 
 

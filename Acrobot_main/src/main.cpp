@@ -125,10 +125,11 @@ Motor motorLegR(LEG_R_ID, canHandler, Debug);
 Motor motorArmL(ARM_L_ID, canHandler, Debug);
 Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(Wire, Debug);
-Leg legL(motorLegL, hallSensor, LEG_L_ID, 32.75, true); // offset values
-Leg legR(motorLegR, hallSensor, LEG_R_ID, 0.99, false);
-Arm armL(motorArmL, hallSensor, ARM_L_ID, 28.64, true);
-Arm armR(motorArmR, hallSensor, ARM_R_ID, -3.25, false);
+DebugLed debugLed;
+Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75, true); // offset values
+Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
+Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true);
+Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false);
 
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
@@ -137,7 +138,6 @@ Button buttonDown(BUTTON_DOWN, Debug);
 Button buttonLeft(BUTTON_LEFT, Debug);
 Button buttonRight(BUTTON_RIGHT, Debug);
 BatterySensor batterySensor(BATTERY_SENSOR);
-DebugLed debugLed;
 ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);

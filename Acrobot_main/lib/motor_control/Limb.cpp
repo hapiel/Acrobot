@@ -1,6 +1,6 @@
 #include "Limb.h"
 
-Limb::Limb(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, bool inverted) : motor(motor), hallSensor(hallSensor), motorID(motorID), offset180(offset180), inverted(inverted) {}
+Limb::Limb(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted) : motor(motor), hallSensor(hallSensor), Debug(Debug), debugLed(debugLed), motorID(motorID), offset180(offset180), inverted(inverted) {}
 
 void Limb::setTarget(float posDegrees, float kp, float kd)
 {
@@ -25,6 +25,9 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   
   if (abs(error) > safeRange )
   {
+    debugLed.setRTemp(255, 100); 
+    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d", motorID, error, safeRange);
+  
     int32_t deltaTime = millis() - lastSetTargetTime;
     int deltaConstrained = min(deltaTime, 50); // prevent large jumps if too long between setTarget calls
 
@@ -35,7 +38,6 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     float target = posDegrees;
 
     posDegrees = lastTarget + moveAngleClamped;
-    // Serial.printf("ID: %d, target: %f, lastTarget: %f, error: %f, moveAngleClamped %f, result: %f\n", motorID, target, lastTarget, error, moveAngleClamped, posDegrees);
 
     if (kp > lastKp){
       float kpIncrease = safeKpIncrease * (deltaConstrained / 1000.0);

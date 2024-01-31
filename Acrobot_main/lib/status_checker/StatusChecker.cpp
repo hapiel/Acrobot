@@ -24,7 +24,8 @@ void StatusChecker::checkBattery()
       lastInfoTime = millis();
     }
 
-    debugLed.setR(128); // doesn't reset, so other functions can trigger red too.
+    debugLed.setRTemp(128, 5000); 
+
     if (batterySensor.getPercentage() <= 12)
     {
 
