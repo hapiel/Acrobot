@@ -144,7 +144,6 @@ Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight,
 MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer);
 
-
 // wifi
 bool wifiConnected = false;
 
@@ -154,6 +153,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *acroMovesPage[];
 extern MenuItem *movePlayerPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
@@ -166,7 +166,8 @@ extern MenuItem *aboutPage[];
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
-    ITEM_SUBMENU("MOVE PLAYER", movePlayerPage),
+    ITEM_SUBMENU("Acro moves", acroMovesPage),
+    ITEM_SUBMENU("MOVE PLAYER TEST", movePlayerPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
     ITEM_SUBMENU("Change PI value", PIPage),
@@ -175,17 +176,68 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
+SUB_MENU(acroMovesPage, mainMenu,
+         ITEM_COMMAND("acro_01", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_01.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_02", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_02.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_03", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_03.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_04", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_04.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_05", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_05.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_06", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_06.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("acro_07", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_07.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("acro_08", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_08.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("acro_09", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_09.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("acro_10", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/acro_10.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
 SUB_MENU(movePlayerPage, mainMenu,
-         ITEM_COMMAND("short", []()
+         ITEM_COMMAND("test startallfront", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/TEST_startpos_short.csv"); };
+        { movePlayer.startMove("/test-start_front.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("repeat", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/TEST_startpos_repeat.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
          ITEM_COMMAND("rightarm_only", []()
                       {
         TaskFunction lambdaFunction = []()

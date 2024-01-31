@@ -23,7 +23,7 @@ public:
   MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp);
   void update();
   void stop();
-  void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 5.0, float moveKi = 2.0);
+  void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 20.0, float moveKi = 2.0);
 
 private:
   RemoteDebug &Debug;
@@ -37,7 +37,7 @@ private:
 
   const float START_DISTANCE_TOLERANCE = 1.0;
 
-  float kp = 5.0;
+  float kp = 20.0;
   float ki = 2.0;
 
   float startPositions[4];

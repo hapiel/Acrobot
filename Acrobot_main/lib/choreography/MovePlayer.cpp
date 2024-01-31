@@ -74,6 +74,7 @@ void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, float moveKp, 
   curves[3] = nullptr;
   nextCurveIndex = NO_INDEX;
 
+
   if (!loadFile(csvDir))
   {
     return;
@@ -226,7 +227,7 @@ void MovePlayer::readCurve()
     }
     else
     {
-      debugE("Not an sC command");
+      debugE("Not an sC cfommand");
     }
   }
   else

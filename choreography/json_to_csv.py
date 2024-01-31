@@ -76,6 +76,7 @@ for animation in data[0]["Animations"]:
             row_values = row.split(",")
             motor_name = row_values[1]
             if motor_name in controller_data and motor_name == "m_arm_r":
+                range_low, range_high = controller_data[motor_name]
                 first_arm_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
         
@@ -83,6 +84,7 @@ for animation in data[0]["Animations"]:
             row_values = row.split(",")
             motor_name = row_values[1]
             if motor_name in controller_data and motor_name == "m_leg_l":
+                range_low, range_high = controller_data[motor_name]
                 first_leg_l_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
         
@@ -90,6 +92,7 @@ for animation in data[0]["Animations"]:
             row_values = row.split(",")
             motor_name = row_values[1]
             if motor_name in controller_data and motor_name == "m_leg_r":
+                range_low, range_high = controller_data[motor_name]
                 first_leg_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
         

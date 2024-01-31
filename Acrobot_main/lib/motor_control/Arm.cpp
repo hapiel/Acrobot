@@ -4,7 +4,7 @@ Arm::Arm(Motor &motor, HallSensor &hallSensor, int motorID, float offset180, boo
   : Limb(motor, hallSensor, motorID, offset180, inverted)
 {
   posMin = -180;
-  posMax = 520;
+  posMax = 540;
   if (inverted){
     posMax = 360 - posMin;
     posMin = 360 - posMax;
