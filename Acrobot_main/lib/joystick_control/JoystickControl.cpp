@@ -375,7 +375,7 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
 
     if (joystick.getR2() > 0)
     {
-      speed = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
+      speed = fMap(joystick.getR2() * joystick.getR2(), 0, 1020 * 1020, 0, speedTriggerMax);
     }
 
     float displacement = speed * deltaT;
@@ -398,7 +398,7 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
 
     if (joystick.getL2() > 0)
     {
-      speed = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
+      speed = fMap(joystick.getL2() * joystick.getL2(), 0, 1020 * 1020, 0, speedTriggerMax);
     }
 
     float displacement = speed * deltaT;
@@ -422,7 +422,7 @@ void JoystickControl::modeSynch(int rotDegrees, float speed)
 
     if (joystick.getR2() > 0)
     {
-      speed = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
+      speed = fMap(joystick.getR2() * joystick.getR2(), 0, 1020 * 1020, 0, speedTriggerMax);
     }
 
     float displacement = speed * deltaT;
@@ -441,7 +441,7 @@ void JoystickControl::modeSynch(int rotDegrees, float speed)
 
     if (joystick.getL2() > 0)
     {
-      speed = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
+      speed = fMap(joystick.getL2() * joystick.getL2(), 0, 1020 * 1020, 0, speedTriggerMax);
     }
 
     float displacement = speed * deltaT;
