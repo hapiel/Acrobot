@@ -57,6 +57,10 @@ for animation in data[0]["Animations"]:
         header_row = ["Command", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
         csvwriter.writerow(header_row)
         
+        # Write animation name 
+        name_row = ["Animation Name:", animation_name]
+        csvwriter.writerow(name_row)
+        
         # get start positions for each motor, 999.0 is default.
         
         first_arm_l_pos = 999.0

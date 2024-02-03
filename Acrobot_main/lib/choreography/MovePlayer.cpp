@@ -43,14 +43,51 @@ void MovePlayer::update()
       readCurve();
     }
 
+    uint8_t finishedCurves = 0;
+
     for (int i = 0; i < 4; i++)
     {
-      if (curves[i] != nullptr && limbActive(i) && curves[i]->getStartTimeMs() < moveMillis())
+      if (curves[i] != nullptr && limbActive(i))
       {
-        float target = curves[i]->getValue(moveMillis());
-        limbs[i]->setTarget(target, kp, ki);
+        if (curves[i]->getStartTimeMs() < moveMillis())
+        {
+          float target = curves[i]->getValue(moveMillis());
+          limbs[i]->setTarget(target, kp, ki);
+          // if (i == 1){
+          //   Serial.printf("ArmR: %f, millis: %d, startTime: %d, sy %d, sCx %d, sCy %d, ey %d, eCx %d, eCy %d\n", target, moveMillis(), curves[i]->getStartTimeMs(), curves[i]->startY, curves[i]->startControlX, curves[i]->startControlY, curves[i]->endY, curves[i]->endControlX, curves[i]->endControlY);
+          // }
+        }
+        if (fileEnded && curves[i]->getEndTimeMs() < moveMillis())
+        {
+
+          finishedCurves++;
+        }
+      }
+      else
+      {
+        // limb not active
+        finishedCurves++;
       }
     }
+
+    if (finishedCurves == 4)
+    {
+      moveFinished();
+    }
+  }
+}
+
+void MovePlayer::moveFinished()
+{
+  if (repeatMove)
+  {
+    debugD("Move finished, repeating");
+    startMove(currentFileDir, moveToBeginOnly, repeatMove, kp, ki, startMoveSpeed);
+  }
+  else
+  {
+    debugD("Move finished, stopping");
+    stop();
   }
 }
 
@@ -62,10 +99,11 @@ void MovePlayer::stop()
   curves[1] = nullptr;
   curves[2] = nullptr;
   curves[3] = nullptr;
+  fileEnded = true;
   nextCurveIndex = NO_INDEX;
 }
 
-void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, float moveKp, float moveKi)
+void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, bool repeat, float moveKp, float moveKi, float _startMoveSpeed)
 {
   // disable previous curves
   curves[0] = nullptr;
@@ -73,7 +111,9 @@ void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, float moveKp, 
   curves[2] = nullptr;
   curves[3] = nullptr;
   nextCurveIndex = NO_INDEX;
+  repeatMove = repeat;
 
+  startMoveSpeed = _startMoveSpeed;
 
   if (!loadFile(csvDir))
   {
@@ -114,8 +154,9 @@ bool MovePlayer::loadFile(const char *csvDir)
 void MovePlayer::parseStartCSV()
 {
 
-  // to bypass header
-  String line = file.readStringUntil('\n');
+  // to bypass header & name row
+  file.readStringUntil('\n');
+  file.readStringUntil('\n');
 
   // debugD("line: %s", line.c_str());
 
@@ -148,11 +189,11 @@ void MovePlayer::moveTowardsStart(int limbIndex)
   float current = limbs[limbIndex]->getTarget();
   float error = target - current;
 
-  // Serial.printf("I: %d, targent: %f, current: %f, error: %f\n", limbIndex, target, current, error);
-
   // move towards target at speed startMoveSpeed
   int32_t deltaTime = millis() - lastStartMovementTime[limbIndex];
   lastStartMovementTime[limbIndex] = millis();
+
+  // Serial.printf("I: %d, target: %f, current: %f, error: %f, dt: %d\n", limbIndex, target, current, error, deltaTime);
 
   float moveAngle = startMoveSpeed * (deltaTime / 1000.0);
   float moveAngleSign = error > 0 ? 1.0 : -1.0;

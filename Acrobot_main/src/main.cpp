@@ -232,6 +232,33 @@ SUB_MENU(acroMovesPage, mainMenu,
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(movePlayerPage, mainMenu,
+        ITEM_COMMAND("walk repeat", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_normal.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+        ITEM_COMMAND("walk begin only", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_normal.csv", true, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+
+        ITEM_COMMAND("w begin only slow", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_normal.csv", true, true, 5, 1, 10); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+
+        ITEM_COMMAND("walk non-repeat", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_normal.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+
          ITEM_COMMAND("test startallfront", []()
                       {
         TaskFunction lambdaFunction = []()

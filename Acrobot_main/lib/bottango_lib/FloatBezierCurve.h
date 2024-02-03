@@ -31,6 +31,15 @@ public:
     virtual float getStartMovement();
     virtual float getEndMovement();
 
+    // temp in public, should go back to private
+    int startY = 0;
+    long startControlX = 0;
+    int startControlY = 0;
+
+    int endY = 0;
+    long endControlX = 0;
+    int endControlY = 0;
+
 private:
     float lerp(float start, float end, float u);
 
@@ -43,13 +52,7 @@ private:
     long duration = 0;
     float lastU = 0.5f;
 
-    int startY = 0;
-    long startControlX = 0;
-    int startControlY = 0;
 
-    int endY = 0;
-    long endControlX = 0;
-    int endControlY = 0;
 };
 
 #endif // BOTTANGOARDUINO_FLOATBEZIERCURVE_H

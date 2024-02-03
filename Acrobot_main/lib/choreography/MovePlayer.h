@@ -23,7 +23,7 @@ public:
   MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp);
   void update();
   void stop();
-  void startMove(const char *csvDir, bool beginPosOnly = false, float moveKp = 20.0, float moveKi = 2.0);
+  void startMove(const char *csvDir, bool beginPosOnly = false, bool repeat = false, float moveKp = 20.0, float moveKi = 2.0, float _startMoveSpeed = 45);
 
 private:
   RemoteDebug &Debug;
@@ -41,12 +41,13 @@ private:
   float ki = 2.0;
 
   float startPositions[4];
-  float startMoveSpeed = 90; // degrees/s
+  float startMoveSpeed = 45; // degrees/s
 
   bool moveToBeginOnly = false;
   char currentFileDir[256];
 
   bool fileEnded = true;
+  bool repeatMove = false;
 
   uint32_t moveStartTime = 0;
   uint32_t lastStartMovementTime[4] = {0,0,0,0};
@@ -65,6 +66,7 @@ private:
   void startCurves();
   void readCurve();
   bool needToReadCurve();
+  void moveFinished();
 };
 
 #endif // MOVEPLAYER_H

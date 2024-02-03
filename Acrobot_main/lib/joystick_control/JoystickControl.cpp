@@ -380,8 +380,8 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    legLTarget = adjustByDisplacement(legLTarget, joyLLegTarget, displacement);
-    legRTarget = adjustByDisplacement(legRTarget, joyRLegTarget, displacement);
+    legLTarget = adjustByDisplacement(legL.getTarget(), joyLLegTarget, displacement);
+    legRTarget = adjustByDisplacement(legR.getTarget(), joyRLegTarget, displacement);
 
     legL.setTarget(legLTarget, menu.getP(), menu.getD());
     legR.setTarget(legRTarget, menu.getP(), menu.getD());
@@ -403,8 +403,8 @@ void JoystickControl::modeSummative(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    armLTarget = adjustByDisplacement(armLTarget, joyLArmTarget, displacement);
-    armRTarget = adjustByDisplacement(armRTarget, joyRArmTarget, displacement);
+    armLTarget = adjustByDisplacement(armL.getTarget(), joyLArmTarget, displacement);
+    armRTarget = adjustByDisplacement(armR.getTarget(), joyRArmTarget, displacement);
 
     armL.setTarget(armLTarget, menu.getP(), menu.getD());
     armR.setTarget(armRTarget, menu.getP(), menu.getD());
@@ -427,8 +427,8 @@ void JoystickControl::modeSynch(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    legLTarget = adjustByDisplacement(legLTarget, joyR, displacement);
-    legRTarget = adjustByDisplacement(legRTarget, joyR, displacement);
+    legLTarget = adjustByDisplacement(legL.getTarget(), joyR, displacement);
+    legRTarget = adjustByDisplacement(legR.getTarget(), joyR, displacement);
 
     legL.setTarget(legLTarget, menu.getP(), menu.getD());
     legR.setTarget(legRTarget, menu.getP(), menu.getD());
@@ -446,8 +446,8 @@ void JoystickControl::modeSynch(int rotDegrees, float speed)
 
     float displacement = speed * deltaT;
 
-    armLTarget = adjustByDisplacement(armLTarget, joyL, displacement);
-    armRTarget = adjustByDisplacement(armRTarget, joyL, displacement);
+    armLTarget = adjustByDisplacement(armL.getTarget(), joyL, displacement);
+    armRTarget = adjustByDisplacement(armR.getTarget(), joyL, displacement);
 
     armL.setTarget(armLTarget, menu.getP(), menu.getD());
     armR.setTarget(armRTarget, menu.getP(), menu.getD());
@@ -513,12 +513,12 @@ void JoystickControl::modePose()
 
   if (joystick.getL2() > 0)
   {
-    legLTarget = adjustByDisplacement(legLTarget, poseLTarget, speedL * deltaT);
+    legLTarget = adjustByDisplacement(legL.getTarget(), poseLTarget, speedL * deltaT);
   }
 
   if (joystick.getR2() > 0)
   {
-    legRTarget = adjustByDisplacement(legRTarget, poseRTarget, speedR * deltaT);
+    legRTarget = adjustByDisplacement(legR.getTarget(), poseRTarget, speedR * deltaT);
   }
 
   legL.setTarget(legLTarget, menu.getP(), menu.getD());

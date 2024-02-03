@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,walk_normal
+Animation Name,walk_normal
 Start positions,ArmL ArmR legL legR,999.0,999.0,203.98681640625,167.98828125,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,800,203.98681640625,200,0.0,167.98828125,-200,0.0
 sC,m_leg_r,0,800,167.98828125,200,0.0,203.98681640625,-200,0.0

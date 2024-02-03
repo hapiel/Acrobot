@@ -10,23 +10,17 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
-  if (lastControlMode != CONTROL_MODE_TARGET)
-  {
-    lastTarget = getPosition();
-  }
-  
-  lastControlMode = CONTROL_MODE_TARGET;
 
   posDegrees = constrain(posDegrees, posMin, posMax);
 
-  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.6 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
+  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
 
-  float error = lastTarget - posDegrees;
+  float error = getTarget() - posDegrees;
   
   if (abs(error) > safeRange )
   {
     debugLed.setRTemp(255, 100); 
-    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d", motorID, error, safeRange);
+    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d, target: %f, lastTarget: %f", motorID, error, safeRange, posDegrees, getTarget());
   
     int32_t deltaTime = millis() - lastSetTargetTime;
     int deltaConstrained = min(deltaTime, 50); // prevent large jumps if too long between setTarget calls
@@ -37,13 +31,15 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
 
     float target = posDegrees;
 
-    posDegrees = lastTarget + moveAngleClamped;
+    posDegrees = getTarget() + moveAngleClamped;
 
     if (kp > lastKp){
       float kpIncrease = safeKpIncrease * (deltaConstrained / 1000.0);
       float kpIncreaseClamped = min(kpIncrease, kp - lastKp);
       kp = lastKp + kpIncreaseClamped;
     }
+
+    
   }
 
   // within lerp time, lerp to target
@@ -77,6 +73,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   }
 
   motor.setPosition(posToSend, kpToSend, kdToSend);
+  lastControlMode = CONTROL_MODE_TARGET;
 }
 
 void Limb::setTorqueUnprotected(float torque)
@@ -92,6 +89,10 @@ void Limb::setTorqueUnprotected(float torque)
 
 float Limb::getTarget()
 {
+  if (lastControlMode != CONTROL_MODE_TARGET)
+  {
+    return getPosition();
+  }
   return lastTarget;
 }
 
