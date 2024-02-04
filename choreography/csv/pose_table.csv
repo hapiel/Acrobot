@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,pose_table,Controller name:,acrobot_poses
+Start positions,ArmL ArmR legL legR,66.26953125,66.26953125,97.6025390625,97.6025390625,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,33,66.26953125,8,0.0,66.26953125,-8,0.0
+sC,m_arm_r,0,33,66.26953125,8,0.0,66.26953125,-8,0.0
+sC,m_leg_l,0,33,97.6025390625,8,0.0,97.6025390625,-8,0.0
+sC,m_leg_r,0,33,97.6025390625,8,0.0,97.6025390625,-8,0.0

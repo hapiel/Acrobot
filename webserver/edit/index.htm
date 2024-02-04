@@ -3,6 +3,11 @@
   <head>
     <title>SD Editor</title>
     <style type="text/css" media="screen">
+      input#upload-path {
+        width: 15em;
+        margin-left: 1em;
+      }
+
       .contextMenu {
         z-index: 300;
         position: absolute;
@@ -231,7 +236,7 @@
           var ext = /(?:\.([^.]+))?$/.exec(filename)[1];
           var name = /(.*)\.[^.]+$/.exec(filename)[1];
           if(typeof name !== undefined){
-            if(name.length > 8) name = name.substring(0, 8);
+            // if(name.length > 8) name = name.substring(0, 8);
             filename = name;
           }
           if(typeof ext !== undefined){

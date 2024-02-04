@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,pose_yoga_dog,Controller name:,acrobot_poses
+Start positions,ArmL ArmR legL legR,0.0,0.0,81.89208984375,81.89208984375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,33,0.0,8,0.0,0.0,-8,0.0
+sC,m_arm_r,0,33,0.0,8,0.0,0.0,-8,0.0
+sC,m_leg_l,0,33,81.89208984375,8,0.0,81.89208984375,-8,0.0
+sC,m_leg_r,0,33,81.89208984375,8,0.0,81.89208984375,-8,0.0

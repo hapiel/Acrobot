@@ -153,8 +153,12 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
-extern MenuItem *acroMovesPage[];
+extern MenuItem *movesPage[];
 extern MenuItem *movePlayerPage[];
+extern MenuItem *acroPage[];
+extern MenuItem *posePage[];
+extern MenuItem *travelPage[];
+extern MenuItem *quickPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
 extern MenuItem *PIPage[];
@@ -166,8 +170,7 @@ extern MenuItem *aboutPage[];
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
-    ITEM_SUBMENU("Acro moves", acroMovesPage),
-    ITEM_SUBMENU("MOVE PLAYER TEST", movePlayerPage),
+    ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
     ITEM_SUBMENU("Change PI value", PIPage),
@@ -176,88 +179,203 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
-SUB_MENU(acroMovesPage, mainMenu,
-         ITEM_COMMAND("acro_01", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_01.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_02", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_02.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_03", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_03.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_04", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_04.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_05", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_05.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_06", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_06.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-         ITEM_COMMAND("acro_07", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_07.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+SUB_MENU(movesPage, mainMenu,
+         ITEM_SUBMENU("Poses", posePage),
+         ITEM_SUBMENU("Acro", acroPage),
+         ITEM_SUBMENU("Travel", travelPage),
+         ITEM_SUBMENU("Quick numbers", quickPage),
+         ITEM_SUBMENU("MovePlayer TESTS", movePlayerPage));
 
-         ITEM_COMMAND("acro_08", []()
+SUB_MENU(acroPage, movesPage,
+         ITEM_COMMAND("acro_podcheska", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_08.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-
-         ITEM_COMMAND("acro_09", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_09.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-
-         ITEM_COMMAND("acro_10", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/acro_10.csv"); };
+        { movePlayer.startMove("/acro_podcheska.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
-SUB_MENU(movePlayerPage, mainMenu,
-        ITEM_COMMAND("walk repeat", []()
+SUB_MENU(travelPage, movesPage,
+         ITEM_COMMAND("walk_normal", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_normal.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("walk_large", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_large.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("walk_backwards", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_backwards.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("walk_forwards", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_forwards.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("walk_zombie", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/walk_zombie.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("crawl_sit", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/crawl_sit.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("crawl_scorpion", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/crawl_scorpion.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+SUB_MENU(quickPage, movesPage,
+         ITEM_COMMAND("quick_01", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_01.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_02", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_02.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_03", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_03.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_04", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_04.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_05", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_05.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_06", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_06.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_07", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_07.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_08", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_08.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_09", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_09.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_10", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_10.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+SUB_MENU(posePage, movesPage,
+         ITEM_COMMAND("stand", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_stand.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("stand_legs_only", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_stand_legs_only.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("180", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_180.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("sit", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_sit.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("handstand", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_handstand.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("seven", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_seven.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("handstand_split", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_handstand_split.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("handstd oversplit", []()
+                      {
+          TaskFunction lambdaFunction = []()
+          { movePlayer.startMove("/pose_handstand_oversplit.csv"); };
+          xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("planche", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_planche.csv", true, false, 30, 3, 30); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("scorpion", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_scorpion.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("yoga_dog", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_yoga_dog.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("table", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_table.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("split_l", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_split_l.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+SUB_MENU(movePlayerPage, movesPage,
+         ITEM_COMMAND("walk repeat", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/walk_normal.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
 
-        ITEM_COMMAND("walk begin only", []()
+         ITEM_COMMAND("walk begin only", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/walk_normal.csv", true, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
 
-
-        ITEM_COMMAND("w begin only slow", []()
+         ITEM_COMMAND("w begin only slow", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/walk_normal.csv", true, true, 5, 1, 10); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
 
-
-        ITEM_COMMAND("walk non-repeat", []()
+         ITEM_COMMAND("walk non-repeat", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/walk_normal.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-
 
          ITEM_COMMAND("test startallfront", []()
                       {
