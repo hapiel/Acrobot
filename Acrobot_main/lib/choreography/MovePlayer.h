@@ -30,8 +30,10 @@ private:
   File &file;
   CSV_Parser &cp;
 
-  Limb *limbs[4]; // order: 0: ArmL, 1: armR, 2: legL, 3: legR
-  FloatBezierCurve *curves[4] = {nullptr, nullptr, nullptr, nullptr};
+  static const uint8_t NUM_CURVES = 4;
+
+  Limb *limbs[NUM_CURVES]; // order: 0: ArmL, 1: armR, 2: legL, 3: legR
+  FloatBezierCurve *curves[NUM_CURVES] = {nullptr, nullptr, nullptr, nullptr};
 
   MovePlayerState state = IDLE;
 
@@ -50,7 +52,7 @@ private:
   bool repeatMove = false;
 
   uint32_t moveStartTime = 0;
-  uint32_t lastStartMovementTime[4] = {0,0,0,0};
+  uint32_t lastStartMovementTime[NUM_CURVES] = {0,0,0,0};
   uint32_t updateMillis = 0;
   uint32_t moveMillis();
 
@@ -67,6 +69,8 @@ private:
   void readCurve();
   bool needToReadCurve();
   void moveFinished();
+  void resetCurve(uint8_t index);
+  void resetAllCurves();
 };
 
 #endif // MOVEPLAYER_H

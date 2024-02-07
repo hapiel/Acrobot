@@ -42,7 +42,6 @@ void MovePlayer::update()
     {
       readCurve();
     }
-
     uint8_t finishedCurves = 0;
 
     for (int i = 0; i < 4; i++)
@@ -75,6 +74,7 @@ void MovePlayer::update()
       moveFinished();
     }
   }
+  
 }
 
 void MovePlayer::moveFinished()
@@ -95,10 +95,8 @@ void MovePlayer::stop()
 {
   state = IDLE;
 
-  curves[0] = nullptr;
-  curves[1] = nullptr;
-  curves[2] = nullptr;
-  curves[3] = nullptr;
+  resetAllCurves();
+
   fileEnded = true;
   nextCurveIndex = NO_INDEX;
 }
@@ -106,10 +104,8 @@ void MovePlayer::stop()
 void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, bool repeat, float moveKp, float moveKi, float _startMoveSpeed)
 {
   // disable previous curves
-  curves[0] = nullptr;
-  curves[1] = nullptr;
-  curves[2] = nullptr;
-  curves[3] = nullptr;
+  resetAllCurves();
+
   nextCurveIndex = NO_INDEX;
   repeatMove = repeat;
 
@@ -211,6 +207,13 @@ void MovePlayer::startCurves()
   state = MOVE_CURVES;
   moveStartTime = millis();
   nextCurve[0] = 0;
+
+  // debugging
+  // static int moveCount = 0;
+  // moveCount++;
+  // Serial.printf("Move count: %d\n", moveCount);
+  // Serial.printf("Free heap: %d, minimum heap: %d \n", xPortGetFreeHeapSize(), xPortGetMinimumEverFreeHeapSize());
+  // end debugging
   debugI("Starting curves");
 }
 
@@ -219,8 +222,10 @@ void MovePlayer::readCurve()
   // create new curve
   if (nextCurveIndex != NO_INDEX)
   {
+    resetCurve(nextCurveIndex);
     curves[nextCurveIndex] = new FloatBezierCurve(nextCurve[0], nextCurve[1], nextCurve[2], nextCurve[3], nextCurve[4], nextCurve[5], nextCurve[6], nextCurve[7]);
   }
+
 
   if (cp.parseRow())
   {
@@ -271,6 +276,7 @@ void MovePlayer::readCurve()
       debugE("Not an sC cfommand");
     }
   }
+
   else
   {
     fileEnded = true;
@@ -287,4 +293,25 @@ uint32_t MovePlayer::moveMillis()
 bool MovePlayer::needToReadCurve()
 {
   return nextCurve[0] < moveMillis() && !fileEnded;
+}
+
+void MovePlayer::resetCurve(uint8_t index)
+{
+  if (index < NUM_CURVES){
+    if (curves[index] != nullptr)
+  {
+    delete curves[index];
+    curves[index] = nullptr;
+  }
+  } else {
+    debugE("Invalid index called on resetCurve");
+  }
+  
+}
+
+void MovePlayer::resetAllCurves(){
+  for (int i = 0; i < NUM_CURVES; i++)
+  {
+    resetCurve(i);
+  }
 }
