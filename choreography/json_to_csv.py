@@ -27,7 +27,7 @@ for line in controller_setup_lines:
 print(f"Controller Setup Data: {controller_data}")
 
 # Create a subdirectory 'csv' if it doesn't exist
-csv_directory = os.path.join(script_directory, "csv")
+csv_directory = os.path.join(script_directory, "moves")
 os.makedirs(csv_directory, exist_ok=True)
 
 
@@ -47,7 +47,8 @@ for animation in data[0]["Animations"]:
 
     # split the animation commands into multiple lines
     animation_array = animation_commands.strip("\\n").split("\\n")
-
+    
+    
     # Create a CSV file for each animation in the 'csv' subdirectory
     csv_file_path = os.path.join(csv_directory, f"{animation_name}.csv")
     with open(csv_file_path, "w", newline="") as csvfile:
@@ -57,8 +58,17 @@ for animation in data[0]["Animations"]:
         header_row = ["Command", "Motor", "Time start", "Duration", "Start pos", "Start cp X", "Start cp Y", "End pos", "End cp X", "End cp Y"]
         csvwriter.writerow(header_row)
         
+        # get the duration of the animation
+        duration = 0
+        for row in animation_array:
+            row_values = row.split(",")
+            start_time = int(row_values[2])
+            length = int(row_values[3])
+            if start_time + length > duration:
+                duration = start_time + length
+        
         # Write animation name 
-        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name]
+        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name, "Duration:", duration]
         csvwriter.writerow(name_row)
         
         # get start positions for each motor, 999.0 is default.
@@ -68,6 +78,7 @@ for animation in data[0]["Animations"]:
         first_leg_l_pos = 999.0
         first_leg_r_pos = 999.0
         
+        # search until the first m_arm_l is found
         for row in animation_array:
             row_values = row.split(",")
             motor_name = row_values[1]
@@ -76,6 +87,7 @@ for animation in data[0]["Animations"]:
                 first_arm_l_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
         
+        # search until the first m_arm_r is found
         for row in animation_array:
             row_values = row.split(",")
             motor_name = row_values[1]
@@ -99,6 +111,8 @@ for animation in data[0]["Animations"]:
                 range_low, range_high = controller_data[motor_name]
                 first_leg_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
+            
+
         
         # same format as other rows
         start_pos_row = ["Start positions", "ArmL ArmR legL legR", first_arm_l_pos, first_arm_r_pos, first_leg_l_pos, first_leg_r_pos, 0.0, 0.0, 0.0, 0.0]

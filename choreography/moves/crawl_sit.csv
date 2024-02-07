@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,crawl_sit,Controller name:,acrobot_travel
+Animation Name:,crawl_sit,Controller name:,acrobot_travel,Duration:,833
 Start positions,ArmL ArmR legL legR,96.767578125,96.767578125,57.64892578125,57.64892578125,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,833,57.64892578125,208,0.0,57.64892578125,-208,0.0
 sC,m_arm_r,0,300,96.767578125,75,0.0,166.904296875,-75,0.0

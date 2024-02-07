@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,crawl_scorpion,Controller name:,acrobot_travel
+Animation Name:,crawl_scorpion,Controller name:,acrobot_travel,Duration:,1767
 Start positions,ArmL ArmR legL legR,63.45703125,63.45703125,110.9326171875,110.9326171875,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,600,63.45703125,150,0.0,89.6484375,-150,0.0
 sC,m_leg_l,0,600,110.9326171875,150,0.0,207.099609375,-150,0.0

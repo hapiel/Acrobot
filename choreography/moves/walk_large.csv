@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,walk_large,Controller name:,acrobot_travel
+Animation Name:,walk_large,Controller name:,acrobot_travel,Duration:,2000
 Start positions,ArmL ArmR legL legR,151.171875,205.224609375,209.99267578125,156.01318359375,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,1000,209.99267578125,250,0.0,156.01318359375,-250,0.0
 sC,m_leg_r,0,1000,156.01318359375,250,0.0,209.99267578125,-250,0.0

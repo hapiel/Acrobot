@@ -1,49 +1,91 @@
 [
   {
-    "Controller Name": "acrobot_travel",
+    "Controller Name": "acrobot_poses",
     "Setup": {
-      "Controller Setup Commands": "rMTR,m_leg_l,30,330,3000,204\\nrMTR,m_leg_r,30,330,3000,168\\nrMTR,m_arm_l,-180,540,3000,163\\nrMTR,m_arm_r,-180,540,3000,202\\n"
+      "Controller Setup Commands": "rMTR,m_arm_l,-180,540,3000,0\\nrMTR,m_arm_r,-180,540,3000,0\\nrMTR,m_leg_l,30,330,3000,90\\nrMTR,m_leg_r,30,330,3000,270\\n"
     },
     "Animations": [
       {
-        "Animation Name": "walk_normal",
-        "Animation Commands": "sC,m_leg_l,0,800,4751,200,0,3768,-200,0\\nsC,m_leg_r,0,800,3768,200,0,4751,-200,0\\nsC,m_arm_l,0,800,3905,200,0,4342,-200,0\\nsC,m_arm_r,0,800,4342,200,0,3905,-200,0\\nsC,m_leg_l,800,800,3768,200,0,4751,-200,0\\nsC,m_leg_r,800,800,4751,200,0,3768,-200,0\\nsC,m_arm_l,800,800,4342,200,0,3905,-200,0\\nsC,m_arm_r,800,800,3905,200,0,4342,-200,0\\n",
+        "Animation Name": "pose_handstand_split",
+        "Animation Commands": "sC,m_arm_l,0,33,2048,8,0,2048,-8,0\\nsC,m_arm_r,0,33,2048,8,0,2048,-8,0\\nsC,m_leg_l,0,33,1632,8,0,1632,-8,0\\nsC,m_leg_r,0,33,6557,8,0,6557,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "walk_large",
-        "Animation Commands": "sC,m_leg_l,0,1000,4915,250,0,3441,-250,0\\nsC,m_leg_r,0,1000,3441,250,0,4915,-250,0\\nsC,m_arm_l,0,1000,3768,250,0,4383,-250,0\\nsC,m_arm_r,0,1000,4383,300,0,3768,-244,0\\nsC,m_leg_l,1000,1000,3441,250,0,4915,-250,0\\nsC,m_leg_r,1000,1000,4915,250,0,3441,-250,0\\nsC,m_arm_l,1000,1000,4383,250,0,3768,-250,0\\nsC,m_arm_r,1000,1000,3768,250,0,4383,-250,0\\n",
+        "Animation Name": "pose_stand",
+        "Animation Commands": "sC,m_arm_l,0,33,4096,8,0,4096,-8,0\\nsC,m_arm_r,0,33,4096,8,0,4096,-8,0\\nsC,m_leg_l,0,33,4233,8,0,4233,-8,0\\nsC,m_leg_r,0,33,4233,8,0,4233,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "walk_zombie",
-        "Animation Commands": "sC,m_leg_l,0,800,4751,200,0,3768,-200,0\\nsC,m_leg_r,0,800,3768,200,0,4751,-200,0\\nsC,m_arm_l,0,800,3280,200,0,3409,-300,0\\nsC,m_arm_r,0,800,3409,200,0,3280,-200,0\\nsC,m_leg_l,800,800,3768,200,0,4751,-200,0\\nsC,m_leg_r,800,800,4751,200,0,3768,-200,0\\nsC,m_arm_l,800,800,3409,300,0,3280,-200,0\\nsC,m_arm_r,800,800,3280,200,0,3409,-200,0\\n",
+        "Animation Name": "pose_stand_legs_only",
+        "Animation Commands": "sC,m_leg_l,0,33,4233,8,0,4233,-8,0\\nsC,m_leg_r,0,33,4233,8,0,4233,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "walk_backwards",
-        "Animation Commands": "sC,m_leg_l,0,1000,6546,250,0,5457,-250,0\\nsC,m_leg_r,0,1000,5457,250,0,6546,-250,0\\nsC,m_arm_l,0,1000,4904,250,0,4995,-250,0\\nsC,m_arm_r,0,1000,4995,250,0,4904,-250,0\\nsC,m_leg_l,1000,1000,5457,250,0,6546,-250,0\\nsC,m_leg_r,1000,1000,6546,250,0,5457,-250,0\\nsC,m_arm_l,1000,1000,4995,250,0,4904,-250,0\\nsC,m_arm_r,1000,1000,4904,250,0,4995,-250,0\\n",
+        "Animation Name": "pose_180",
+        "Animation Commands": "sC,m_arm_l,0,33,4096,8,0,4096,-8,0\\nsC,m_arm_r,0,33,4096,8,0,4096,-8,0\\nsC,m_leg_l,0,33,4096,8,0,4096,-8,0\\nsC,m_leg_r,0,33,4096,8,0,4096,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "walk_forwards",
-        "Animation Commands": "sC,m_leg_l,0,1000,3351,250,0,2240,-250,0\\nsC,m_leg_r,0,1000,2240,250,0,3351,-250,0\\nsC,m_arm_r,0,633,3948,158,0,4204,-158,0\\nsC,m_arm_l,0,633,3948,158,0,4204,-158,0\\nsC,m_arm_r,633,367,4204,92,0,3948,-92,0\\nsC,m_arm_l,633,367,4204,92,0,3948,-92,0\\nsC,m_arm_l,1000,633,3948,158,0,4204,-167,0\\nsC,m_leg_r,1000,1000,3351,250,0,2240,-250,0\\nsC,m_leg_l,1000,1000,2240,250,0,3351,-250,0\\nsC,m_arm_r,1000,633,3948,158,0,4204,-167,0\\nsC,m_arm_l,1633,367,4204,92,0,3948,-92,0\\nsC,m_arm_r,1633,367,4204,92,0,3948,-92,0\\n",
+        "Animation Name": "pose_handstand",
+        "Animation Commands": "sC,m_arm_l,0,33,2048,8,0,2048,-8,0\\nsC,m_arm_r,0,33,2048,8,0,2048,-8,0\\nsC,m_leg_l,0,33,4096,8,0,4096,-8,0\\nsC,m_leg_r,0,33,4096,8,0,4096,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "crawl_sit",
-        "Animation Commands": "sC,m_leg_l,0,833,755,208,0,755,-208,0\\nsC,m_arm_r,0,300,3149,75,0,3947,-75,0\\nsC,m_leg_r,0,833,755,208,0,755,-208,0\\nsC,m_arm_l,0,300,3149,75,0,3947,-75,0\\nsC,m_arm_r,300,100,3947,25,0,3947,-25,0\\nsC,m_arm_l,300,100,3947,25,0,3947,-25,0\\nsC,m_arm_l,400,200,3947,50,0,3149,-50,0\\nsC,m_arm_r,400,200,3947,50,0,3149,-50,0\\nsC,m_arm_r,600,233,3149,58,0,3149,-58,0\\nsC,m_arm_l,600,233,3149,58,0,3149,-58,0\\n",
+        "Animation Name": "pose_sit",
+        "Animation Commands": "sC,m_arm_l,0,33,3548,8,0,3548,-8,0\\nsC,m_arm_r,0,33,3548,8,0,3548,-8,0\\nsC,m_leg_l,0,33,1599,8,0,1599,-8,0\\nsC,m_leg_r,0,33,1599,8,0,1599,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       },
       {
-        "Animation Name": "crawl_scorpion",
-        "Animation Commands": "sC,m_arm_r,0,600,2770,150,0,3068,-150,0\\nsC,m_leg_l,0,600,2210,150,0,4836,-150,0\\nsC,m_leg_r,0,600,2210,150,0,4836,-150,0\\nsC,m_arm_l,0,600,2770,150,0,3068,-150,0\\nsC,m_arm_l,600,133,3068,33,0,3068,-33,0\\nsC,m_leg_r,600,133,4836,33,0,4836,-33,0\\nsC,m_arm_r,600,133,3068,33,0,3068,-33,0\\nsC,m_leg_l,600,133,4836,33,0,4836,-33,0\\nsC,m_leg_l,733,900,4836,225,0,2210,-225,0\\nsC,m_leg_r,733,900,4836,225,0,2210,-225,0\\nsC,m_arm_r,733,900,3068,225,0,2770,-225,0\\nsC,m_arm_l,733,900,3068,225,0,2770,-225,0\\nsC,m_arm_l,1633,134,2770,33,0,2770,-33,0\\nsC,m_leg_l,1633,134,2210,33,0,2210,-33,0\\nsC,m_arm_r,1633,134,2770,33,0,2770,-33,0\\nsC,m_leg_r,1633,134,2210,33,0,2210,-33,0\\n",
+        "Animation Name": "pose_seven",
+        "Animation Commands": "sC,m_arm_l,0,33,1724,8,0,1724,-8,0\\nsC,m_arm_r,0,33,1724,8,0,1724,-8,0\\nsC,m_leg_l,0,33,887,8,0,887,-8,0\\nsC,m_leg_r,0,33,887,8,0,887,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_yoga_dog",
+        "Animation Commands": "sC,m_arm_l,0,33,2048,8,0,2048,-8,0\\nsC,m_arm_r,0,33,2048,8,0,2048,-8,0\\nsC,m_leg_l,0,33,1417,8,0,1417,-8,0\\nsC,m_leg_r,0,33,1417,8,0,1417,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_table",
+        "Animation Commands": "sC,m_arm_l,0,33,2802,8,0,2802,-8,0\\nsC,m_arm_r,0,33,2802,8,0,2802,-8,0\\nsC,m_leg_l,0,33,1846,8,0,1846,-8,0\\nsC,m_leg_r,0,33,1846,8,0,1846,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_scorpion",
+        "Animation Commands": "sC,m_arm_l,0,33,3327,8,0,3327,-8,0\\nsC,m_arm_r,0,33,3327,8,0,3327,-8,0\\nsC,m_leg_l,0,33,5883,8,0,5883,-8,0\\nsC,m_leg_r,0,33,5883,8,0,5883,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_planche",
+        "Animation Commands": "sC,m_arm_l,0,33,3767,8,0,3767,-8,0\\nsC,m_arm_r,0,33,3767,8,0,3767,-8,0\\nsC,m_leg_l,0,33,4233,8,0,4233,-8,0\\nsC,m_leg_r,0,33,4233,8,0,4233,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "empty_motors",
+        "Animation Commands": "",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_split_l",
+        "Animation Commands": "sC,m_arm_l,0,33,4696,8,0,4696,-8,0\\nsC,m_arm_r,0,33,3682,8,0,3682,-8,0\\nsC,m_leg_l,0,33,1704,8,0,1704,-8,0\\nsC,m_leg_r,0,33,6710,8,0,6710,-8,0\\n",
+        "Animation Loop Commands": "",
+        "Animation Loop Duration MS": 0
+      },
+      {
+        "Animation Name": "pose_handstand_oversplit",
+        "Animation Commands": "sC,m_arm_l,0,33,2048,8,0,2048,-8,0\\nsC,m_arm_r,0,33,2048,8,0,2048,-8,0\\nsC,m_leg_l,0,33,0,8,0,0,-8,0\\nsC,m_leg_r,0,33,8192,8,0,8192,-8,0\\n",
         "Animation Loop Commands": "",
         "Animation Loop Duration MS": 0
       }
