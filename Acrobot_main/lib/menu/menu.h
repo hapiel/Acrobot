@@ -45,8 +45,8 @@ public:
   // variable menu texts
   char bootAdc[19] = "A: 234 234 234 234";
   char bootState[19] = "S: off on cal xxx";   // or "ready ready ready
-  char bootPosA[19] = "PA: 123 123 ";   // position arms
-  char bootPosL[19] = "PL: 123 123 ";   // position legs
+  char bootPosA[19] = "PA: 123 123 ";         // position arms
+  char bootPosL[19] = "PL: 123 123 ";         // position legs
   char bootRelais[19] = "Relais: Set EXAMPL"; // or relais unset
 
   char statusTemp[19] = "Temp: 00 00 XX 00 "; // XX = missing motor
@@ -64,7 +64,7 @@ public:
   char adsL[19] = "LL 00000 LR 00000";
 
   char PUpText[19] = "P UP, val: X";
-  char DUpText[19] = "D UP, val: X";
+  char IUpText[19] = "I UP, val: X";
 
 private:
   LiquidCrystal_I2C &lcd;

@@ -6,7 +6,14 @@ Motor::Motor(uint16_t ID, CANHandler &canHandler, RemoteDebug &Debug) : canID(ID
   latestFrame.ext = false;
   latestFrame.rtr = false;
   latestFrame.len = 8;
-  packCommand(latestFrame, 0, 0, 0, 0, 0);
+  latestFrame.data[0] = 0xFF;
+  latestFrame.data[1] = 0xFF;
+  latestFrame.data[2] = 0xFF;
+  latestFrame.data[3] = 0xFF;
+  latestFrame.data[4] = 0xFF;
+  latestFrame.data[5] = 0xFF;
+  latestFrame.data[6] = 0xFF;
+  latestFrame.data[7] = 0xFC;
 }
 
 void Motor::start()

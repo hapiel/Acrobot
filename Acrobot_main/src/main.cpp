@@ -197,37 +197,37 @@ SUB_MENU(travelPage, movesPage,
          ITEM_COMMAND("walk_normal", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/walk_normal.csv"); };
+        { movePlayer.startMove("/walk_normal.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("walk_large", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/walk_large.csv"); };
+        { movePlayer.startMove("/walk_large.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("walk_backwards", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/walk_backwards.csv"); };
+        { movePlayer.startMove("/walk_backwards.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("walk_forwards", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/walk_forwards.csv"); };
+        { movePlayer.startMove("/walk_forwards.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("walk_zombie", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/walk_zombie.csv"); };
+        { movePlayer.startMove("/walk_zombie.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("crawl_sit", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/crawl_sit.csv"); };
+        { movePlayer.startMove("/crawl_sit.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
          ITEM_COMMAND("crawl_scorpion", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/crawl_scorpion.csv"); };
+        { movePlayer.startMove("/crawl_scorpion.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(quickPage, movesPage,
@@ -443,9 +443,9 @@ SUB_MENU(PIPage, mainMenu,
                       { menu.PAdjust(2); }),
          ITEM_COMMAND("P DOWN step: (2)", []()
                       { menu.PAdjust(-2); }),
-         ITEM_COMMAND(menu.DUpText, []()
+         ITEM_COMMAND(menu.IUpText, []()
                       { menu.DAdjust(0.5); }),
-         ITEM_COMMAND("D DOWN step: (0.5)", []()
+         ITEM_COMMAND("I DOWN step: (0.5)", []()
                       { menu.DAdjust(-0.5); }));
 
 SUB_MENU(controlPage, mainMenu,

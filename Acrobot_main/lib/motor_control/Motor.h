@@ -58,6 +58,7 @@ private:
   uint32_t lastSendTime = 0;
   int sendInterval = 1; // ms
   RemoteDebug &Debug;
+
 };
 
 #endif

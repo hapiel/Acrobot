@@ -3894,7 +3894,7 @@
                     "animationTrack": {
                       "$ref": "386"
                     },
-                    "Movement": 0.442219555,
+                    "Movement": 0.481776,
                     "HandleType": "AutoSmooth",
                     "InTangent": {
                       "$id": "393",
@@ -3917,7 +3917,7 @@
                     "animationTrack": {
                       "$ref": "386"
                     },
-                    "Movement": 0.442219555,
+                    "Movement": 0.481776,
                     "HandleType": "AutoSmooth",
                     "InTangent": {
                       "$id": "396",
@@ -4034,7 +4034,7 @@
                     "animationTrack": {
                       "$ref": "404"
                     },
-                    "Movement": 0.442219555,
+                    "Movement": 0.481776,
                     "HandleType": "AutoSmooth",
                     "InTangent": {
                       "$id": "411",
@@ -4057,7 +4057,7 @@
                     "animationTrack": {
                       "$ref": "404"
                     },
-                    "Movement": 0.442219555,
+                    "Movement": 0.481776,
                     "HandleType": "AutoSmooth",
                     "InTangent": {
                       "$id": "414",

@@ -203,7 +203,7 @@ void Menu::updateText()
   sprintf(adsL, "LL %05d LR %05d", hallSensor.getValFromID(LEG_L_ID), hallSensor.getValFromID(LEG_R_ID));
 
   sprintf(PUpText, "P UP, val: %.1f", P);
-  sprintf(DUpText, "D UP, val: %.1f", D);
+  sprintf(IUpText, "D UP, val: %.1f", D);
 }
 
 void Menu::PAdjust(float val)
