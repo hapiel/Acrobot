@@ -60,6 +60,7 @@ The project should be built in platformio
 #include "JoystickControl.h"
 #include "webserverFunctions.h"
 #include "MovePlayer.h"
+#include "Sequencer.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -143,6 +144,7 @@ StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eS
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer);
+Sequencer sequencer(movePlayer, Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -154,6 +156,7 @@ bool wifiConnected = false;
 
 extern MenuItem *bootPage[];
 extern MenuItem *movesPage[];
+extern MenuItem *sequencerPage[];
 extern MenuItem *movePlayerPage[];
 extern MenuItem *acroPage[];
 extern MenuItem *posePage[];
@@ -171,13 +174,21 @@ extern MenuItem *aboutPage[];
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Moves", movesPage),
+    ITEM_SUBMENU("Sequencer", sequencerPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
     ITEM_SUBMENU("Change PI value", PIPage),
     ITEM_SUBMENU("Control mode", controlPage),
-    ITEM_SUBMENU("Sequences", sequencePage),
+    ITEM_SUBMENU("Sequences old", sequencePage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(sequencerPage, mainMenu,
+         ITEM_COMMAND("walk_test", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { sequencer.startSequence("/routine_walk_test.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(movesPage, mainMenu,
          ITEM_SUBMENU("Poses", posePage),
@@ -636,6 +647,7 @@ void updates()
   menu.update();
   statusChecker.update();
   choreoPlayer.update();
+  sequencer.update();
 
   // webserver
   if (wifiConnected)
