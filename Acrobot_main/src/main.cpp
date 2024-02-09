@@ -157,11 +157,13 @@ bool wifiConnected = false;
 extern MenuItem *bootPage[];
 extern MenuItem *movesPage[];
 extern MenuItem *sequencerPage[];
-extern MenuItem *movePlayerPage[];
-extern MenuItem *acroPage[];
-extern MenuItem *posePage[];
-extern MenuItem *travelPage[];
-extern MenuItem *quickPage[];
+extern MenuItem *moveTestPage[];
+extern MenuItem *moveAcroPage[];
+extern MenuItem *movePosePage[];
+extern MenuItem *moveWarmupPage[];
+extern MenuItem *moveGreetingPage[];
+extern MenuItem *moveTravelPage[];
+extern MenuItem *moveQuickPage[];
 extern MenuItem *statusPage[];
 extern MenuItem *motorPage[];
 extern MenuItem *PIPage[];
@@ -191,20 +193,78 @@ SUB_MENU(sequencerPage, mainMenu,
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(movesPage, mainMenu,
-         ITEM_SUBMENU("Poses", posePage),
-         ITEM_SUBMENU("Acro", acroPage),
-         ITEM_SUBMENU("Travel", travelPage),
-         ITEM_SUBMENU("Quick numbers", quickPage),
-         ITEM_SUBMENU("MovePlayer TESTS", movePlayerPage));
+         ITEM_SUBMENU("Poses", movePosePage),
+         ITEM_SUBMENU("Acro", moveAcroPage),
+         ITEM_SUBMENU("Travel", moveTravelPage),
+         ITEM_SUBMENU("Warmup", moveWarmupPage),
+         ITEM_SUBMENU("Greeting", moveGreetingPage),
+         ITEM_SUBMENU("Quick numbers", moveQuickPage),
+         ITEM_SUBMENU("MovePlayer TESTS", moveTestPage));
 
-SUB_MENU(acroPage, movesPage,
+SUB_MENU(moveGreetingPage, movesPage,
+         ITEM_COMMAND("wave_double", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_wave_double.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("wave_left", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_wave_left.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("nod", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_nod.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("bow_small", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_bow_small.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("bow_deep", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_bow_deep.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("shake_hand", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/greeting_shake_hand.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+
+
+SUB_MENU(moveWarmupPage, movesPage,
+         ITEM_COMMAND("arm_swing", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/warmup_arm_swing.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("leg_stretch", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/warmup_leg_stretch.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("shoulder_stretch", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/warmup_shoulder_stretch.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("situp", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/warmup_situp.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+SUB_MENU(moveAcroPage, movesPage,
          ITEM_COMMAND("acro_podcheska", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/acro_podcheska.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
-SUB_MENU(travelPage, movesPage,
+SUB_MENU(moveTravelPage, movesPage,
          ITEM_COMMAND("walk_normal", []()
                       {
         TaskFunction lambdaFunction = []()
@@ -241,7 +301,7 @@ SUB_MENU(travelPage, movesPage,
         { movePlayer.startMove("/crawl_scorpion.csv", false, true); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
-SUB_MENU(quickPage, movesPage,
+SUB_MENU(moveQuickPage, movesPage,
          ITEM_COMMAND("quick_01", []()
                       {
         TaskFunction lambdaFunction = []()
@@ -296,7 +356,7 @@ SUB_MENU(quickPage, movesPage,
         { movePlayer.startMove("/quick_10.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
-SUB_MENU(posePage, movesPage,
+SUB_MENU(movePosePage, movesPage,
          ITEM_COMMAND("stand", []()
                       {
         TaskFunction lambdaFunction = []()
@@ -363,7 +423,7 @@ SUB_MENU(posePage, movesPage,
         { movePlayer.startMove("/pose_split_l.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
-SUB_MENU(movePlayerPage, movesPage,
+SUB_MENU(moveTestPage, movesPage,
          ITEM_COMMAND("walk repeat", []()
                       {
         TaskFunction lambdaFunction = []()
@@ -518,7 +578,14 @@ SUB_MENU(aboutPage, mainMenu,
          ITEM_BASIC("Mila Baumann"),
          ITEM_BASIC("Marit Adriaanse"),
          ITEM_BASIC("Edwin Dertien"),
-         ITEM_BASIC("Ricard Lopez"));
+         ITEM_BASIC("Ricard Lopez"),
+         ITEM_BASIC("Bram Graafland"),
+         ITEM_BASIC("::Sponsors::"),
+         ITEM_BASIC("CubeMars"),
+         ITEM_BASIC("Aluxprofile"),
+         ITEM_BASIC("Fillamentum"),
+         ITEM_BASIC("PCBWay"),
+         ITEM_BASIC("MakerBeam"));
 
 // ---------
 // MENU SECTION END

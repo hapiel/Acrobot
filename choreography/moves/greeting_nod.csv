@@ -1,0 +1,9 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,greeting_nod,Controller name:,acrobot_greeting,Duration:,933
+Start positions,ArmL ArmR legL legR,999.0,999.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
+sC,m_leg_l,0,367,185.01708984375,91,0.0,179.853515625,-92,0.0
+sC,m_leg_r,0,367,185.01708984375,92,0.0,179.853515625,-92,0.0
+sC,m_leg_l,367,266,179.853515625,67,0.0,179.853515625,-67,0.0
+sC,m_leg_r,367,266,179.853515625,67,0.0,179.853515625,-67,0.0
+sC,m_leg_l,633,300,179.853515625,75,0.0,185.01708984375,-75,0.0
+sC,m_leg_r,633,300,179.853515625,75,0.0,185.01708984375,-75,0.0

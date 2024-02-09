@@ -1,0 +1,11 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,greeting_wave_left,Controller name:,acrobot_greeting,Duration:,6133
+Start positions,ArmL ArmR legL legR,180.0,999.0,999.0,999.0,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,1133,180.0,283,0.0,10.8984375,-445,-17.40234375
+sC,m_arm_l,1133,834,10.8984375,74,2.900390625,10.8984375,-28,0.0
+sC,m_arm_l,1967,266,10.8984375,65,0.0,0.17578125,-67,0.0
+sC,m_arm_l,2233,267,0.17578125,67,0.0,10.8984375,-67,0.0
+sC,m_arm_l,2500,267,10.8984375,67,0.0,0.17578125,-67,0.0
+sC,m_arm_l,2767,333,0.17578125,83,0.0,10.8984375,-83,0.0
+sC,m_arm_l,3100,533,10.8984375,133,0.0,10.8984375,-15,0.52734375
+sC,m_arm_l,3633,2500,10.8984375,948,-25.224609375,180.0,-859,-1.40625

@@ -1,0 +1,11 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,greeting_shake_hand,Controller name:,acrobot_greeting,Duration:,6900
+Start positions,ArmL ArmR legL legR,999.0,180.0,999.0,999.0,0.0,0.0,0.0,0.0
+sC,m_arm_r,0,1633,180.0,408,0.0,123.75,-281,0.0
+sC,m_arm_r,1633,1100,123.75,74,0.0,123.75,-275,0.0
+sC,m_arm_r,2733,267,123.75,67,0.0,113.115234375,-67,0.0
+sC,m_arm_r,3000,267,113.115234375,67,0.0,123.75,-67,0.0
+sC,m_arm_r,3267,266,123.75,67,0.0,113.115234375,-67,0.0
+sC,m_arm_r,3533,334,113.115234375,83,0.0,123.75,-83,0.0
+sC,m_arm_r,3867,533,123.75,133,0.0,123.75,-15,0.52734375
+sC,m_arm_r,4400,2500,123.75,948,-25.224609375,180.0,-859,-1.40625

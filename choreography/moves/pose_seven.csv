@@ -1,7 +1,7 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
 Animation Name:,pose_seven,Controller name:,acrobot_poses,Duration:,33
-Start positions,ArmL ArmR legL legR,-28.4765625,-28.4765625,62.48291015625,62.48291015625,0.0,0.0,0.0,0.0
-sC,m_arm_l,0,33,-28.4765625,8,0.0,-28.4765625,-8,0.0
-sC,m_arm_r,0,33,-28.4765625,8,0.0,-28.4765625,-8,0.0
+Start positions,ArmL ArmR legL legR,-32.431640625,-32.431640625,62.48291015625,62.48291015625,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,33,-32.431640625,8,0.0,-32.431640625,-8,0.0
+sC,m_arm_r,0,33,-32.431640625,8,0.0,-32.431640625,-8,0.0
 sC,m_leg_l,0,33,62.48291015625,8,0.0,62.48291015625,-8,0.0
 sC,m_leg_r,0,33,62.48291015625,8,0.0,62.48291015625,-8,0.0
