@@ -40,7 +40,6 @@ The project should be built in platformio
 #include "WebServer.h"
 #define CSV_PARSER_DONT_IMPORT_SD
 #include "CSV_Parser.h"
-#include <AsyncTCP.h>
 
 // custom libraries
 #include "utilsAcrobot.h"
@@ -62,6 +61,7 @@ The project should be built in platformio
 #include "webserverFunctions.h"
 #include "MovePlayer.h"
 #include "Sequencer.h"
+#include "BottangoSocket.h"
 
 // parameters
 #include "wifiConfig.h" // needs to be made from wifiConfig_sample.h, in /include
@@ -132,7 +132,6 @@ Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75, true); // offs
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
 Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true);
 Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false);
-
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -146,6 +145,7 @@ Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight,
 MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer);
 Sequencer sequencer(movePlayer, Debug);
+BottangoSocket bottangoSocket(Debug, menu, armL, armR, legL, legR);
 
 // wifi
 bool wifiConnected = false;
@@ -160,6 +160,7 @@ bool wifiConnected = false;
 extern MenuItem *bootPage[];
 extern MenuItem *movesPage[];
 extern MenuItem *sequencerPage[];
+extern MenuItem *bottangoPage[];
 extern MenuItem *moveTestPage[];
 extern MenuItem *moveAcroPage[];
 extern MenuItem *movePosePage[];
@@ -180,6 +181,7 @@ MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
+    ITEM_SUBMENU("Bottango Socket", bottangoPage),
     ITEM_SUBMENU("Status", statusPage),
     ITEM_SUBMENU("Motors", motorPage),
     ITEM_SUBMENU("Change PI value", PIPage),
@@ -498,6 +500,12 @@ SUB_MENU(bootPage, mainMenu,
          ITEM_BASIC(menu.bootState), // or "ready ready ready"
          ITEM_BASIC(menu.bootPosA), ITEM_BASIC(menu.bootPosL), ITEM_BASIC(menu.bootRelais));
 
+SUB_MENU(bottangoPage, mainMenu,
+         ITEM_COMMAND("start", []()
+                      { bottangoSocket.start(); }),
+         ITEM_COMMAND("stop", []()
+                      { bottangoSocket.stop(); }));
+
 SUB_MENU(statusPage, mainMenu,
          ITEM_BASIC(menu.statusTemp),
          ITEM_BASIC(menu.statusWifi),
@@ -590,42 +598,12 @@ SUB_MENU(aboutPage, mainMenu,
          ITEM_BASIC("PCBWay"),
          ITEM_BASIC("MakerBeam"));
 
-// ---------
-// MENU SECTION END
+
 /* #endregion */
 
+// ---------
+// MENU SECTION END
 
-// socket
-
-#define SERVER_HOST_NAME "192.168.20.126"
-
-#define TCP_PORT 59225
-
-bool socketConnected = false;
-
-static void replyToServer(void* arg) {
-	AsyncClient* client = reinterpret_cast<AsyncClient*>(arg);
-
-	// send reply
-	if (client->space() > 32 && client->canSend()) {
-		char message[32];
-		client->add(message, strlen(message));
-		client->send();
-	}
-}
-
-static void handleData(void* arg, AsyncClient* client, void *data, size_t len) {
-	Serial.printf("\n data received from %s \n", client->remoteIP().toString().c_str());
-	Serial.write((uint8_t*)data, len);
-
-}
-
-void onConnect(void* arg, AsyncClient* client) {
-	Serial.printf("\n client has been connected to %s on port %d \n", SERVER_HOST_NAME, TCP_PORT);
-	replyToServer(client);
-}
-
-// socket end
 
 void initDebug()
 {
@@ -726,14 +704,6 @@ void wifiConnection()
   }
   wifiConnected = WiFi.status() == WL_CONNECTED;
 
-  if (wifiConnected && !socketConnected) {
-    AsyncClient* client = new AsyncClient;
-    client->onData(&handleData, client);
-    client->onConnect(&onConnect, client);
-    client->connect(SERVER_HOST_NAME, TCP_PORT);
-    socketConnected = true;
-    Serial.println("Socket connected");
-  }
 }
 
 void updates()
@@ -757,6 +727,8 @@ void updates()
   statusChecker.update();
   choreoPlayer.update();
   sequencer.update();
+  bottangoSocket.update(); 
+  movePlayer.update();
 
   // webserver
   if (wifiConnected)
@@ -764,7 +736,7 @@ void updates()
     server.handleClient();
   }
 
-  movePlayer.update();
+
 }
 
 void updatesI2C()
@@ -804,6 +776,6 @@ void setup()
 void loop()
 {
   vTaskDelete(NULL);
-  taskMain(NULL);
-  taskI2C(NULL);
+  // taskMain(NULL);
+  // taskI2C(NULL);
 }

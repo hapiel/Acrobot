@@ -85,7 +85,7 @@ private:
   BatterySensor &batterySensor;
   RemoteDebug &Debug;
 
-  float P = 16;
+  float P = 20;
   float D = 2;
 
   bool upPressed = false;
