@@ -166,6 +166,7 @@ void loop() {
           rumbleForce = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
           rumbleDuration = command.substring(command.lastIndexOf('=') + 1).toInt();
           setRumble(myGamepad, rumbleForce, rumbleDuration);
+          Serial.printf("rumbleForce: %d, rumbleDuration: %d\n", rumbleForce, rumbleDuration);
         }
       }
     }
@@ -206,7 +207,7 @@ void loop() {
   // Detailed info here:
   // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
-  delay(20);
+  delay(1);
 }
 
 void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {

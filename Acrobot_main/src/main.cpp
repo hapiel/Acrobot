@@ -174,6 +174,8 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
+    ITEM_COMMAND("rumble", []()
+                      {joystick.setRumble(255,255);}),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
@@ -696,6 +698,7 @@ void wifiConnection()
 
 void updates()
 {
+  // Serial.println("debug 0");
   joystick.update(); // Update joystick and button states
   canHandler.update();
   eStop.update();
@@ -733,6 +736,7 @@ void updatesI2C()
 
 void taskMain(void *parameter)
 {
+  Serial.println("debug -2");
   for (;;)
   {
     updates();
@@ -755,13 +759,13 @@ void setup()
 {
   inits();
   functionQueue = xQueueCreate(5, sizeof(TaskFunction));
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 80000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
   vTaskDelete(NULL);
-  taskMain(NULL);
-  taskI2C(NULL);
+  // taskMain(NULL);
+  // taskI2C(NULL);
 }

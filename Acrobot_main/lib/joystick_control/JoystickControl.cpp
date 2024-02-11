@@ -187,6 +187,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (armNeutral < 430)
       {
         armNeutral += 90;
+        joystick.setRumble(64, 20);
       }
     }
     if (joystick.getAxisLYCorrected() < -10)
@@ -194,6 +195,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (armNeutral > -90)
       {
         armNeutral -= 90;
+        joystick.setRumble(64, 20);
       }
     }
   }
@@ -204,6 +206,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (legNeutral < 200)
       {
         legNeutral += 90;
+        joystick.setRumble(64, 20);
       }
     }
     if (joystick.getAxisRYCorrected() < -10)
@@ -211,6 +214,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (legNeutral > 160)
       {
         legNeutral -= 90;
+        joystick.setRumble(64, 20);
       }
     }
   }
@@ -226,6 +230,32 @@ void JoystickControl::defaultSubmodes()
   // submodeTestPositions();
   submodeToggleSynch();
   submodeChangeVariableAngle();
+  submodeCurrentRumble();
+}
+
+void JoystickControl::submodeCurrentRumble()
+{
+  static long unsigned int lastRumble = 0;
+  if (millis()-lastRumble > 50)
+  {
+    lastRumble = millis();
+    int legCurrentThreshold = 4;
+    if(joystick.getButtonR1() || joystick.getR2() > 0)//benen
+    {
+      if(abs(legL.getTorque()) >= legCurrentThreshold || abs(legR.getTorque()) >= legCurrentThreshold)
+      {
+        joystick.setRumble(255,150);
+      }
+    }
+    int armCurrentThreshold = 4;
+    if(joystick.getButtonL1() || joystick.getL2() > 0)//armen
+    {
+      if(abs(armL.getTorque()) >= legCurrentThreshold || abs(armR.getTorque()) >= legCurrentThreshold)
+      {
+        joystick.setRumble(255,150);
+      }
+    }
+  }
 }
 
 void JoystickControl::submodeTestPositions()

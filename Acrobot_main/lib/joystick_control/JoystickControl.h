@@ -97,6 +97,7 @@ private:
   void submodeTestPositions();
   void submodeToggleSynch();
   void submodeChangeVariableAngle();
+  void submodeCurrentRumble();
 
   void defaultSubmodes();
 
