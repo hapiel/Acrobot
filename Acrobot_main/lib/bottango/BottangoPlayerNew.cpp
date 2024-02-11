@@ -71,7 +71,7 @@ void BottangoPlayer::update()
             }
             else
             {
-
+                
             }
             
         }

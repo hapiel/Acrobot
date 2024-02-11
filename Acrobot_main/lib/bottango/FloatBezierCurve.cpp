@@ -142,12 +142,12 @@ bool FloatBezierCurve::isInProgress(unsigned long currentTimeMs)
 
 bool FloatBezierCurve::isFinished(unsigned long currentTimeMs)
 {
-    return currentTimeMs > getEndTimeMs();
+    return currentTimeMs > getEndTimeMs();//zelf bij geschreven
 }
 
 bool FloatBezierCurve::notStarted(unsigned long currentTimeMs)
 {
-    return currentTimeMs < getStartTimeMs();
+    return currentTimeMs < getStartTimeMs();//zelf bij geschreven
 }
     
 float FloatBezierCurve::getStartMovement()
