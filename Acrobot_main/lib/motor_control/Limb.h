@@ -61,8 +61,8 @@ protected:
   float lastKp;
   uint32_t lastSetTargetTime = 0;
   bool inverted;
-  const int SAFE_TARGET_RANGE_MIN = 10;
-  const int SAFE_TARGET_RANGE_MAX = 25;
+  const int SAFE_TARGET_RANGE_MIN = 8;
+  const int SAFE_TARGET_RANGE_MAX = 20;
   State state = STATE_OFF;
   LastControlMode lastControlMode = CONTROL_MODE_NONE;
   
