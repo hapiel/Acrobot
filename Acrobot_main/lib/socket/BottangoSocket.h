@@ -34,6 +34,8 @@ private:
   {"m_leg_r", 3}
 };
 
+  
+
   static const uint8_t NUM_LIMBS = 4;
   Limb *limbs[NUM_LIMBS]; // order: 0: armL, 1: armR, 2: legL, 3: legR
 
@@ -41,6 +43,10 @@ private:
 
   int maxDegrees[NUM_LIMBS];
   int minDegrees[NUM_LIMBS];
+
+  bool targetsSet[NUM_LIMBS] = {false, false, false, false};
+
+  float targets[NUM_LIMBS] = {0, 0, 0, 0};
 
   const char *host = "LAPTOP-VSACRSB1.local";
   const uint16_t port = 59225;

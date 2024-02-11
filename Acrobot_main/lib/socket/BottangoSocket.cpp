@@ -52,20 +52,36 @@ void BottangoSocket::update()
           int target = splitValues[2].toInt();
 
           float targetDegrees = fMap(target, 0, BOTTANGO_MAX_VALUE, minDegrees[mapping.index], maxDegrees[mapping.index]);
+
+          targets[mapping.index] = targetDegrees;
+          targetsSet[mapping.index] = true;
           
-          limbs[mapping.index]->setTarget(targetDegrees, menu.getP(), menu.getD());
           break; // Exit loop once the pattern is matched
         }
       }
     }
 
+    if (splitValues[0] == "STOP"){
+      debugI("Bottango software called stop");
+      stop();
+    }
+
 
     client.print("OK\n");
+  }
+
+  for (int i = 0; i < NUM_LIMBS; i++)
+  {
+    if (targetsSet[i])
+    {
+      limbs[i]->setTarget(targets[i],menu.getP(), menu.getD());
+    }
   }
 }
 
 void BottangoSocket::start()
 {
+  stop();
   if (!client.connect(host, port))
   {
     debugE("Bottango socket connection failed!");
@@ -78,4 +94,8 @@ void BottangoSocket::stop()
 {
   connected = false;
   client.stop();
+  targetsSet[0] = false;
+  targetsSet[1] = false;
+  targetsSet[2] = false;
+  targetsSet[3] = false;
 }
