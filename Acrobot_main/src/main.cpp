@@ -759,8 +759,8 @@ void setup()
 {
   inits();
   functionQueue = xQueueCreate(5, sizeof(TaskFunction));
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 80000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 10000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
 }
 
 void loop()
