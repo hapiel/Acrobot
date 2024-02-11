@@ -40,6 +40,7 @@ The project should be built in platformio
 #include "WebServer.h"
 #define CSV_PARSER_DONT_IMPORT_SD
 #include "CSV_Parser.h"
+#include <AsyncTCP.h>
 
 // custom libraries
 #include "utilsAcrobot.h"
@@ -151,6 +152,8 @@ bool wifiConnected = false;
 
 // MENU SECTION START
 // ---------
+
+/* #region Menu */
 
 // This section needs to be in the same file that inits the lcdMenu.
 
@@ -589,10 +592,40 @@ SUB_MENU(aboutPage, mainMenu,
 
 // ---------
 // MENU SECTION END
+/* #endregion */
 
-// webserver
 
-// webserver end
+// socket
+
+#define SERVER_HOST_NAME "192.168.20.126"
+
+#define TCP_PORT 59225
+
+bool socketConnected = false;
+
+static void replyToServer(void* arg) {
+	AsyncClient* client = reinterpret_cast<AsyncClient*>(arg);
+
+	// send reply
+	if (client->space() > 32 && client->canSend()) {
+		char message[32];
+		client->add(message, strlen(message));
+		client->send();
+	}
+}
+
+static void handleData(void* arg, AsyncClient* client, void *data, size_t len) {
+	Serial.printf("\n data received from %s \n", client->remoteIP().toString().c_str());
+	Serial.write((uint8_t*)data, len);
+
+}
+
+void onConnect(void* arg, AsyncClient* client) {
+	Serial.printf("\n client has been connected to %s on port %d \n", SERVER_HOST_NAME, TCP_PORT);
+	replyToServer(client);
+}
+
+// socket end
 
 void initDebug()
 {
@@ -692,6 +725,15 @@ void wifiConnection()
     }
   }
   wifiConnected = WiFi.status() == WL_CONNECTED;
+
+  if (wifiConnected && !socketConnected) {
+    AsyncClient* client = new AsyncClient;
+    client->onData(&handleData, client);
+    client->onConnect(&onConnect, client);
+    client->connect(SERVER_HOST_NAME, TCP_PORT);
+    socketConnected = true;
+    Serial.println("Socket connected");
+  }
 }
 
 void updates()
