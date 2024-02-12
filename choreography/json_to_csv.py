@@ -68,7 +68,7 @@ for animation in data[0]["Animations"]:
                 duration = start_time + length
         
         # Write animation name 
-        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name, "Duration:", duration]
+        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name, "Duration:", duration, "", "", "",""]
         csvwriter.writerow(name_row)
         
         # get start positions for each motor, 999.0 is default.
