@@ -122,6 +122,9 @@ for animation in data[0]["Animations"]:
         # Write animation commands to the CSV file
         for row in animation_array:
             row_values = row.split(",")
+            if row_values[0] != "sC":
+                continue
+            
             motor_name = row_values[1]
             
             if motor_name in controller_data:

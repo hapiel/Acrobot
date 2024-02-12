@@ -143,9 +143,9 @@ ChoreoPlayer choreoPlayer(Debug, legL, legR, armL, armR);
 StatusChecker statusChecker(Debug, batterySensor, buzzer, debugLed, joystick, eStop);
 Menu menu(lcdMenu, lcd, joystick, buttonUp, buttonDown, buttonLeft, buttonRight, legL, legR, armL, armR, buzzer, hallSensor, WiFi, eStop, batterySensor, Debug);
 MovePlayer movePlayer(Debug, legL, legR, armL, armR, file, cp);
-JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer);
 Sequencer sequencer(movePlayer, Debug);
 BottangoSocket bottangoSocket(Debug, menu, armL, armR, legL, legR);
+JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR, choreoPlayer, menu, eStop, movePlayer, sequencer, bottangoSocket);
 
 // wifi
 bool wifiConnected = false;
@@ -178,8 +178,6 @@ extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
 
 MAIN_MENU(
-    ITEM_COMMAND("rumble", []()
-                      {joystick.setRumble(255,255);}),
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
@@ -569,6 +567,12 @@ SUB_MENU(hardwarePage, mainMenu,
                      { menu.callbackBacklight(isOff); }), // enable again on button press
          ITEM_COMMAND("Buzzer beep", []()
                       { menu.callbackBeep(); }), // lambda because non static
+         ITEM_COMMAND("Rumble long", []()
+                      {joystick.setRumble(255,255);}),
+         ITEM_COMMAND("Rumble soft", []()
+                      {joystick.setRumble(5,255);}),
+         ITEM_COMMAND("Rumble short", []()
+                      {joystick.setRumble(255,5);}),
          ITEM_SUBMENU("Show ADS", adsPage));
 
 SUB_MENU(adsPage, hardwarePage,

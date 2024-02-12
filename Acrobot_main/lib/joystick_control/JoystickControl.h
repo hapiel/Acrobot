@@ -11,6 +11,8 @@
 #include "EStop.h"
 #include "debugLed.h"
 #include "MovePlayer.h"
+#include "Sequencer.h"
+#include "BottangoSocket.h"
 
 enum JoystickControlMode
 {
@@ -32,7 +34,7 @@ enum JoystickControlMode
 class JoystickControl
 {
 public:
-  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop, MovePlayer &movePlayer);
+  JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop, MovePlayer &movePlayer, Sequencer &sequencer, BottangoSocket &bottangoSocket);
   void update();
 
   void setMode(JoystickControlMode mode);
@@ -49,6 +51,8 @@ private:
   Menu &menu;
   EStop &eStop;
   MovePlayer &movePlayer;
+  Sequencer &sequencer;
+  BottangoSocket &bottangoSocket;
 
   long prevUpdateTime = 0;
   int deltaT = 0;

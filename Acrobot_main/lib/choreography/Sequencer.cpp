@@ -4,6 +4,10 @@ Sequencer::Sequencer(MovePlayer &movePlayer, RemoteDebug &Debug) : movePlayer(mo
 
 void Sequencer::update()
 {
+  if (stopped)
+  {
+    return;
+  }
 if (sequenceStartTime + moveStartTime < millis()){
   if (moveParsedWaiting)
   {
@@ -23,6 +27,7 @@ if (sequenceStartTime + moveStartTime < millis()){
 
 void Sequencer::startSequence(const char *csvDir, bool repeat)
 {
+  stopped = false;
   if (!openFile(csvDir))
   {
     debugE("Sequence: Failed to open file %s", csvDir);
@@ -33,6 +38,12 @@ void Sequencer::startSequence(const char *csvDir, bool repeat)
   // to bypass header
   file.readStringUntil('\n');
   parseNextMove();
+}
+
+void Sequencer::stop()
+{
+  movePlayer.stop();
+  stopped = true;
 }
 
 bool Sequencer::openFile(const char *filename)

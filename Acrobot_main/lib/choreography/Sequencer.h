@@ -19,11 +19,14 @@ public:
   Sequencer(MovePlayer &movePlayer, RemoteDebug &Debug);
   void update();
   void startSequence(const char *csvDir, bool repeat = false);
+  void stop();
 
 private:
   MovePlayer &movePlayer;
   RemoteDebug &Debug;
   File file;
+
+  bool stopped = true;
 
   uint32_t sequenceStartTime = 0;
   bool moveParsedWaiting = false;

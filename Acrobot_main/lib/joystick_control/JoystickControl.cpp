@@ -1,9 +1,7 @@
 #include "JoystickControl.h"
 
-JoystickControl::JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop, MovePlayer &movePlayer)
-    : Debug(Debug), joystick(joystick), legL(legL), legR(legR), armL(armL), armR(armR), choreoPlayer(choreoPlayer), menu(menu), eStop(eStop), movePlayer(movePlayer) {}
-
-
+JoystickControl::JoystickControl(RemoteDebug &Debug, Joystick &joystick, Leg &legL, Leg &legR, Arm &armL, Arm &armR, ChoreoPlayer &choreoPlayer, Menu &menu, EStop &eStop, MovePlayer &movePlayer, Sequencer &sequencer, BottangoSocket &bottangoSocket)
+    : Debug(Debug), joystick(joystick), legL(legL), legR(legR), armL(armL), armR(armR), choreoPlayer(choreoPlayer), menu(menu), eStop(eStop), movePlayer(movePlayer), sequencer(sequencer), bottangoSocket(bottangoSocket) {}
 
 void JoystickControl::update()
 {
@@ -23,7 +21,6 @@ void JoystickControl::update()
     joystickConnected = false;
     return;
   }
-
 
   deltaT = millis() - prevUpdateTime;
 
@@ -103,6 +100,8 @@ void JoystickControl::submodeStop()
     armL.stop();
     choreoPlayer.stop();
     movePlayer.stop();
+    sequencer.stop();
+    bottangoSocket.stop();
   }
 }
 
@@ -236,23 +235,23 @@ void JoystickControl::defaultSubmodes()
 void JoystickControl::submodeCurrentRumble()
 {
   static long unsigned int lastRumble = 0;
-  if (millis()-lastRumble > 50)
+  if (millis() - lastRumble > 50)
   {
     lastRumble = millis();
-    int legCurrentThreshold = 4;
-    if(joystick.getButtonR1() || joystick.getR2() > 0)//benen
+    int legCurrentThreshold = 5;
+    if (joystick.getButtonR1() || joystick.getR2() > 0) // benen
     {
-      if(abs(legL.getTorque()) >= legCurrentThreshold || abs(legR.getTorque()) >= legCurrentThreshold)
+      if (abs(legL.getTorque()) >= legCurrentThreshold || abs(legR.getTorque()) >= legCurrentThreshold)
       {
-        joystick.setRumble(255,150);
+        joystick.setRumble(255, 150);
       }
     }
     int armCurrentThreshold = 4;
-    if(joystick.getButtonL1() || joystick.getL2() > 0)//armen
+    if (joystick.getButtonL1() || joystick.getL2() > 0) // armen
     {
-      if(abs(armL.getTorque()) >= legCurrentThreshold || abs(armR.getTorque()) >= legCurrentThreshold)
+      if (abs(armL.getTorque()) >= armCurrentThreshold || abs(armR.getTorque()) >= armCurrentThreshold)
       {
-        joystick.setRumble(255,150);
+        joystick.setRumble(255, 150);
       }
     }
   }
@@ -292,6 +291,8 @@ void JoystickControl::submodeStopChoreo()
   {
     choreoPlayer.stop();
     movePlayer.stop();
+    sequencer.stop();
+    bottangoSocket.stop();
   }
 }
 
@@ -631,7 +632,6 @@ void JoystickControl::setLedValues()
   {
     ledG = 255;
   }
-
 
   joystick.setColorLED(ledR, ledG, ledB);
 }
