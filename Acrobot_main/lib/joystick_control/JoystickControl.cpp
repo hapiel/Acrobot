@@ -186,7 +186,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (armNeutral < 430)
       {
         armNeutral += 90;
-        joystick.setRumble(64, 20);
+        joystick.setRumble(64, 10);
       }
     }
     if (joystick.getAxisLYCorrected() < -10)
@@ -194,7 +194,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (armNeutral > -90)
       {
         armNeutral -= 90;
-        joystick.setRumble(64, 20);
+        joystick.setRumble(64, 10);
       }
     }
   }
@@ -205,7 +205,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (legNeutral < 200)
       {
         legNeutral += 90;
-        joystick.setRumble(64, 20);
+        joystick.setRumble(64, 10);
       }
     }
     if (joystick.getAxisRYCorrected() < -10)
@@ -213,7 +213,7 @@ void JoystickControl::submodeArmNeutralJoystick()
       if (legNeutral > 160)
       {
         legNeutral -= 90;
-        joystick.setRumble(64, 20);
+        joystick.setRumble(64, 10);
       }
     }
   }

@@ -294,18 +294,18 @@ int Joystick::getBatteryPercentage()
 void Joystick::setRumble(int force, int duration)
 {
   // currently not implemented on joystick esp
-  Serial2.printf("set_rumble=%d,%d\n", force, duration);
+  Serial2.printf("r=%d,%d\n", force, duration);
 }
 
 void Joystick::setColorLED(int red, int green, int blue)
 {
-  Serial2.printf("set_joystick_color_led=%d,%d,%d\n", red, green, blue);
+  Serial2.printf("jC=%d,%d,%d\n", red, green, blue);
 }
 
 void Joystick::setPlayerLEDs(int ledMask)
 {
   // 0 is off, 1 - 4 sets leds.
-  Serial2.printf("set_joystick_player_leds=%d\n", ledMask);
+  Serial2.printf("jP=%d\n", ledMask);
 }
 
 void Joystick::update()

@@ -76,11 +76,11 @@ void DebugLed::update()
     colorsChanged = false;
     if (flickerOn)
     {
-      Serial2.printf("set_debug_led=%u,%u,%u\n", (int)((float)red * brightnessMultiplier), (int)((float)green * brightnessMultiplier), (int)((float)blue * brightnessMultiplier));
+      Serial2.printf("dL=%u,%u,%u\n", (int)((float)red * brightnessMultiplier), (int)((float)green * brightnessMultiplier), (int)((float)blue * brightnessMultiplier));
     }
     else
     {
-      Serial2.printf("set_debug_led=%u,%u,%u\n", red, green, blue);
+      Serial2.printf("dL=%u,%u,%u\n", red, green, blue);
     }
   }
 }

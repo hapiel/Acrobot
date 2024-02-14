@@ -143,7 +143,7 @@ void loop() {
     String command = Serial2.readStringUntil('\n');
     Serial.println(command);
 
-    if (command.startsWith("set_debug_led")) {
+    if (command.startsWith("dL")) {
       int red = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
       int green = command.substring(command.indexOf(',') + 1, command.lastIndexOf(',')).toInt();
       int blue = command.substring(command.lastIndexOf(',') + 1).toInt();
@@ -154,19 +154,19 @@ void loop() {
       GamepadPtr myGamepad = myGamepads[i];
 
       if (myGamepad && myGamepad->isConnected()) {
-        if (command.startsWith("set_joystick_color_led")) {
+        if (command.startsWith("jC")) {
           int red = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
           int green = command.substring(command.indexOf(',') + 1, command.lastIndexOf(',')).toInt();
           int blue = command.substring(command.lastIndexOf(',') + 1).toInt();
           setColorLED(myGamepad, red, green, blue);
-        } else if (command.startsWith("set_joystick_player_leds")) {
+        } else if (command.startsWith("jP")) {
           int ledValue = command.substring(command.indexOf('=') + 1).toInt();
           setPlayerLEDs(myGamepad, ledValue);
-        } else if (command.startsWith("set_rumble")) {
+        } else if (command.startsWith("r")) {
           rumbleForce = command.substring(command.indexOf('=') + 1, command.indexOf(',')).toInt();
           rumbleDuration = command.substring(command.lastIndexOf('=') + 1).toInt();
           setRumble(myGamepad, rumbleForce, rumbleDuration);
-          Serial.printf("rumbleForce: %d, rumbleDuration: %d\n", rumbleForce, rumbleDuration);
+          // Serial.printf("rumbleForce: %d, rumbleDuration: %d\n", rumbleForce, rumbleDuration);
         }
       }
     }
@@ -207,7 +207,7 @@ void loop() {
   // Detailed info here:
   // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
-  delay(1);
+  vTaskDelay(1);
 }
 
 void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {
@@ -216,7 +216,6 @@ void setColorLED(GamepadPtr gamepad, int red, int green, int blue) {
 
 void setPlayerLEDs(GamepadPtr gamepad, int ledValue) {
   gamepad->setPlayerLEDs(ledValue & 0x0F);
-  Serial.println(ledValue);
 }
 
 void setRumble(GamepadPtr gamepad, unsigned int force, unsigned int duration) {
