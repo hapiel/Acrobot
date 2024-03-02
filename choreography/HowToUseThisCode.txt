@@ -1,0 +1,23 @@
+!!!!!!!
+
+In order to use this generated code, you will need to do two things:
+
+1) In the Bottango Arduino folder, you will find the file “BottangoArduinoConfig.h.” You will need to uncomment the line in that file that has the definition “USE_COMMAND_STREAM.” This tells the code to read commands from the generated code, instead of from your computer over USB.
+
+To uncomment a line, simply remove the “//“ characters from the beginning of that line.
+
+2) Drag the two generated files (“GeneratedCommandStreams.cpp” and “GeneratedCommandStreams.h”) into the Bottango Arduino folder.
+
+Once you have done these two things, re-upload the BottangoArduino.ino file to your Arduino. To go back to live mode, reverse these two steps and then upload to your Arduino again.
+
+!!!!!
+
+—————
+
+If you have multiple drivers in your project, and exported them, you will have a folder for each driver, and a .cpp and .h file in each folder.  Repeat these steps for each driver, using the generated code for each driver.
+
+__________
+
+When you exported the code, you set some playback settings (such as which animation to play on start, whether or not to loop, etc). You can also implement your own playback logic by modifying the function “updatePlayStatus()” in GeneratedCommandStreams.cpp.
+
+That function is called once per update loop. There’s examples in the comments on how to get what animation is currently playing, if it is complete, how to start a new animation, etc.

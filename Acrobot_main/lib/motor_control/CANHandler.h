@@ -17,7 +17,7 @@ public:
 private:
     static const uint32_t DESIRED_BIT_RATE = 1000UL * 1000UL;
     uint32_t lastRecievedTime[4] = {0,0,0,0};
-    int recieveTimeout = 200; // ms
+    int recieveTimeout = 400; // ms // was 200
 };
 
 #endif // CAN_HANDLER_H

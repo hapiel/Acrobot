@@ -9,6 +9,7 @@
 #include "FloatBezierCurve.h"
 #include "SD.h"
 #include <CSV_Parser.h>
+#include "ChoreoPlayer.h"
 
 enum MovePlayerState
 {
@@ -20,7 +21,7 @@ enum MovePlayerState
 class MovePlayer
 {
 public:
-  MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp);
+  MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp, ChoreoPlayer &choreoPlayer);
   void update();
   void stop();
   void startMove(const char *csvDir, bool beginPosOnly = false, bool repeat = false, float moveKp = 20.0, float moveKi = 2.0, float _startMoveSpeed = 45);
@@ -29,6 +30,7 @@ private:
   RemoteDebug &Debug;
   File &file;
   CSV_Parser &cp;
+  ChoreoPlayer &choreoPlayer;
 
   static const uint8_t NUM_CURVES = 4;
 

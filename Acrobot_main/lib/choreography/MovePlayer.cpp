@@ -1,7 +1,7 @@
 #include "MovePlayer.h"
 
-MovePlayer::MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp)
-    : Debug(Debug), file(file), cp(cp)
+MovePlayer::MovePlayer(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, File &file, CSV_Parser &cp, ChoreoPlayer &choreoPlayer)
+    : Debug(Debug), file(file), cp(cp), choreoPlayer(choreoPlayer)
 {
   limbs[0] = &armL;
   limbs[1] = &armR;
@@ -105,6 +105,8 @@ void MovePlayer::startMove(const char *csvDir, bool beginPosOnly, bool repeat, f
 {
   // disable previous curves
   resetAllCurves();
+  // disable old choreo player
+  choreoPlayer.stop();
 
   nextCurveIndex = NO_INDEX;
   repeatMove = repeat;

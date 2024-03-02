@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+from datetime import datetime
 
 # Get the current working directory
 script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -68,7 +69,7 @@ for animation in data[0]["Animations"]:
                 duration = start_time + length
         
         # Write animation name 
-        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name, "Duration:", duration, "", "", "",""]
+        name_row = ["Animation Name:", animation_name, "Controller name:", controller_name, "Duration:", duration, "Created at", datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "",""]
         csvwriter.writerow(name_row)
         
         # get start positions for each motor, 999.0 is default.

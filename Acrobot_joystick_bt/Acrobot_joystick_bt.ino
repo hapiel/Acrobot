@@ -6,11 +6,13 @@ It needs to be compiled out of the Arduino IDE because this is compatible with B
 This secondary ESP32 is used so that it can use bluetooth, whilst the main esp can run wifi at the same time.
 Code mostly consists of Bluepad32 example code.
 The main ESP32 can send the following commands to trigger the joystick:
-set_color_led=255,0,0
-set_player_leds=4
+jC=255,0,0
+jP=4
+Or the debug led:
+dL
 
 Rumble does not seem to work correctly at the moment, could be fixed later. Command for this:
-set_rumble=255,100
+r=255,100
 
 We're controlling this project with a PS5 controller
 */
@@ -18,14 +20,11 @@ We're controlling this project with a PS5 controller
 #include <Bluepad32.h>
 #include "uni_virtual_device.h"
 
-
-
 #define DEBUG_LED_RED 25
 #define DEBUG_LED_GREEN 32
 #define DEBUG_LED_BLUE 33
 
 #define ESTOP_SET_PIN 5
-
 
 GamepadPtr myGamepads[BP32_MAX_GAMEPADS];
 
