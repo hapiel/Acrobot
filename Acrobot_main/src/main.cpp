@@ -159,6 +159,7 @@ bool wifiConnected = false;
 
 extern MenuItem *bootPage[];
 extern MenuItem *kelderfestPage[];
+extern MenuItem *agtPage[];
 extern MenuItem *movesPage[];
 extern MenuItem *sequencerPage[];
 extern MenuItem *bottangoPage[];
@@ -182,6 +183,7 @@ extern MenuItem *aboutPage[];
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
+    ITEM_SUBMENU("AGT", agtPage),
     ITEM_SUBMENU("Kelderfest", kelderfestPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
@@ -231,6 +233,19 @@ SUB_MENU(kelderfestPage, mainMenu,
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/act_jamileh.csv", false, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+
+SUB_MENU(agtPage, mainMenu,
+         ITEM_COMMAND("stand", []()
+                       {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/pose_stand.csv"); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+        //act_moveyourfeet.csv
+        ITEM_COMMAND("act move feet", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 
@@ -677,9 +692,7 @@ SUB_MENU(controlPage, mainMenu,
          ITEM_COMMAND("Summative", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
          ITEM_COMMAND("Telepresence Arm", []()
-                      { joystickControl.setMode(MODE_TELEPRESENCE); }),
-         ITEM_COMMAND("Pose", []()
-                      { joystickControl.setMode(MODE_POSE); }));
+                      { joystickControl.setMode(MODE_TELEPRESENCE); }));
 
 SUB_MENU(sequencePage, mainMenu,
          ITEM_COMMAND("awakening", []()

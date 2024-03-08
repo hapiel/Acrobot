@@ -29,47 +29,15 @@ void JoystickControl::update()
   switch (controlMode)
   {
   case MODE_NONE:
-
     break;
-  // case MODE_ABSOLUTE_90_LIMITED:
-  //   modeAbsolute(90, speedAbsoluteMode);
-  //   break;
-  // case MODE_ABSOLUTE_90_UNLIMITED:
-  //   modeAbsolute(90, speedUnlimitedMode);
-  //   break;
-  // case MODE_ABSOLUTE_140_LIMITED:
-  //   modeAbsolute(140, speedAbsoluteMode);
-  //   break;
-  // case MODE_ABSOLUTE_20_LIMITED:
-  //   modeAbsolute(20, speedAbsoluteMode);
-  //   break;
-  // case MODE_LEGS_RELATIVE:
-  //   modeLegsRelative();
-  //   break;
   case MODE_SUMMATIVE_90:
     modeSummative(variableAngle[variableSetting], speedSummativeMode);
     break;
-  // case MODE_SUMMATIVE_90_FAST:
-  //   modeSummative(95, speedSummativeFastMode);
-  //   break;
-  // case MODE_SUMMATIVE_140:
-  //   modeSummative(140, speedSummativeMode);
-  //   break;
-  case MODE_POSE:
-    defaultOn = false;
-    submodeStop();
-    submodeMenuOption();
-    modePose();
-    break;
+
   case MODE_TELEPRESENCE:
     modeTelepresence();
     break;
-  // case MODE_SYNCH_140:
-  //   modeSynch(140, speedSummativeMode);
-  //   break;
-  // case MODE_SYNCH_90:
-  //   modeSynch(95, speedSummativeMode);
-  //   break;
+
   default:
     break;
   }
@@ -150,32 +118,6 @@ void JoystickControl::submodeMenuOption()
   }
 }
 
-// void JoystickControl::submodeArmNeutralDpad()
-// {
-
-//   if (joystick.getButtonL1() || joystick.getL2() > 0)
-//   {
-//     if (joystick.getDpadUpPressed())
-//     {
-//       armNeutral = 0;
-//     }
-
-//     if (joystick.getDpadRightPressed())
-//     {
-//       armNeutral = 90;
-//     }
-
-//     if (joystick.getDpadDownPressed())
-//     {
-//       armNeutral = 180;
-//     }
-
-//     if (joystick.getDpadLeftPressed())
-//     {
-//       armNeutral = 270;
-//     }
-//   }
-// }
 
 void JoystickControl::submodeArmNeutralJoystick()
 {
@@ -226,10 +168,27 @@ void JoystickControl::defaultSubmodes()
   submodeMenu();
   submodeArmNeutralJoystick();
   submodeStopChoreo();
-  // submodeTestPositions();
   submodeToggleSynch();
   submodeChangeVariableAngle();
   submodeCurrentRumble();
+  submodePoseButtons();
+}
+
+void JoystickControl::submodePoseButtons(){
+  if (joystick.getButtonTrianglePressed())
+  {
+    movePlayer.startMove("/pose_handstand.csv");
+  }
+  if (joystick.getButtonCirclePressed())
+  {
+    movePlayer.startMove("/pose_stand.csv");
+  }
+
+  if (joystick.getButtonSquarePressed())
+  {
+    movePlayer.startMove("/pose_sit.csv");
+  }
+
 }
 
 void JoystickControl::submodeCurrentRumble()
@@ -254,33 +213,6 @@ void JoystickControl::submodeCurrentRumble()
         joystick.setRumble(255, 150);
       }
     }
-  }
-}
-
-void JoystickControl::submodeTestPositions()
-{
-  if (joystick.getButtonTriangle())
-  {
-    armLTarget = 180;
-    armRTarget = 180;
-    armL.setTarget(armLTarget, menu.getP(), menu.getD());
-    armR.setTarget(armRTarget, menu.getP(), menu.getD());
-  }
-
-  if (joystick.getButtonCircle())
-  {
-    armLTarget = 90;
-    armRTarget = 90;
-    armL.setTarget(armLTarget, menu.getP(), menu.getD());
-    armR.setTarget(armRTarget, menu.getP(), menu.getD());
-  }
-
-  if (joystick.getButtonSquare())
-  {
-    armLTarget = 199;
-    armRTarget = 199;
-    armL.setTarget(armLTarget, menu.getP(), menu.getD());
-    armR.setTarget(armRTarget, menu.getP(), menu.getD());
   }
 }
 
@@ -485,76 +417,7 @@ void JoystickControl::modeSynch(int rotDegrees, float speed)
   }
 }
 
-void JoystickControl::modePose()
-{
-  static int poseLTarget = 180;
-  static int poseRTarget = 180;
 
-  float speedL = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
-  float speedR = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
-
-  // stand
-  if (joystick.getButtonSquarePressed())
-  {
-    poseLTarget = 187;
-    poseRTarget = 187;
-  }
-
-  // 180
-  if (joystick.getButtonTrianglePressed())
-  {
-    poseLTarget = 180;
-    poseRTarget = 180;
-  }
-
-  // sit
-  if (joystick.getButtonCirclePressed())
-  {
-    poseLTarget = 90;
-    poseRTarget = 90;
-  }
-
-  // stepR
-  if (joystick.getDpadRightPressed())
-  {
-    poseRTarget = 90;
-    poseLTarget = 270;
-  }
-
-  // stepL
-  if (joystick.getDpadLeftPressed())
-  {
-    poseRTarget = 270;
-    poseLTarget = 90;
-  }
-
-  // kickR
-  if (joystick.getDpadUpPressed())
-  {
-    poseRTarget = 90;
-    poseLTarget = 190;
-  }
-
-  // kickL
-  if (joystick.getDpadDownPressed())
-  {
-    poseRTarget = 190;
-    poseLTarget = 90;
-  }
-
-  if (joystick.getL2() > 0)
-  {
-    legLTarget = adjustByDisplacement(legL.getTarget(), poseLTarget, speedL * deltaT);
-  }
-
-  if (joystick.getR2() > 0)
-  {
-    legRTarget = adjustByDisplacement(legR.getTarget(), poseRTarget, speedR * deltaT);
-  }
-
-  legL.setTarget(legLTarget, menu.getP(), menu.getD());
-  legR.setTarget(legRTarget, menu.getP(), menu.getD());
-}
 
 void JoystickControl::modeTelepresence()
 {

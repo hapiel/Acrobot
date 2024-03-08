@@ -25,7 +25,6 @@ enum JoystickControlMode
   MODE_SUMMATIVE_90,
   MODE_SUMMATIVE_90_FAST,
   MODE_SUMMATIVE_140,
-  MODE_POSE,
   MODE_SYNCH_90,
   MODE_SYNCH_140,
   MODE_TELEPRESENCE
@@ -98,17 +97,16 @@ private:
   void submodeMenuOption();
   void submodeArmNeutralDpad();
   void submodeArmNeutralJoystick();
-  void submodeTestPositions();
   void submodeToggleSynch();
   void submodeChangeVariableAngle();
   void submodeCurrentRumble();
+  void submodePoseButtons();
 
   void defaultSubmodes();
 
   void modeAbsolute(int rotDegrees, float speed);
   void modeLegsRelative();
   void modeSummative(int rotDegrees, float speed);
-  void modePose();
   void modeTelepresence();
   void modeSynch(int rotDegrees, float speed);
 
