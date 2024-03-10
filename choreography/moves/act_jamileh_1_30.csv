@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_jamileh_1_30,Controller name:,acrobot_act,Duration:,240633,Created at,09/03/2024 15:21:39,,
+Animation Name:,act_jamileh_1_30,Controller name:,acrobot_act,Duration:,240633,Created at,10/03/2024 00:09:38,,
 Start positions,ArmL ArmR legL legR,185.09765625,176.484375,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,9033,185.01708984375,2258,0.0,185.01708984375,-2258,0.0
 sC,m_arm_r,0,33,176.484375,8,0.0,176.484375,-8,0.0
