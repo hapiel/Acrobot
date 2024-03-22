@@ -170,8 +170,9 @@ void JoystickControl::defaultSubmodes()
   submodeStopChoreo();
   submodeToggleSynch();
   submodeChangeVariableAngle();
-  submodeCurrentRumble();
-  submodePoseButtons();
+  // submodeCurrentRumble();
+  // submodePoseButtons();
+  submodeAGTButtons();
 }
 
 void JoystickControl::submodePoseButtons(){
@@ -186,7 +187,29 @@ void JoystickControl::submodePoseButtons(){
 
   if (joystick.getButtonSquarePressed())
   {
-    movePlayer.startMove("/pose_sit.csv");
+    movePlayer.startMove("/pose_sit.csv", false, false, 20, 2, 60);
+  }
+
+}
+
+void JoystickControl::submodeAGTButtons(){
+  if (joystick.getButtonTrianglePressed())
+  {
+    movePlayer.startMove("/greetings_wave.csv", false, false, 20, 2, 75);
+  }
+  if (joystick.getButtonCirclePressed())
+  {
+    movePlayer.startMove("/walk_normal.csv", false, true);
+  }
+
+  if (joystick.getButtonSquarePressed())
+  {
+    movePlayer.startMove("/pose_sit.csv", false, false, 20, 2, 60);
+  }
+
+  if (joystick.getButtonCrossPressed())
+  {
+    movePlayer.startMove("/pose_stand.csv");
   }
 
 }
@@ -219,7 +242,7 @@ void JoystickControl::submodeCurrentRumble()
 void JoystickControl::submodeStopChoreo()
 {
   const int STOP_TRESHOLD = 0;
-  if (joystick.getButtonCross() || joystick.getButtonL1() || joystick.getL2() > STOP_TRESHOLD || joystick.getButtonR1() || joystick.getR2() > STOP_TRESHOLD)
+  if ( joystick.getButtonL1() || joystick.getL2() > STOP_TRESHOLD || joystick.getButtonR1() || joystick.getR2() > STOP_TRESHOLD) // add joystick.getButtonCross() || , only removed temp!
   {
     choreoPlayer.stop();
     movePlayer.stop();

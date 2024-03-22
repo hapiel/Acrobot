@@ -130,8 +130,8 @@ HallSensor hallSensor(Wire, Debug);
 DebugLed debugLed;
 Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75, true); // offset values
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
-Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true);
-Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false);
+Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true, 11100);
+Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false, 10750);
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -184,7 +184,7 @@ extern MenuItem *aboutPage[];
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
     ITEM_SUBMENU("AGT", agtPage),
-    ITEM_SUBMENU("Kelderfest", kelderfestPage),
+    ITEM_SUBMENU("Zwolle", kelderfestPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
     ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -204,24 +204,10 @@ SUB_MENU(kelderfestPage, mainMenu,
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
         ITEM_COMMAND("awakening", []()
                       { choreoPlayer.start(CHOREO_AWAKENING); }),
-                      // act_explanation_01_wave.csv
-                      // act_explanation_02_schrik.csv
-                      // act_explanation_03_schouders.csv
-
-        ITEM_COMMAND("explain 01 wave", []()
+        ITEM_COMMAND("wave en zit", []()
                   {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_explanation_01_wave.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        ITEM_COMMAND("explain 02 schrik", []()
-                  {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_explanation_02_schrik.csv", false, false, 20, 2, 90); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        ITEM_COMMAND("explain 03 schouder", []()
-                  {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_explanation_03_schouders.csv", false, false, 50); };
+        { movePlayer.startMove("/act_explanation_04_wave_schouders.csv", false, false, 40); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
         ITEM_COMMAND("stand", []()
                       {
@@ -229,10 +215,10 @@ SUB_MENU(kelderfestPage, mainMenu,
         { movePlayer.startMove("/pose_stand.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
         // act_jamileh.csv
-        ITEM_COMMAND("act jamileh", []()
+        ITEM_COMMAND("act AGT", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_jamileh.csv", false, false, 50); };
+        { movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(agtPage, mainMenu,

@@ -101,6 +101,7 @@ private:
   void submodeChangeVariableAngle();
   void submodeCurrentRumble();
   void submodePoseButtons();
+  void submodeAGTButtons();
 
   void defaultSubmodes();
 
