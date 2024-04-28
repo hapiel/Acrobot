@@ -33,6 +33,9 @@ void JoystickControl::update()
   case MODE_SUMMATIVE_90:
     modeSummative(variableAngle[variableSetting], speedSummativeMode);
     break;
+  case MODE_MANNEQUIN:
+    modeMannequin();
+    break;
 
   case MODE_TELEPRESENCE:
     modeTelepresence();
@@ -171,8 +174,8 @@ void JoystickControl::defaultSubmodes()
   submodeToggleSynch();
   submodeChangeVariableAngle();
   // submodeCurrentRumble();
-  // submodePoseButtons();
-  submodeAGTButtons();
+  submodePoseButtons();
+  // submodeAGTButtons();
 }
 
 void JoystickControl::submodePoseButtons(){
@@ -242,7 +245,7 @@ void JoystickControl::submodeCurrentRumble()
 void JoystickControl::submodeStopChoreo()
 {
   const int STOP_TRESHOLD = 0;
-  if ( joystick.getButtonL1() || joystick.getL2() > STOP_TRESHOLD || joystick.getButtonR1() || joystick.getR2() > STOP_TRESHOLD) // add joystick.getButtonCross() || , only removed temp!
+  if (joystick.getButtonCross() ||  joystick.getButtonL1() || joystick.getL2() > STOP_TRESHOLD || joystick.getButtonR1() || joystick.getR2() > STOP_TRESHOLD) 
   {
     choreoPlayer.stop();
     movePlayer.stop();
@@ -463,6 +466,31 @@ void JoystickControl::modeTelepresence()
 
   armL.setTorqueUnprotected(torqueL);
   armR.setTorqueUnprotected(torqueR);
+}
+
+void JoystickControl::modeMannequin(){
+  float torqArmL = abs(armL.getTorque());
+  float torqArmR = abs(armR.getTorque());
+  float torqLegL = abs(legL.getTorque());
+  float torqLegR = abs(legR.getTorque());
+
+  if (torqArmL > 2){
+    float diff = armL.getPosition() - armL.getTarget() ;
+    armL.setTarget(armL.getTarget() + diff * 0.1, menu.getP(), menu.getD());
+  }
+  if (torqArmR > 2){
+    float diff = armR.getPosition() - armR.getTarget() ;
+    armR.setTarget(armR.getTarget() + diff * 0.1, menu.getP(), menu.getD());
+  }
+
+  if (torqLegL > 3){
+    float diff = legL.getPosition() - legL.getTarget() ;
+    legL.setTarget(legL.getTarget() + diff * 0.1, menu.getP(), menu.getD());
+  }
+  if (torqLegR > 3){
+    float diff = legR.getPosition() - legR.getTarget() ;
+    legR.setTarget(legR.getTarget() + diff * 0.1, menu.getP(), menu.getD());
+  }
 }
 
 float JoystickControl::adjustByDisplacement(float currentVal, float target, float displacement)

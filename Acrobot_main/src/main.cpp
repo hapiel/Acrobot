@@ -158,6 +158,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *circusstadPage[];
 extern MenuItem *kelderfestPage[];
 extern MenuItem *agtPage[];
 extern MenuItem *movesPage[];
@@ -180,11 +181,14 @@ extern MenuItem *sequencePage[];
 extern MenuItem *hardwarePage[];
 extern MenuItem *adsPage[]; // in hardwarpage
 extern MenuItem *aboutPage[];
+extern MenuItem *moveQuickRepeatPage[];
+extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
+    ITEM_SUBMENU("Circusstad", circusstadPage),
+    ITEM_SUBMENU("Antwerpen", kelderfestPage),
     ITEM_SUBMENU("AGT", agtPage),
-    ITEM_SUBMENU("Zwolle", kelderfestPage),
     ITEM_SUBMENU("Moves", movesPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
     ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -196,44 +200,77 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
+
+SUB_MENU(circusstadPage, mainMenu,
+         ITEM_COMMAND("sit", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/circusstad_spiegel_acroyoga.csv", true, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         // act_circusstad.csv
+         ITEM_COMMAND("spiegel-yoga", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/circusstad_spiegel_acroyoga.csv", false, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+        
+        ITEM_COMMAND("mannequin", []()
+                      { joystickControl.setMode(MODE_MANNEQUIN); }),
+
+        ITEM_COMMAND("microphone", []()
+                      { TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/circusstad_microphone.csv", false, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+        ITEM_COMMAND("mannequin 2", []()
+                      { joystickControl.setMode(MODE_MANNEQUIN); }),
+        
+        ITEM_COMMAND("stand", []()
+                      {
+                      TaskFunction lambdaFunction = []() 
+        { movePlayer.startMove("/circusstad_spiegel_acro.csv", true, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+        ITEM_COMMAND("lets dance", []()
+                      {
+                      TaskFunction lambdaFunction = []() 
+        { movePlayer.startMove("/circusstad_spiegel_acro.csv", false, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+        ITEM_COMMAND("I feel empty", []()
+                      {
+                      TaskFunction lambdaFunction = []() 
+        { movePlayer.startMove("/circusstad_ending_alive.csv", false, false, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); })
+
+        
+        );
+
 SUB_MENU(kelderfestPage, mainMenu,
          ITEM_COMMAND("stand", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/pose_stand.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        ITEM_COMMAND("awakening", []()
-                      { choreoPlayer.start(CHOREO_AWAKENING); }),
-        ITEM_COMMAND("wave en zit", []()
-                  {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_explanation_04_wave_schouders.csv", false, false, 40); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        ITEM_COMMAND("stand", []()
+         // act_jamileh.csv
+         ITEM_COMMAND("act Jamileh", []()
                       {
         TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/pose_stand.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        // act_jamileh.csv
-        ITEM_COMMAND("act AGT", []()
-                      {
-        TaskFunction lambdaFunction = []()
-        { movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50); };
+        { movePlayer.startMove("/act_jamileh.csv", false, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(agtPage, mainMenu,
          ITEM_COMMAND("stand", []()
-                       {
+                      {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/pose_stand.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-        //act_moveyourfeet.csv
-        ITEM_COMMAND("act move feet", []()
+         // act_moveyourfeet.csv
+         ITEM_COMMAND("act move feet", []()
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
-
 
 SUB_MENU(sequencerPage, mainMenu,
          ITEM_COMMAND("walk_test", []()
@@ -250,6 +287,8 @@ SUB_MENU(movesPage, mainMenu,
          ITEM_SUBMENU("Greeting", moveGreetingPage),
          ITEM_SUBMENU("Quick P20 nums", moveQuickPage),
          ITEM_SUBMENU("Quick P50 nums", moveQuick50Page),
+         ITEM_SUBMENU("Quick P20 rep", moveQuickRepeatPage),
+         ITEM_SUBMENU("Quick P50 rep", moveQuick50RepeatPage),
          ITEM_SUBMENU("Quick POW", moveQuickPowPage),
          ITEM_SUBMENU("MovePlayer TESTS", moveTestPage));
 
@@ -284,8 +323,6 @@ SUB_MENU(moveGreetingPage, movesPage,
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/greeting_shake_hand.csv"); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
-
-
 
 SUB_MENU(moveWarmupPage, movesPage,
          ITEM_COMMAND("arm_swing", []()
@@ -406,7 +443,67 @@ SUB_MENU(moveQuick50Page, movesPage,
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/quick_10.csv", false, false, 50); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 11", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_11.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 12", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_12.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 13", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_13.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 14", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_14.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 15", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_15.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 16", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_16.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 17", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_17.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 18", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_18.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 19", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_19.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 20", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_20.csv", false, false, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
 
 SUB_MENU(moveQuickPage, movesPage,
          ITEM_COMMAND("quick_01", []()
@@ -461,7 +558,322 @@ SUB_MENU(moveQuickPage, movesPage,
                       {
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/quick_10.csv"); };
-        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+        
+        ITEM_COMMAND("quick_11", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_11.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_12", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_12.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_13", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_13.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_14", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_14.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_15", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_15.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_16", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_16.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_17", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_17.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_18", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_18.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_19", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_19.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_20", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_20.csv"); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  })
+
+        
+        );
+
+SUB_MENU(moveQuick50RepeatPage, movesPage,
+         ITEM_COMMAND("quick P50 01", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_01.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 02", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_02.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 03", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_03.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 04", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_04.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 05", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_05.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 06", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_06.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick P50 07", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_07.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 08", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_08.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 09", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_09.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 10", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_10.csv", false, true, 50); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 11", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_11.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 12", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_12.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 13", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_13.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 14", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_14.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 15", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_15.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 16", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_16.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 17", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_17.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 18", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_18.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 19", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_19.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick P50 20", []()
+                      {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_20.csv", false, true, 50); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); })
+
+);
+
+SUB_MENU(moveQuickRepeatPage, movesPage,
+         ITEM_COMMAND("quick_01", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_01.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_02", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_02.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_03", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_03.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_04", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_04.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_05", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_05.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_06", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_06.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+         ITEM_COMMAND("quick_07", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_07.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_08", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_08.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_09", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_09.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+
+         ITEM_COMMAND("quick_10", []()
+                      {
+        TaskFunction lambdaFunction = []()
+        { movePlayer.startMove("/quick_10.csv", false, true); };
+        xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
+        
+        ITEM_COMMAND("quick_11", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_11.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_12", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_12.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_13", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_13.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_14", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_14.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_15", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_15.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_16", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_16.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_17", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_17.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_18", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_18.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_19", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_19.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }),
+
+ITEM_COMMAND("quick_20", []()
+              {
+    TaskFunction lambdaFunction = []()
+    { movePlayer.startMove("/quick_20.csv", false, true); };
+    xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+  }));
 
 SUB_MENU(moveQuickPowPage, movesPage,
          ITEM_COMMAND("quick P 10", []()
@@ -469,38 +881,38 @@ SUB_MENU(moveQuickPowPage, movesPage,
         TaskFunction lambdaFunction = []()
         { movePlayer.startMove("/quick_pow.csv", false, false, 10 ); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 20", []()
-                        {
+         ITEM_COMMAND("quick P 20", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 20 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 40", []()
-                        {
+         ITEM_COMMAND("quick P 40", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 40 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 60", []()
-                        {
+         ITEM_COMMAND("quick P 60", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 60 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 80", []()
-                        {
+         ITEM_COMMAND("quick P 80", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 80 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 100", []()
-                        {
+         ITEM_COMMAND("quick P 100", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 100 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 120", []()
-                        {
+         ITEM_COMMAND("quick P 120", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 120 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
-          ITEM_COMMAND("quick P 150", []()
-                        {
+         ITEM_COMMAND("quick P 150", []()
+                      {
           TaskFunction lambdaFunction = []()
           { movePlayer.startMove("/quick_pow.csv", false, false, 150 ); };
           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
@@ -677,6 +1089,8 @@ SUB_MENU(PIPage, mainMenu,
 SUB_MENU(controlPage, mainMenu,
          ITEM_COMMAND("Summative", []()
                       { joystickControl.setMode(MODE_SUMMATIVE_90); }),
+         ITEM_COMMAND("Manequin", []()
+                      { joystickControl.setMode(MODE_MANNEQUIN); }),
          ITEM_COMMAND("Telepresence Arm", []()
                       { joystickControl.setMode(MODE_TELEPRESENCE); }));
 
@@ -710,11 +1124,11 @@ SUB_MENU(hardwarePage, mainMenu,
          ITEM_COMMAND("Buzzer beep", []()
                       { menu.callbackBeep(); }), // lambda because non static
          ITEM_COMMAND("Rumble long", []()
-                      {joystick.setRumble(255,255);}),
+                      { joystick.setRumble(255, 255); }),
          ITEM_COMMAND("Rumble soft", []()
-                      {joystick.setRumble(5,255);}),
+                      { joystick.setRumble(5, 255); }),
          ITEM_COMMAND("Rumble short", []()
-                      {joystick.setRumble(255,5);}),
+                      { joystick.setRumble(255, 5); }),
          ITEM_SUBMENU("Show ADS", adsPage));
 
 SUB_MENU(adsPage, hardwarePage,
@@ -746,12 +1160,10 @@ SUB_MENU(aboutPage, mainMenu,
          ITEM_BASIC("PCBWay"),
          ITEM_BASIC("MakerBeam"));
 
-
 /* #endregion */
 
 // ---------
 // MENU SECTION END
-
 
 void initDebug()
 {
@@ -851,7 +1263,6 @@ void wifiConnection()
     }
   }
   wifiConnected = WiFi.status() == WL_CONNECTED;
-
 }
 
 void updates()
@@ -875,7 +1286,7 @@ void updates()
   statusChecker.update();
   choreoPlayer.update();
   sequencer.update();
-  bottangoSocket.update(); 
+  bottangoSocket.update();
   movePlayer.update();
 
   // webserver
@@ -883,8 +1294,6 @@ void updates()
   {
     server.handleClient();
   }
-
-
 }
 
 void updatesI2C()
