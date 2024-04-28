@@ -228,13 +228,13 @@ SUB_MENU(circusstadPage, mainMenu,
         ITEM_COMMAND("stand", []()
                       {
                       TaskFunction lambdaFunction = []() 
-        { movePlayer.startMove("/circusstad_spiegel_acro.csv", true, false, 50); };
+        { movePlayer.startMove("/circusstad_acro.csv", true, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
 
         ITEM_COMMAND("lets dance", []()
                       {
                       TaskFunction lambdaFunction = []() 
-        { movePlayer.startMove("/circusstad_spiegel_acro.csv", false, false, 50); };
+        { movePlayer.startMove("/circusstad_acro.csv", false, false, 50); };
         xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }),
 
         ITEM_COMMAND("I feel empty", []()

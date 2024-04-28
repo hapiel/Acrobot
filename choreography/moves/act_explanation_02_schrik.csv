@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_explanation_02_schrik,Controller name:,acrobot_act,Duration:,60567,Created at,28/04/2024 23:57:41,,
+Animation Name:,act_explanation_02_schrik,Controller name:,acrobot_act,Duration:,60567,Created at,29/04/2024 01:03:12,,
 Start positions,ArmL ArmR legL legR,147.919921875,147.919921875,203.5107421875,203.5107421875,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,4767,203.5107421875,1192,0.0,203.5107421875,-1192,0.0
 sC,m_arm_r,0,4767,147.919921875,1192,0.0,147.919921875,-1192,0.0

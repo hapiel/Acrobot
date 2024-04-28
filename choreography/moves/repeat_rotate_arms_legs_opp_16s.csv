@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,repeat_rotate_arms_legs_opp_16s,Controller name:,acrobot_act,Duration:,16000,Created at,28/04/2024 23:57:42,,
+Animation Name:,repeat_rotate_arms_legs_opp_16s,Controller name:,acrobot_act,Duration:,16000,Created at,29/04/2024 01:03:15,,
 Start positions,ArmL ArmR legL legR,540.0,540.0,30.0,30.0,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,8000,540.0,2000,0.0,-180.0,-2000,0.0
 sC,m_arm_r,0,8000,540.0,2000,0.0,-180.0,-2000,0.0

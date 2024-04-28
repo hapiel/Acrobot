@@ -77,6 +77,11 @@ void MovePlayer::update()
   
 }
 
+bool MovePlayer::isIdle()
+{
+  return state == IDLE;
+}
+
 void MovePlayer::moveFinished()
 {
   if (repeatMove)

@@ -25,6 +25,7 @@ public:
   void update();
   void stop();
   void startMove(const char *csvDir, bool beginPosOnly = false, bool repeat = false, float moveKp = 20.0, float moveKi = 2.0, float _startMoveSpeed = 45);
+  bool isIdle();
 
 private:
   RemoteDebug &Debug;

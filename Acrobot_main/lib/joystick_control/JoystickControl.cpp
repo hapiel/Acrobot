@@ -19,7 +19,7 @@ void JoystickControl::update()
   if (!justConnected)
   {
     joystickConnected = false;
-    return;
+    // return; // needs to be turned off for mannequin to work
   }
 
   deltaT = millis() - prevUpdateTime;
@@ -56,6 +56,10 @@ void JoystickControl::update()
 void JoystickControl::setMode(JoystickControlMode mode)
 {
   controlMode = mode;
+  choreoPlayer.stop();
+  movePlayer.stop();
+  sequencer.stop();
+  bottangoSocket.stop();
 }
 
 void JoystickControl::submodeStop()
@@ -469,6 +473,9 @@ void JoystickControl::modeTelepresence()
 }
 
 void JoystickControl::modeMannequin(){
+  if (!movePlayer.isIdle()){
+    return;
+  }
   float torqArmL = abs(armL.getTorque());
   float torqArmR = abs(armR.getTorque());
   float torqLegL = abs(legL.getTorque());
