@@ -25,6 +25,7 @@ The project should be built in platformio
 
 // external libraries
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include "Wire.h"
 #include "SPI.h"
 #include "SD.h"
@@ -1227,13 +1228,53 @@ void inits()
 
   debugI("Next init: Webserver");
   // webserver
+  server.enableCORS(true);
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);
   server.on("/edit", HTTP_PUT, handleCreate);
-  server.on(
-      "/edit", HTTP_POST, []()
-      { returnOK(); },
-      handleFileUpload);
+  server.on("/edit", HTTP_POST, []()
+            { returnOK(); }, handleFileUpload);
+  server.on("/test-command", HTTP_POST, []()
+            {
+    Serial.println("received test-command");
+    if (server.hasArg("plain")) {
+      String body = server.arg("plain");
+      Serial.println("body: " + body);
+
+      StaticJsonDocument<200> doc;
+      DeserializationError error = deserializeJson(doc, body);
+      if (error) {
+        Serial.print("JSON deserialization failed: ");
+        Serial.println(error.c_str());
+        server.send(400, "application/json", "{\"message\":\"Invalid JSON\"}");
+        return;
+      }
+
+      const char *command = doc["command"];
+      if (command) {
+        Serial.print("command: ");
+        Serial.println(command);
+      } else {
+        Serial.println("no command passed");
+      }
+    } else {
+      Serial.println("no command passed");
+    }
+
+    StaticJsonDocument<200> nestedDoc;
+    nestedDoc["nested"] = true;
+    nestedDoc["value"] = 42;
+    StaticJsonDocument<200> responseDoc;
+    responseDoc["status"] = "success";
+    responseDoc["additionalInfo"] = "Any additional data";
+    responseDoc["nested"] = nestedDoc;
+
+    // Serialize JSON to string
+    String responseBody;
+    serializeJson(responseDoc, responseBody);
+
+    // Send response
+    server.send(200, "application/json", responseBody); });
   server.onNotFound(handleNotFound);
 
   server.begin();
