@@ -2,7 +2,7 @@
 #define JOYSTICK_H
 
 #include <Arduino.h>
-#include <remoteDebug.h>
+#include <RemoteDebug.h>
 
 class Joystick
 {
