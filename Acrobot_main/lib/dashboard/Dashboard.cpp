@@ -56,7 +56,7 @@ const MotorStatus Dashboard::getLimbStatus(const Limb *limb) const
   return limb != nullptr ? limb->getStatus() : MotorStatus{0.0, 0.0, 0.0, 0, false, 1};
 }
 
-const StaticJsonDocument<200> Dashboard::getLimbStatusJson(const Limb *limb) const
+StaticJsonDocument<90> Dashboard::getLimbStatusJson(const Limb *limb) const
 {
   const MotorStatus status = getLimbStatus(limb);
   StaticJsonDocument<200> doc;
@@ -75,10 +75,9 @@ const RobotStatus Dashboard::getRobotStatus() const
   return RobotStatus{getLimbStatus(leftArm), getLimbStatus(rightArm), getLimbStatus(leftLeg), getLimbStatus(rightLeg)};
 }
 
-StaticJsonDocument<200> &Dashboard::getRobotStatusJson() const
+StaticJsonDocument<400> Dashboard::getRobotStatusJson() const
 {
-
-  StaticJsonDocument<200> doc;
+  StaticJsonDocument<400> doc;
   doc["leftArm"] = getLimbStatusJson(leftArm);
   doc["rightArm"] = getLimbStatusJson(rightArm);
   doc["leftLeg"] = getLimbStatusJson(leftLeg);

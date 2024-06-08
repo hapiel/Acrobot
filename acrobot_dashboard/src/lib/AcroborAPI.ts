@@ -1,7 +1,9 @@
 class AcrobotAPI {
   async isConnected() {
     try {
-      await fetch('http://acrobot.local/ping');
+      const signal = new AbortController();
+      setTimeout(() => signal.abort(), 1000);
+      await fetch('http://acrobot.local/ping', { signal: signal.signal });
       return true;
     } catch (e) {
       return false;
