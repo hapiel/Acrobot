@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { acrobot } from '@/lib/AcroborAPI';
 import { useState } from 'react';
 
 function App() {
   const [command, setCommand] = useState('');
   const [response, setResponse] = useState('');
+
+  acrobot.getStatus().then(setResponse);
 
   return (
     <main className="flex min-w-full flex-col items-center justify-center pt-12">
