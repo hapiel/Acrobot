@@ -1228,7 +1228,7 @@ void inits()
 
   server.on("/robot-status", HTTP_GET, []()
             {
-               StaticJsonDocument<200> doc = dashboard.getRobotStatusJson();
+              StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
               String responseBody;
               serializeJson(doc, responseBody);
               server.send(200, "application/json", responseBody); });
