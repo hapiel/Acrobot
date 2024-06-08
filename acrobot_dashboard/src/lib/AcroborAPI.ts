@@ -1,3 +1,18 @@
+export type LimbStatus = {
+  position: number;
+  velocity: number;
+  torque: number;
+  temperature: number;
+  isOnline: boolean;
+};
+
+export type GetStatusResponse = {
+  leftLeg: LimbStatus;
+  rightLeg: LimbStatus;
+  leftArm: LimbStatus;
+  rightArm: LimbStatus;
+};
+
 class AcrobotAPI {
   async isConnected() {
     try {
@@ -10,7 +25,7 @@ class AcrobotAPI {
     }
   }
 
-  async getStatus() {
+  async getStatus(): Promise<GetStatusResponse> {
     const response = await fetch('http://acrobot.local/robot-status');
     return await response.json();
   }
