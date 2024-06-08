@@ -53,5 +53,35 @@ const MotorStatus Dashboard::getRightLegStatus() const
 
 const MotorStatus Dashboard::getLimbStatus(const Limb *limb) const
 {
-  return limb != nullptr ? limb->getStatus() : MotorStatus{};
+  return limb != nullptr ? limb->getStatus() : MotorStatus{0.0, 0.0, 0.0, 0, false, 1};
+}
+
+const StaticJsonDocument<200> Dashboard::getLimbStatusJson(const Limb *limb) const
+{
+  const MotorStatus status = getLimbStatus(limb);
+  StaticJsonDocument<200> doc;
+  doc["position"] = status.position;
+  doc["velocity"] = status.velocity;
+  doc["torque"] = status.torque;
+  doc["temperature"] = status.temperature;
+  doc["isOnline"] = status.isOnline;
+  doc["errorCode"] = status.errorCode;
+
+  return doc;
+}
+
+const RobotStatus Dashboard::getRobotStatus() const
+{
+  return RobotStatus{getLimbStatus(leftArm), getLimbStatus(rightArm), getLimbStatus(leftLeg), getLimbStatus(rightLeg)};
+}
+
+StaticJsonDocument<200> &Dashboard::getRobotStatusJson() const
+{
+
+  StaticJsonDocument<200> doc;
+  doc["leftArm"] = getLimbStatusJson(leftArm);
+  doc["rightArm"] = getLimbStatusJson(rightArm);
+  doc["leftLeg"] = getLimbStatusJson(leftLeg);
+  doc["rightLeg"] = getLimbStatusJson(rightLeg);
+  return doc;
 }

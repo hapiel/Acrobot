@@ -186,8 +186,8 @@ const MotorStatus Motor::getStatus() const
   status.velocity = getVelocity();
   status.torque = getTorque();
   status.temperature = getTemperature();
-  status.errorCode = getErrorCode();
   status.isOnline = isOnline();
+  status.errorCode = getErrorCode();
 
   return status;
 }

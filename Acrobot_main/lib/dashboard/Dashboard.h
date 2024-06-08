@@ -4,6 +4,15 @@
 #include "BatterySensor.h"
 #include "Limb.h"
 #include "Motor.h"
+#include <ArduinoJson.h>
+
+struct RobotStatus
+{
+  MotorStatus leftArm;
+  MotorStatus rightArm;
+  MotorStatus leftLeg;
+  MotorStatus rightLeg;
+};
 
 class Dashboard
 {
@@ -19,6 +28,9 @@ public:
   const MotorStatus getLeftLegStatus() const;
   const MotorStatus getRightLegStatus() const;
 
+  const RobotStatus getRobotStatus() const;
+  StaticJsonDocument<200> &getRobotStatusJson() const;
+
 private:
   const Limb *leftArm = nullptr;
   const Limb *rightArm = nullptr;
@@ -27,6 +39,7 @@ private:
   const BatterySensor *batterySensor = nullptr;
 
   const MotorStatus getLimbStatus(const Limb *limb) const;
+  const StaticJsonDocument<200> getLimbStatusJson(const Limb *limb) const;
 };
 
 #endif // DASHBOARD_H

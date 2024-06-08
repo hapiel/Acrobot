@@ -55,6 +55,7 @@ The project should be built in platformio
 #include "HallSensor.h"
 #include "Leg.h"
 #include "Arm.h"
+#include "Dashboard.h"
 #include "StatusChecker.h"
 #include "menu.h"
 #include "ChoreoPlayer.h"
@@ -133,6 +134,7 @@ Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75, true); // offs
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
 Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true, 11100);
 Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false, 10750);
+Dashboard dashboard;
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
 Button buttonUp(BUTTON_UP, Debug);
@@ -1206,8 +1208,15 @@ void inits()
   debugI("Next init: Menu");
   menu.init(mainMenu);
 
-  debugI("Next init: Webserver");
+  debugI("Next init: Dashboard instance");
+  dashboard.setLeftArm(armL)
+      .setRightArm(armR)
+      .setLeftLeg(legL)
+      .setRightLeg(legR)
+      .setBatterySensor(batterySensor);
+
   // webserver
+  debugI("Next init: Webserver");
   server.enableCORS(true);
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);
@@ -1216,6 +1225,13 @@ void inits()
             { returnOK(); }, handleFileUpload);
   server.on("/ping", HTTP_GET, []()
             { returnOK(); });
+
+  server.on("/robot-status", HTTP_GET, []()
+            {
+               StaticJsonDocument<200> doc = dashboard.getRobotStatusJson();
+              String responseBody;
+              serializeJson(doc, responseBody);
+              server.send(200, "application/json", responseBody); });
 
   server.on("/test-command", HTTP_POST, []()
             {
@@ -1258,6 +1274,7 @@ void inits()
 
     // Send response
     server.send(200, "application/json", responseBody); });
+
   server.onNotFound(handleNotFound);
 
   server.begin();

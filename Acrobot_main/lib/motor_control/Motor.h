@@ -11,8 +11,8 @@ struct MotorStatus
   float velocity;
   float torque;
   uint8_t temperature;
-  uint8_t errorCode;
   bool isOnline;
+  uint8_t errorCode;
 };
 
 class Motor
