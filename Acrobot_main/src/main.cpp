@@ -1234,6 +1234,9 @@ void inits()
   server.on("/edit", HTTP_PUT, handleCreate);
   server.on("/edit", HTTP_POST, []()
             { returnOK(); }, handleFileUpload);
+  server.on("/ping", HTTP_GET, []()
+            { returnOK(); });
+
   server.on("/test-command", HTTP_POST, []()
             {
     Serial.println("received test-command");
