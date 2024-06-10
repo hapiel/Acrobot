@@ -9,7 +9,7 @@ export function Limb({ status, children }: LimbProps) {
   return (
     <div
       className={cn(
-        'rounded-lg border',
+        'rounded-lg border transition-all',
         status?.isOnline ? 'border-green-600 dark:border-green-600' : 'border-red-600 dark:border-red-600'
       )}
     >
