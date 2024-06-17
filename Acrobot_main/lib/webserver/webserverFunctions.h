@@ -4,6 +4,13 @@
 #define DBG_OUTPUT_PORT Serial
 #include <Arduino.h>
 #include <WebServer.h>
+#include "ESPAsyncTCP.h"
+#include "ESPAsyncWebServer.h"
+
+AsyncWebServer server(80);
+AsyncWebSocket ws("/ws");           // access at ws://[esp ip]/ws
+AsyncEventSource events("/events"); // event source (Server-Sent events)
+
 #include <SD.h>
 
 // source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
@@ -290,6 +297,28 @@ void handleNotFound()
   }
   server.send(404, "text/plain", message);
   DBG_OUTPUT_PORT.print(message);
+}
+AsyncWebServer server_for_ws(81);
+AsyncWebSocket ws("/ws");
+
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
+{
+  if (type == WS_EVT_CONNECT)
+  {
+    Serial.println("WebSocket client connected");
+    client->printf("Hello Client %u :)", client->id());
+  }
+  else if (type == WS_EVT_DISCONNECT)
+  {
+    Serial.println("WebSocket client disconnected");
+  }
+  else if (type == WS_EVT_DATA)
+  {
+    Serial.print("Data received: ");
+    Serial.write(data, len);
+    Serial.println();
+    client->text("Message received");
+  }
 }
 
 #endif
