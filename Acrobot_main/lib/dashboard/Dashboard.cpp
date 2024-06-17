@@ -64,7 +64,7 @@ StaticJsonDocument<90> Dashboard::getLimbStatusJson(const Limb *limb) const
   doc["velocity"] = status.velocity;
   doc["torque"] = status.torque;
   doc["temperature"] = status.temperature;
-  doc["isOnline"] = status.isOnline;
+  doc["isOnline"] = rand() % 100 > 50; // status.isOnline;
   doc["errorCode"] = status.errorCode;
 
   return doc;

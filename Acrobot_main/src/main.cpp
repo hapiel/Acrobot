@@ -85,7 +85,6 @@ The project should be built in platformio
 #define MOSI 23
 #define CS 18
 
-// external libraries
 RemoteDebug Debug;                  // Debug levels: Verbose Debug Info Warning Error. Can't be named differently due to library macros?
 LiquidCrystal_I2C lcd(0x27, 20, 4); // 20 wide 4 tall
 LcdMenu lcdMenu(3, 20);

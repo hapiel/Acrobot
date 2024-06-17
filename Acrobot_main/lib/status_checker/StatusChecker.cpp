@@ -16,31 +16,31 @@ StatusChecker::StatusChecker(RemoteDebug &Debug, BatterySensor &batterySensor, B
 
 void StatusChecker::checkBattery()
 {
-  if (batterySensor.getPercentage() <= 20)
-  {
-    if (lastInfoTime + 1000 < millis())
-    {
-      debugI("battery low, pecentage: %d", batterySensor.getPercentage());
-      lastInfoTime = millis();
-    }
+  // if (batterySensor.getPercentage() <= 20)
+  // {
+  //   if (lastInfoTime + 1000 < millis())
+  //   {
+  //     debugI("battery low, pecentage: %d", batterySensor.getPercentage());
+  //     lastInfoTime = millis();
+  //   }
 
-    debugLed.setRTemp(128, 5000); 
+  //   debugLed.setRTemp(128, 5000);
 
-    if (batterySensor.getPercentage() <= 12)
-    {
+  //   if (batterySensor.getPercentage() <= 12)
+  //   {
 
-      if (lastWarningTime + 1000 < millis())
-      {
-        debugW("battery VERY low, pecentage: %d", batterySensor.getPercentage());
-        lastWarningTime = millis();
-      }
+  //     if (lastWarningTime + 1000 < millis())
+  //     {
+  //       debugW("battery VERY low, pecentage: %d", batterySensor.getPercentage());
+  //       lastWarningTime = millis();
+  //     }
 
-      if (millis() % 500 < 50)
-      {
-        buzzer.buzz(50);
-      }
-    }
-  }
+  //     if (millis() % 500 < 50)
+  //     {
+  //       buzzer.buzz(50);
+  //     }
+  //   }
+  // }
 }
 
 void StatusChecker::update()
@@ -69,19 +69,19 @@ void StatusChecker::update()
       {
         joystick.setPlayerLEDs(0);
       }
-      if(joystick.getBatteryPercentage() > 20 && joystick.getBatteryPercentage() <= 40)
+      if (joystick.getBatteryPercentage() > 20 && joystick.getBatteryPercentage() <= 40)
       {
         joystick.setPlayerLEDs(1);
       }
-      if(joystick.getBatteryPercentage() > 40 && joystick.getBatteryPercentage() <= 60)
+      if (joystick.getBatteryPercentage() > 40 && joystick.getBatteryPercentage() <= 60)
       {
         joystick.setPlayerLEDs(2);
       }
-      if(joystick.getBatteryPercentage() > 60 && joystick.getBatteryPercentage() <= 80)
+      if (joystick.getBatteryPercentage() > 60 && joystick.getBatteryPercentage() <= 80)
       {
         joystick.setPlayerLEDs(3);
       }
-      if(joystick.getBatteryPercentage() > 80 )
+      if (joystick.getBatteryPercentage() > 80)
       {
         joystick.setPlayerLEDs(4);
       }
