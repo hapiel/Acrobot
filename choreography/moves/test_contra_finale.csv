@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,test_contra_finale,Controller name:,acrobot_act,Duration:,40833,Created at,29/04/2024 01:03:13,,
+Animation Name:,test_contra_finale,Controller name:,acrobot_act,Duration:,40833,Created at,08/07/2024 16:46:39,,
 Start positions,ArmL ArmR legL legR,184.04296875,184.04296875,58.6376953125,58.6376953125,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,700,184.04296875,66,0.0,180.0,-203,0.0
 sC,m_arm_l,0,700,184.04296875,66,0.0,180.0,-193,0.0

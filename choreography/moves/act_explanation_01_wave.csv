@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_explanation_01_wave,Controller name:,acrobot_act,Duration:,178167,Created at,29/04/2024 01:03:12,,
+Animation Name:,act_explanation_01_wave,Controller name:,acrobot_act,Duration:,178167,Created at,08/07/2024 16:46:39,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,1533,180.0,383,0.0,18.80859375,-383,0.0
 sC,m_leg_l,0,13767,185.01708984375,3442,0.0,185.01708984375,-3442,0.0

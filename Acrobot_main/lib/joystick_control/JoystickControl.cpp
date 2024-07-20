@@ -178,8 +178,8 @@ void JoystickControl::defaultSubmodes()
   submodeToggleSynch();
   submodeChangeVariableAngle();
   // submodeCurrentRumble();
-  submodePoseButtons();
-  // submodeAGTButtons();
+  // submodePoseButtons();
+  submodeAGTButtons();
 }
 
 void JoystickControl::submodePoseButtons(){
