@@ -4,11 +4,28 @@
 #define DBG_OUTPUT_PORT Serial
 #include <Arduino.h>
 #include <WebServer.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 #include <SD.h>
+
+WebServer server(80);
+AsyncWebServer async_server(3000);
+AsyncWebSocket ws("/ws");
+
+void notFound(AsyncWebServerRequest *request)
+{
+  if (request->method() == HTTP_OPTIONS)
+  {
+    request->send(200);
+  }
+  else
+  {
+    request->send(404, "application/json", "{\"message\":\"Not found\"}");
+  }
+}
 
 // source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
 
-WebServer server(80);
 static bool hasSD = false;
 File uploadFile;
 
@@ -290,6 +307,26 @@ void handleNotFound()
   }
   server.send(404, "text/plain", message);
   DBG_OUTPUT_PORT.print(message);
+}
+
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
+{
+  if (type == WS_EVT_CONNECT)
+  {
+    Serial.println("WebSocket client connected");
+    client->printf("Hello Client %u :)", client->id());
+  }
+  else if (type == WS_EVT_DISCONNECT)
+  {
+    Serial.println("WebSocket client disconnected");
+  }
+  else if (type == WS_EVT_DATA)
+  {
+    Serial.print("Data received: ");
+    Serial.write(data, len);
+    Serial.println();
+    client->text("Message received");
+  }
 }
 
 #endif
