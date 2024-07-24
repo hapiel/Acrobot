@@ -11,7 +11,8 @@ function App() {
     setStatus
   } = useRobotStatus();
   const { sendMessage, lastMessage, readyState } = useWebSocket('ws://192.168.68.114:3000/ws', {
-    shouldReconnect: () => true
+    shouldReconnect: () => true,
+    onMessage: (message) => console.log('websocket message', { message })
   });
 
   const handleClickSendMessage = useCallback(() => sendMessage('hello'), [sendMessage]);

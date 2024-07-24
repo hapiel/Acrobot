@@ -1705,17 +1705,28 @@ SUB_MENU(hardwarePage, mainMenu,
 SUB_MENU(adsPage, hardwarePage, ITEM_BASIC(" - ADS values - "),
          ITEM_BASIC(menu.adsA), ITEM_BASIC(menu.adsL));
 
-SUB_MENU(aboutPage, mainMenu, ITEM_BASIC("Acrobot v3 Jona"),
-         ITEM_BASIC("By Daniel Simu"), ITEM_BASIC("::Supported by::"),
-         ITEM_BASIC("V2_ Unstable"), ITEM_BASIC("Circusstad Festival"),
-         ITEM_BASIC("Amarte"), ITEM_BASIC("Gemeente Rotterdam"),
-         ITEM_BASIC("::Collaborators::"), ITEM_BASIC("Basti Kuhz"),
-         ITEM_BASIC("Esmee v/d Ster"), ITEM_BASIC("Luc van Esch"),
-         ITEM_BASIC("Mila Baumann"), ITEM_BASIC("Marit Adriaanse"),
-         ITEM_BASIC("Edwin Dertien"), ITEM_BASIC("Ricard Lopez"),
-         ITEM_BASIC("Bram Graafland"), ITEM_BASIC("::Sponsors::"),
-         ITEM_BASIC("CubeMars"), ITEM_BASIC("Aluxprofile"),
-         ITEM_BASIC("Fillamentum"), ITEM_BASIC("PCBWay"),
+SUB_MENU(aboutPage, mainMenu,
+         ITEM_BASIC("Acrobot v3 Jona"),
+         ITEM_BASIC("By Daniel Simu"),
+         ITEM_BASIC("::Supported by::"),
+         ITEM_BASIC("V2_ Unstable"),
+         ITEM_BASIC("Circusstad Festival"),
+         ITEM_BASIC("Amarte"),
+         ITEM_BASIC("Gemeente Rotterdam"),
+         ITEM_BASIC("::Collaborators::"),
+         ITEM_BASIC("Basti Kuhz"),
+         ITEM_BASIC("Esmee v/d Ster"),
+         ITEM_BASIC("Luc van Esch"),
+         ITEM_BASIC("Mila Baumann"),
+         ITEM_BASIC("Marit Adriaanse"),
+         ITEM_BASIC("Edwin Dertien"),
+         ITEM_BASIC("Ricard Mallafre"),
+         ITEM_BASIC("Bram Graafland"),
+         ITEM_BASIC("::Sponsors::"),
+         ITEM_BASIC("CubeMars"),
+         ITEM_BASIC("Aluxprofile"),
+         ITEM_BASIC("Fillamentum"),
+         ITEM_BASIC("PCBWay"),
          ITEM_BASIC("MakerBeam"));
 
 /* #endregion */
@@ -1735,8 +1746,6 @@ void initDebug()
 
 void inits()
 {
-
-  Serial.begin(115200); // Initialize Serial for USB communication
 
   Serial.println("Next init: wifi");
   // WiFi.mode(WIFI_STA);
@@ -1818,35 +1827,34 @@ void inits()
 
   async_server.begin();
 
-  // server.enableCORS(true);
-  // server.on("/list", HTTP_GET, printDirectory);
-  // server.on("/edit", HTTP_DELETE, handleDelete);
-  // server.on("/edit", HTTP_PUT, handleCreate);
-  // server.on("/edit", HTTP_POST, []()
-  //           { returnOK(); }, handleFileUpload);
-  // server.on("/ping", HTTP_GET, []()
-  //           { returnOK(); });
+  server.enableCORS(true);
+  server.on("/list", HTTP_GET, printDirectory);
+  server.on("/edit", HTTP_DELETE, handleDelete);
+  server.on("/edit", HTTP_PUT, handleCreate);
+  server.on("/edit", HTTP_POST, []()
+            { returnOK(); }, handleFileUpload);
+  server.on("/ping", HTTP_GET, []()
+            { returnOK(); });
 
-  // server.on("/robot-status", HTTP_GET, []()
-  //           {
-  //             StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
-  //             String responseBody;
-  //             serializeJson(doc, responseBody);
-  //             server.send(200, "application/json", responseBody); });
+  server.on("/robot-status", HTTP_GET, []()
+            {
+              StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
+              String responseBody;
+              serializeJson(doc, responseBody);
+              server.send(200, "application/json", responseBody); });
 
-  // server.onNotFound(handleNotFound);
+  server.onNotFound(handleNotFound);
 
-  // server.begin();
+  server.begin();
 
   // webserver end
 
-  debugI("Inits Done.");
+  debugI("inits done!");
   buzzer.buzz(50); // short buzz to indicate boot
 }
 
 void wifiConnection()
 {
-  Serial.printf("wifi connected? %s\nwifi status: %d", wifiConnected ? "yes" : "no", WiFi.status());
 
   if (WiFi.status() == WL_CONNECTED && !wifiConnected)
   {
@@ -1859,6 +1867,7 @@ void wifiConnection()
     {
       debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
       MDNS.addService("telnet", "tcp", 23);
+      MDNS.addService("http", "tcp", 80);
       MDNS.addService("http", "tcp", 3000);
     }
     debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
@@ -1870,8 +1879,12 @@ void wifiConnection()
   }
 }
 
+unsigned long lastWsSend = 0;
+int ws_message_count = 0;
+
 void updates()
 {
+
   joystick.update(); // Update joystick and button states
   canHandler.update();
   eStop.update();
@@ -1895,10 +1908,19 @@ void updates()
   movePlayer.update();
 
   // webserver
-  // if (wifiConnected)
-  // {
-  //   server.handleClient();
-  // }
+  if (wifiConnected)
+  {
+    server.handleClient();
+  }
+
+  // Send a message through the WebSocket every second
+  if (millis() - lastWsSend > 1000)
+  {
+    lastWsSend = millis();
+    String message = "recurring message being sent " + String(ws_message_count++);
+    ws.textAll(message);
+  }
+  // webserver end
 }
 
 void updatesI2C()
@@ -1929,15 +1951,37 @@ void taskI2C(void *parameter)
 
 void setup()
 {
+  Serial.begin(115200); // Initialize Serial for USB communication
+  Serial.println("setting up");
   inits();
+  Serial.println("inits done");
   functionQueue = xQueueCreate(5, sizeof(TaskFunction));
-  xTaskCreatePinnedToCore(taskMain, "taskMain", 100000, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
+
+  BaseType_t taskMainCreated = xTaskCreatePinnedToCore(taskMain, "taskMain", 8192, NULL, 1, NULL, 1);
+  BaseType_t taskI2CCreated = xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
+
+  if (taskMainCreated == pdPASS)
+  {
+    Serial.println("taskMain created successfully");
+  }
+  else
+  {
+    Serial.printf("Failed to create taskMain. Error code: %d\n", taskMainCreated);
+  }
+
+  if (taskI2CCreated == pdPASS)
+  {
+    Serial.println("taskI2C created successfully");
+  }
+  else
+  {
+    Serial.printf("Failed to create taskI2C. Error code: %d\n", taskI2CCreated);
+  }
+
+  Serial.println("setup done");
 }
 
 void loop()
 {
   vTaskDelete(NULL);
-  // taskMain(NULL);
-  // taskI2C(NULL);
 }
