@@ -1834,7 +1834,7 @@ void inits()
   server.on("/edit", HTTP_POST, []()
             { returnOK(); }, handleFileUpload);
   server.on("/ping", HTTP_GET, []()
-            { returnOK(); });
+            { server.send(200, "text/plain", "pong"); });
 
   server.on("/robot-status", HTTP_GET, []()
             {
@@ -1859,18 +1859,18 @@ void wifiConnection()
   if (WiFi.status() == WL_CONNECTED && !wifiConnected)
   {
     wifiConnected = true;
-    if (!MDNS.begin(HOST_NAME))
-    {
-      debugE("Error setting up MDNS responder!");
-    }
-    else
+    if (MDNS.begin(HOST_NAME))
     {
       debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
       MDNS.addService("telnet", "tcp", 23);
       MDNS.addService("http", "tcp", 80);
-      MDNS.addService("http", "tcp", 3000);
+      MDNS.addService("ws", "tcp", 3000);
+      debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
     }
-    debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
+    else
+    {
+      debugE("Error setting up MDNS responder!");
+    }
   }
   else if (WiFi.status() != WL_CONNECTED && wifiConnected)
   {
@@ -1917,8 +1917,10 @@ void updates()
   if (millis() - lastWsSend > 1000)
   {
     lastWsSend = millis();
-    String message = "recurring message being sent " + String(ws_message_count++);
-    ws.textAll(message);
+    StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
+    String status;
+    serializeJson(doc, status);
+    ws.textAll(status);
   }
   // webserver end
 }
