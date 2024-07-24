@@ -8,9 +8,9 @@
 #include <ESPAsyncWebServer.h>
 #include <SD.h>
 
+WebServer server(80);
 AsyncWebServer async_server(3000);
 AsyncWebSocket ws("/ws");
-AsyncEventSource events("/events");
 
 void notFound(AsyncWebServerRequest *request)
 {
@@ -26,7 +26,6 @@ void notFound(AsyncWebServerRequest *request)
 
 // source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
 
-WebServer server(80);
 static bool hasSD = false;
 File uploadFile;
 

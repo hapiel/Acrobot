@@ -1912,7 +1912,17 @@ void updates()
   {
     server.handleClient();
   }
+  // webserver end
+}
 
+void updatesI2C()
+{
+  menu.updateI2C();
+  hallSensor.update();
+}
+
+void updatesWebsocket()
+{
   // Send a message through the WebSocket every second
   if (millis() - lastWsSend > 1000)
   {
@@ -1922,13 +1932,6 @@ void updates()
     serializeJson(doc, status);
     ws.textAll(status);
   }
-  // webserver end
-}
-
-void updatesI2C()
-{
-  menu.updateI2C();
-  hallSensor.update();
 }
 
 void taskMain(void *parameter)
@@ -1942,11 +1945,12 @@ void taskMain(void *parameter)
   }
 }
 
-void taskI2C(void *parameter)
+void taskSecondary(void *parameter)
 {
   for (;;)
   {
     updatesI2C();
+    updatesWebsocket();
     vTaskDelay(5);
   }
 }
@@ -1960,7 +1964,7 @@ void setup()
   functionQueue = xQueueCreate(5, sizeof(TaskFunction));
 
   BaseType_t taskMainCreated = xTaskCreatePinnedToCore(taskMain, "taskMain", 8192, NULL, 1, NULL, 1);
-  BaseType_t taskI2CCreated = xTaskCreatePinnedToCore(taskI2C, "taskI2C", 20000, NULL, 1, NULL, 1);
+  BaseType_t taskI2CCreated = xTaskCreatePinnedToCore(taskSecondary, "taskI2C", 20000, NULL, 1, NULL, 1);
 
   if (taskMainCreated == pdPASS)
   {
