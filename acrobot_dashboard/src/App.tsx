@@ -10,7 +10,7 @@ function App() {
     status: { rightArm, rightLeg, leftArm, leftLeg },
     setStatus
   } = useRobotStatus();
-  const { sendMessage, lastMessage, readyState } = useWebSocket('ws://192.168.68.114/ws', {
+  const { sendMessage, lastMessage, readyState } = useWebSocket('ws://192.168.68.114:3000/ws', {
     shouldReconnect: () => true
   });
 

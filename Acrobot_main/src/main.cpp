@@ -1858,8 +1858,8 @@ void wifiConnection()
     else
     {
       debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
-      MDNS.addService("http", "tcp", 80);
-      MDNS.addService("ws", "tcp", 81);
+      MDNS.addService("telnet", "tcp", 23);
+      MDNS.addService("http", "tcp", 3000);
     }
     debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
   }

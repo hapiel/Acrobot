@@ -8,7 +8,7 @@
 #include <ESPAsyncWebServer.h>
 #include <SD.h>
 
-AsyncWebServer async_server(80);
+AsyncWebServer async_server(3000);
 AsyncWebSocket ws("/ws");
 AsyncEventSource events("/events");
 
