@@ -18,7 +18,7 @@ class AcrobotAPI {
     try {
       const signal = new AbortController();
       setTimeout(() => signal.abort(), 1000);
-      await fetch('http://acrobot.local/ping', { signal: signal.signal });
+      await fetch('http://192.168.68.114/ping', { signal: signal.signal });
       return true;
     } catch (e) {
       return false;

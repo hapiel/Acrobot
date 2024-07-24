@@ -10,19 +10,18 @@ function App() {
     status: { rightArm, rightLeg, leftArm, leftLeg },
     setStatus
   } = useRobotStatus();
-  const { sendMessage, lastMessage, readyState } = useWebSocket('ws://acrobot.local:81/ws');
+  const { sendMessage, lastMessage, readyState } = useWebSocket('ws://192.168.68.114/ws', {
+    shouldReconnect: () => true
+  });
 
   const handleClickSendMessage = useCallback(() => sendMessage('hello'), [sendMessage]);
 
   return (
     <main className="flex min-w-full flex-col items-center justify-center pt-2">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <Button onClick={async () => setStatus(await acrobot.getStatus())}>Get status</Button>
         {readyState !== ReadyState.OPEN && (
-          <Button
-            disabled={readyState === ReadyState.CONNECTING}
-            onClick={async () => setStatus(await acrobot.getStatus())}
-          >
+          <Button disabled={readyState === ReadyState.CONNECTING} onClick={async () => sendMessage('connect')}>
             Connect socket
           </Button>
         )}

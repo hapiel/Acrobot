@@ -1739,7 +1739,16 @@ void inits()
   Serial.begin(115200); // Initialize Serial for USB communication
 
   Serial.println("Next init: wifi");
-  WiFi.begin(wifiSsid, wifiPassword); // from config.h
+  // WiFi.mode(WIFI_STA);
+  WiFi.begin(wifiSsid, wifiPassword);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 
   Serial.println("Next init: Debug");
   initDebug(); // AFTER WIFI!
@@ -1797,67 +1806,38 @@ void inits()
 
   // webserver
   debugI("Next init: Webserver");
-  server.enableCORS(true);
-  server.on("/list", HTTP_GET, printDirectory);
-  server.on("/edit", HTTP_DELETE, handleDelete);
-  server.on("/edit", HTTP_PUT, handleCreate);
-  server.on("/edit", HTTP_POST, []()
-            { returnOK(); }, handleFileUpload);
-  server.on("/ping", HTTP_GET, []()
-            { returnOK(); });
+  ws.onEvent(onEvent);
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "Content-Type");
+  async_server.addHandler(&ws);
+  async_server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *request)
+                  { request->send(200, "text/plain", "pong"); });
 
-  server.on("/robot-status", HTTP_GET, []()
-            {
-              StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
-              String responseBody;
-              serializeJson(doc, responseBody);
-              server.send(200, "application/json", responseBody); });
+  async_server.onNotFound(notFound);
 
-  server.on("/test-command", HTTP_POST, []()
-            {
-    Serial.println("received test-command");
-    if (server.hasArg("plain")) {
-      String body = server.arg("plain");
-      Serial.println("body: " + body);
+  async_server.begin();
 
-      StaticJsonDocument<200> doc;
-      DeserializationError error = deserializeJson(doc, body);
-      if (error) {
-        Serial.print("JSON deserialization failed: ");
-        Serial.println(error.c_str());
-        server.send(400, "application/json", "{\"message\":\"Invalid JSON\"}");
-        return;
-      }
+  // server.enableCORS(true);
+  // server.on("/list", HTTP_GET, printDirectory);
+  // server.on("/edit", HTTP_DELETE, handleDelete);
+  // server.on("/edit", HTTP_PUT, handleCreate);
+  // server.on("/edit", HTTP_POST, []()
+  //           { returnOK(); }, handleFileUpload);
+  // server.on("/ping", HTTP_GET, []()
+  //           { returnOK(); });
 
-      const char *command = doc["command"];
-      if (command) {
-        Serial.print("command: ");
-        Serial.println(command);
-      } else {
-        Serial.println("no command passed");
-      }
-    } else {
-      Serial.println("no command passed");
-    }
+  // server.on("/robot-status", HTTP_GET, []()
+  //           {
+  //             StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
+  //             String responseBody;
+  //             serializeJson(doc, responseBody);
+  //             server.send(200, "application/json", responseBody); });
 
-    StaticJsonDocument<200> nestedDoc;
-    nestedDoc["nested"] = true;
-    nestedDoc["value"] = 42;
-    StaticJsonDocument<200> responseDoc;
-    responseDoc["status"] = "success";
-    responseDoc["additionalInfo"] = "Any additional data";
-    responseDoc["nested"] = nestedDoc;
+  // server.onNotFound(handleNotFound);
 
-    // Serialize JSON to string
-    String responseBody;
-    serializeJson(responseDoc, responseBody);
+  // server.begin();
 
-    // Send response
-    server.send(200, "application/json", responseBody); });
-
-  server.onNotFound(handleNotFound);
-
-  server.begin();
   // webserver end
 
   debugI("Inits Done.");
@@ -1866,22 +1846,28 @@ void inits()
 
 void wifiConnection()
 {
-  if (!wifiConnected)
+  Serial.printf("wifi connected? %s\nwifi status: %d", wifiConnected ? "yes" : "no", WiFi.status());
+
+  if (WiFi.status() == WL_CONNECTED && !wifiConnected)
   {
-    // Wait for connection
-    if (WiFi.status() == WL_CONNECTED)
+    wifiConnected = true;
+    if (!MDNS.begin(HOST_NAME))
     {
-      if (MDNS.begin(HOST_NAME))
-      {
-        debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME,
-               HOST_NAME);
-      }
-      MDNS.addService("telnet", "tcp", 23);
-      MDNS.addService("http", "tcp", 80);
-      debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
+      debugE("Error setting up MDNS responder!");
     }
+    else
+    {
+      debugI("MDNS responder started. Hostname -> %s or %s.local", HOST_NAME, HOST_NAME);
+      MDNS.addService("http", "tcp", 80);
+      MDNS.addService("ws", "tcp", 81);
+    }
+    debugI("Connected to IP address: %s ", WiFi.localIP().toString().c_str());
   }
-  wifiConnected = WiFi.status() == WL_CONNECTED;
+  else if (WiFi.status() != WL_CONNECTED && wifiConnected)
+  {
+    wifiConnected = false;
+    debugI("WiFi connection lost");
+  }
 }
 
 void updates()
@@ -1909,10 +1895,10 @@ void updates()
   movePlayer.update();
 
   // webserver
-  if (wifiConnected)
-  {
-    server.handleClient();
-  }
+  // if (wifiConnected)
+  // {
+  //   server.handleClient();
+  // }
 }
 
 void updatesI2C()
