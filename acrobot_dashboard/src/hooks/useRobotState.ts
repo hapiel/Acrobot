@@ -1,7 +1,7 @@
 import { GetStatusResponse } from '@/lib/AcroborAPI';
 import { create } from 'zustand';
 
-export type State = {
+export type RobotStatus = {
   status: GetStatusResponse;
   setStatus: (status: GetStatusResponse) => void;
   setRightArm: (status: GetStatusResponse['rightArm']) => void;
@@ -9,7 +9,7 @@ export type State = {
   setRightLeg: (status: GetStatusResponse['rightLeg']) => void;
 };
 
-export const useRobotStatus = create<State>((set) => ({
+export const useRobotStatus = create<RobotStatus>((set) => ({
   status: {} as GetStatusResponse,
   setStatus: (status: GetStatusResponse) => set({ status }),
   setRightArm: (status: GetStatusResponse['rightArm']) => {
