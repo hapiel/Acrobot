@@ -1927,7 +1927,7 @@ void updatesWebsocket()
   if (millis() - lastWsSend > 1000)
   {
     lastWsSend = millis();
-    StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
+    StaticJsonDocument<600> doc = dashboard.getRobotStatusJson();
     String status;
     serializeJson(doc, status);
     ws.textAll(status);

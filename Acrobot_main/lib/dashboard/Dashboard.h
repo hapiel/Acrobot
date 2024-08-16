@@ -28,7 +28,7 @@ public:
   const LimbStatus getRightLegStatus() const;
 
   const RobotStatus getRobotStatus() const;
-  StaticJsonDocument<400> getRobotStatusJson() const;
+  StaticJsonDocument<600> getRobotStatusJson() const;
 
 private:
   const Limb *leftArm = nullptr;
@@ -38,7 +38,7 @@ private:
   const BatterySensor *batterySensor = nullptr;
 
   const LimbStatus getLimbStatus(const Limb *limb) const;
-  StaticJsonDocument<90> getLimbStatusJson(const Limb *limb) const;
+  StaticJsonDocument<120> getLimbStatusJson(const Limb *limb) const;
 };
 
 #endif // DASHBOARD_H

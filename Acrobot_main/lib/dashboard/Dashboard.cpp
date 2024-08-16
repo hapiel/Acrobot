@@ -53,13 +53,18 @@ const LimbStatus Dashboard::getRightLegStatus() const
 
 const LimbStatus Dashboard::getLimbStatus(const Limb *limb) const
 {
-  return limb != nullptr ? limb->getStatus() : LimbStatus{0.0, 0.0, 0.0, 0.0, 0, true, false, 1};
+  if (limb == nullptr)
+  {
+    return LimbStatus{0.0, 0.0, 0.0, 0.0, 0, true, false, 1};
+  }
+
+  return limb->getStatus();
 }
 
-StaticJsonDocument<90> Dashboard::getLimbStatusJson(const Limb *limb) const
+StaticJsonDocument<120> Dashboard::getLimbStatusJson(const Limb *limb) const
 {
   const LimbStatus status = getLimbStatus(limb);
-  StaticJsonDocument<200> doc;
+  StaticJsonDocument<300> doc;
   doc["target"] = status.target;
   doc["position"] = status.position;
   doc["velocity"] = status.velocity;
@@ -77,9 +82,9 @@ const RobotStatus Dashboard::getRobotStatus() const
   return RobotStatus{getLimbStatus(leftArm), getLimbStatus(rightArm), getLimbStatus(leftLeg), getLimbStatus(rightLeg)};
 }
 
-StaticJsonDocument<400> Dashboard::getRobotStatusJson() const
+StaticJsonDocument<600> Dashboard::getRobotStatusJson() const
 {
-  StaticJsonDocument<400> doc;
+  StaticJsonDocument<600> doc;
   doc["leftArm"] = getLimbStatusJson(leftArm);
   doc["rightArm"] = getLimbStatusJson(rightArm);
   doc["leftLeg"] = getLimbStatusJson(leftLeg);
