@@ -1,6 +1,7 @@
 #include "Motor.h"
 
-Motor::Motor(uint16_t ID, CANHandler &canHandler, RemoteDebug &Debug) : canID(ID), canHandler(canHandler), Debug(Debug)
+Motor::Motor(uint16_t ID, CANHandler &canHandler, RemoteDebug &Debug)
+    : canID(ID), canHandler(canHandler), Debug(Debug)
 {
   latestFrame.id = canID;
   latestFrame.ext = false;
@@ -67,17 +68,12 @@ void Motor::setPosition(float pos, float kp, float kd)
   sendCommand(pos, 0, kp, kd, 0);
 }
 
-void Motor::setVelocity(float vel, float kd)
-{
-  sendCommand(0, vel, 0, kd, 0);
-}
+void Motor::setVelocity(float vel, float kd) { sendCommand(0, vel, 0, kd, 0); }
 
-void Motor::setTorque(float torque)
-{
-  sendCommand(0, 0, 0, 0, torque);
-}
+void Motor::setTorque(float torque) { sendCommand(0, 0, 0, 0, torque); }
 
-void Motor::sendCommand(float p_des, float v_des, float kp, float kd, float t_ff)
+void Motor::sendCommand(float p_des, float v_des, float kp, float kd,
+                        float t_ff)
 {
 
   packCommand(latestFrame, p_des, v_des, kp, kd, t_ff);
@@ -142,7 +138,8 @@ float Motor::uintToFloat(int x_int, float x_min, float x_max, int bits)
   return result;
 }
 
-void Motor::packCommand(CANMessage &msg, float p_des, float v_des, float kp, float kd, float t_ff)
+void Motor::packCommand(CANMessage &msg, float p_des, float v_des, float kp,
+                        float kd, float t_ff)
 {
   // Limit data to be within bounds
   p_des = constrain(p_des, P_MIN, P_MAX);
@@ -158,45 +155,29 @@ void Motor::packCommand(CANMessage &msg, float p_des, float v_des, float kp, flo
   unsigned int t_int = floatToUInt(t_ff, T_MIN, T_MAX, 12);
 
   // Pack ints into the CAN message buffer
-  msg.data[0] = p_int >> 8;                           // Position 8 higher
-  msg.data[1] = p_int & 0xFF;                         // Position 8 lower
-  msg.data[2] = v_int >> 4;                           // Speed 8 higher
-  msg.data[3] = ((v_int & 0xF) << 4) | (kp_int >> 8); // Speed 4 bit lower KP 4bit higher
-  msg.data[4] = kp_int & 0xFF;                        // KP 8 bit lower
-  msg.data[5] = kd_int >> 4;                          // Kd 8 bit higher
-  msg.data[6] = ((kd_int & 0xF) << 4) | (t_int >> 8); // KP 4 bit lower torque 4 bit higher
-  msg.data[7] = t_int & 0xff;                         // torque 4 bit lower
+  msg.data[0] = p_int >> 8;   // Position 8 higher
+  msg.data[1] = p_int & 0xFF; // Position 8 lower
+  msg.data[2] = v_int >> 4;   // Speed 8 higher
+  msg.data[3] =
+      ((v_int & 0xF) << 4) | (kp_int >> 8); // Speed 4 bit lower KP 4bit higher
+  msg.data[4] = kp_int & 0xFF;              // KP 8 bit lower
+  msg.data[5] = kd_int >> 4;                // Kd 8 bit higher
+  msg.data[6] = ((kd_int & 0xF) << 4) |
+                (t_int >> 8); // KP 4 bit lower torque 4 bit higher
+  msg.data[7] = t_int & 0xff; // torque 4 bit lower
 }
 
-float Motor::getPosition()
-{
-  return pOut;
-}
+float Motor::getPosition() const { return pOut; }
 
-float Motor::getVelocity()
-{
-  return vOut;
-}
+float Motor::getVelocity() const { return vOut; }
 
-float Motor::getTorque()
-{
-  return iOut;
-}
+float Motor::getTorque() const { return iOut; }
 
-uint8_t Motor::getTemperature()
-{
-  return temperature;
-}
+uint8_t Motor::getTemperature() const { return temperature; }
 
-uint8_t Motor::getErrorCode()
-{
-  return errorCode;
-}
+uint8_t Motor::getErrorCode() const { return errorCode; }
 
-bool Motor::isOnline()
-{
-  return canHandler.getIsOnline(canID);
-}
+bool Motor::isOnline() const { return canHandler.getIsOnline(canID); }
 
 void Motor::unpackCommand(const CANMessage &msg)
 {
@@ -213,8 +194,9 @@ void Motor::unpackCommand(const CANMessage &msg)
   vOut = uintToFloat(velocityInt, V_MIN, V_MAX, 12);
   iOut = uintToFloat(torqueInt, -T_MAX, T_MAX, 12);
 
-  this->temperature = temperature - 40; // t-40 = celcius according to CubeMars discord
-  this->errorCode = errorCode;          // needs to be interpreted?
+  this->temperature =
+      temperature - 40;        // t-40 = celcius according to CubeMars discord
+  this->errorCode = errorCode; // needs to be interpreted?
 }
 
 void Motor::update()

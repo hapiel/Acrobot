@@ -1,6 +1,9 @@
 #include "Limb.h"
 
-Limb::Limb(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted) : motor(motor), hallSensor(hallSensor), Debug(Debug), debugLed(debugLed), motorID(motorID), offset180(offset180), inverted(inverted) {}
+Limb::Limb(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,
+           DebugLed &debugLed, int motorID, float offset180, bool inverted)
+    : motor(motor), hallSensor(hallSensor), Debug(Debug), debugLed(debugLed),
+      motorID(motorID), offset180(offset180), inverted(inverted) {}
 
 void Limb::setTarget(float posDegrees, float kp, float kd)
 {
@@ -10,20 +13,24 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
-
   posDegrees = constrain(posDegrees, posMin, posMax);
 
-  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp   , SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
+  int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp,
+                            SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
 
   float error = getTarget() - posDegrees;
-  
-  if (abs(error) > safeRange )
+
+  if (abs(error) > safeRange)
   {
-    debugLed.setRTemp(255, 100); 
-    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d, target: %f, lastTarget: %f", motorID, error, safeRange, posDegrees, getTarget());
-  
+    debugLed.setRTemp(255, 100);
+    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d, "
+           "target: %f, lastTarget: %f",
+           motorID, error, safeRange, posDegrees, getTarget());
+
     int32_t deltaTime = millis() - lastSetTargetTime;
-    int deltaConstrained = min(deltaTime, 50); // prevent large jumps if too long between setTarget calls
+    int deltaConstrained =
+        min(deltaTime,
+            50); // prevent large jumps if too long between setTarget calls
 
     float moveAngle = safeMoveSpeed * (deltaConstrained / 1000.0);
     float moveAngleSign = error < 0 ? 1.0 : -1.0;
@@ -33,13 +40,12 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
 
     posDegrees = getTarget() + moveAngleClamped;
 
-    if (kp > lastKp){
+    if (kp > lastKp)
+    {
       float kpIncrease = safeKpIncrease * (deltaConstrained / 1000.0);
       float kpIncreaseClamped = min(kpIncrease, kp - lastKp);
       kp = lastKp + kpIncreaseClamped;
     }
-
-    
   }
 
   // within lerp time, lerp to target
@@ -62,14 +68,16 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   // ramp up kp after start
   if (millis() - startTime < startRampDuration)
   {
-    kpToSend = min(kpToSend, fMap(millis() - startTime, 0, startRampDuration, kPLimitStart, kPlimitRampEnd));
+    kpToSend = min(kpToSend, fMap(millis() - startTime, 0, startRampDuration,
+                                  kPLimitStart, kPlimitRampEnd));
   }
 
   float kdToSend = constrain(kd, kdMinimum, 5);
   // ramp down kd after start
   if (millis() - startTime < startRampDuration)
   {
-    kdToSend = max(kdToSend, fMap(millis() - startTime, 0, startRampDuration, kDMinimumStart, kdMinimum));
+    kdToSend = max(kdToSend, fMap(millis() - startTime, 0, startRampDuration,
+                                  kDMinimumStart, kdMinimum));
   }
 
   motor.setPosition(posToSend, kpToSend, kdToSend);
@@ -79,7 +87,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
 void Limb::setTorqueUnprotected(float torque)
 {
   lastControlMode = CONTROL_MODE_TORQUE;
-  
+
   if (inverted)
   {
     torque = -torque;
@@ -87,7 +95,7 @@ void Limb::setTorqueUnprotected(float torque)
   motor.setTorque(torque);
 }
 
-float Limb::getTarget()
+float Limb::getTarget() const
 {
   if (lastControlMode != CONTROL_MODE_TARGET)
   {
@@ -103,16 +111,17 @@ void Limb::start()
   lastControlMode = CONTROL_MODE_NONE;
   startTime = millis();
 
-  // set motor inactive. Can't be set active immediately after start because of ramping feature in setTarget.
+  // set motor inactive. Can't be set active immediately after start because of
+  // ramping feature in setTarget.
   motor.setPosition(0, 0, 0);
-  
 }
 
 void Limb::stop()
 {
   motor.stop();
   state = STATE_OFF;
-  lastControlMode = CONTROL_MODE_NONE; // possibly redundant, better safe than sorry
+  lastControlMode =
+      CONTROL_MODE_NONE; // possibly redundant, better safe than sorry
 }
 
 void Limb::startCalibration()
@@ -131,7 +140,8 @@ void Limb::tryCalibration()
     if (motor.isOnline())
     {
 
-      int offsetSteps = floor((getPosition() - calibrationDegreesLow) / offsetDegrees);
+      int offsetSteps =
+          floor((getPosition() - calibrationDegreesLow) / offsetDegrees);
       if (inverted)
       {
         offsetGearbox = (offsetSteps)*offsetDegrees;
@@ -145,12 +155,24 @@ void Limb::tryCalibration()
   }
 }
 
-State Limb::getState()
+State Limb::getState() const { return state; }
+
+const LimbStatus Limb::getStatus() const
 {
-  return state;
+  LimbStatus status;
+  status.target = getTarget();
+  status.position = getPosition();
+  status.velocity = getVelocity();
+  status.torque = getTorque();
+  status.temperature = getTemperature();
+  status.isCalibrating = state == STATE_CALIBRATION;
+  status.isOnline = motor.isOnline();
+  status.errorCode = getErrorCode();
+
+  return status;
 }
 
-float Limb::getPosition()
+float Limb::getPosition() const
 {
 
   float posDegrees = radToDegrees(motor.getPosition());
@@ -164,7 +186,7 @@ float Limb::getPosition()
   return posOffsetCorrected;
 }
 
-float Limb::getVelocity()
+float Limb::getVelocity() const
 {
   float vel = motor.getVelocity();
   if (inverted)
@@ -174,40 +196,24 @@ float Limb::getVelocity()
   return vel;
 }
 
-float Limb::getTorque()
-{
-  return motor.getTorque();
-}
+float Limb::getTorque() const { return motor.getTorque(); }
 
-uint8_t Limb::getTemperature()
-{
-  return motor.getTemperature();
-}
+uint8_t Limb::getTemperature() const { return motor.getTemperature(); }
 
-uint8_t Limb::getErrorCode()
-{
-  return motor.getErrorCode();
-}
+uint8_t Limb::getErrorCode() const { return motor.getErrorCode(); }
 
-float Limb::radToDegrees(float rad)
-{
-  return rad * 180.0 / PI;
-}
+float Limb::radToDegrees(float rad) const { return rad * 180.0 / PI; }
 
-float Limb::degreesToRad(float degrees)
-{
-  return degrees * PI / 180.0;
-}
+float Limb::degreesToRad(float degrees) const { return degrees * PI / 180.0; }
 
-float Limb::correctOffsetShaftToMotor(float shaftDegrees)
+float Limb::correctOffsetShaftToMotor(float shaftDegrees) const
 {
   return shaftDegrees - 180 + offset180 - offsetGearbox;
 }
 
-float Limb::correctOffsetMotorToShaft(float motorDegrees)
+float Limb::correctOffsetMotorToShaft(float motorDegrees) const
 {
   return motorDegrees + 180 - offset180 + offsetGearbox;
-  ;
 }
 
 void Limb::update()

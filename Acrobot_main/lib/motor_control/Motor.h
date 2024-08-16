@@ -2,8 +2,8 @@
 #define MOTOR_H
 
 #include "ACAN_ESP32.h"
-#include "RemoteDebug.h"
 #include "CANHandler.h"
+#include "RemoteDebug.h"
 
 class Motor
 {
@@ -19,12 +19,12 @@ public:
 
   void sendCommand(float p_des, float v_des, float kp, float kd, float t_ff);
 
-  float getPosition();
-  float getVelocity();
-  float getTorque();
-  uint8_t getTemperature();
-  uint8_t getErrorCode();
-  bool isOnline();
+  float getPosition() const;
+  float getVelocity() const;
+  float getTorque() const;
+  uint8_t getTemperature() const;
+  uint8_t getErrorCode() const;
+  bool isOnline() const;
 
   void update();
 
@@ -49,7 +49,8 @@ private:
 
   int floatToUInt(float x, float x_min, float x_max, unsigned int bits);
   float uintToFloat(int x_int, float x_min, float x_max, int bits);
-  void packCommand(CANMessage &msg, float p_des, float v_des, float kp, float kd, float t_ff);
+  void packCommand(CANMessage &msg, float p_des, float v_des, float kp,
+                   float kd, float t_ff);
 
   void unpackCommand(const CANMessage &msg);
   CANMessage latestFrame;
@@ -58,7 +59,6 @@ private:
   uint32_t lastSendTime = 0;
   int sendInterval = 1; // ms
   RemoteDebug &Debug;
-
 };
 
 #endif
