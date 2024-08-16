@@ -53,13 +53,14 @@ const LimbStatus Dashboard::getRightLegStatus() const
 
 const LimbStatus Dashboard::getLimbStatus(const Limb *limb) const
 {
-  return limb != nullptr ? limb->getStatus() : LimbStatus{0.0, 0.0, 0.0, 0.0, 0, false, false, 1};
+  return limb != nullptr ? limb->getStatus() : LimbStatus{0.0, 0.0, 0.0, 0.0, 0, true, false, 1};
 }
 
 StaticJsonDocument<90> Dashboard::getLimbStatusJson(const Limb *limb) const
 {
   const LimbStatus status = getLimbStatus(limb);
   StaticJsonDocument<200> doc;
+  doc["target"] = status.target;
   doc["position"] = status.position;
   doc["velocity"] = status.velocity;
   doc["torque"] = status.torque;

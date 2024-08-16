@@ -39,8 +39,8 @@ export function Limb({ status, children }: LimbProps) {
           </div>
           <div className="even:bg-gray-600/50">
             <h2 className="font-bold">Calibration</h2>
-            <p className={cn(status?.isCalibrating ? 'text-red-600' : 'text-green-600')}>
-              {status?.isCalibrating ? 'Pending' : 'Done'}
+            <p className={cn(status?.isOnline && status?.isCalibrating ? 'text-red-600' : 'text-green-600')}>
+              {!status?.isOnline ? 'Offline' : status?.isCalibrating ? 'Pending' : 'Done'}
             </p>
           </div>
           <div className="even:bg-gray-600/50">
