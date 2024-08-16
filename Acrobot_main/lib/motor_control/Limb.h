@@ -22,6 +22,18 @@ enum LastControlMode
   CONTROL_MODE_TORQUE
 };
 
+struct LimbStatus
+{
+  float target;
+  float position;
+  float velocity;
+  float torque;
+  uint8_t temperature;
+  bool isCalibrating;
+  bool isOnline;
+  uint8_t errorCode;
+};
+
 class Limb
 {
 public:
@@ -36,15 +48,15 @@ public:
   // straight to the motor. Use with caution.
   void setTorqueUnprotected(float torque);
 
-  float getTarget();
-  float getPosition();
-  float getVelocity();
-  float getTorque();
-  uint8_t getTemperature();
-  uint8_t getErrorCode();
-  State getState();
+  float getTarget() const;
+  float getPosition() const;
+  float getVelocity() const;
+  float getTorque() const;
+  uint8_t getTemperature() const;
+  uint8_t getErrorCode() const;
+  State getState() const;
 
-  const MotorStatus getStatus() const;
+  const LimbStatus getStatus() const;
 
 protected:
   Motor &motor;
@@ -79,10 +91,10 @@ protected:
   void start();
   void tryCalibration();
 
-  float radToDegrees(float rad);
-  float degreesToRad(float degrees);
-  float correctOffsetShaftToMotor(float degrees);
-  float correctOffsetMotorToShaft(float degrees);
+  float radToDegrees(float rad) const;
+  float degreesToRad(float degrees) const;
+  float correctOffsetShaftToMotor(float degrees) const;
+  float correctOffsetMotorToShaft(float degrees) const;
 
   int16_t calibrationDegreesLow;
   const int offsetDegrees = 36;

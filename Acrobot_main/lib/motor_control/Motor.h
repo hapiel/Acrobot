@@ -5,16 +5,6 @@
 #include "CANHandler.h"
 #include "RemoteDebug.h"
 
-struct MotorStatus
-{
-  float position;
-  float velocity;
-  float torque;
-  uint8_t temperature;
-  bool isOnline;
-  uint8_t errorCode;
-};
-
 class Motor
 {
 public:
@@ -35,8 +25,6 @@ public:
   uint8_t getTemperature() const;
   uint8_t getErrorCode() const;
   bool isOnline() const;
-
-  const MotorStatus getStatus() const;
 
   void update();
 

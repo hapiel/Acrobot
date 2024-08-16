@@ -179,19 +179,6 @@ uint8_t Motor::getErrorCode() const { return errorCode; }
 
 bool Motor::isOnline() const { return canHandler.getIsOnline(canID); }
 
-const MotorStatus Motor::getStatus() const
-{
-  MotorStatus status;
-  status.position = getPosition();
-  status.velocity = getVelocity();
-  status.torque = getTorque();
-  status.temperature = getTemperature();
-  status.isOnline = isOnline();
-  status.errorCode = getErrorCode();
-
-  return status;
-}
-
 void Motor::unpackCommand(const CANMessage &msg)
 {
   // Unpack ints from the CAN buffer

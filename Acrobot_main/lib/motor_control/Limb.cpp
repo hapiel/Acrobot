@@ -95,7 +95,7 @@ void Limb::setTorqueUnprotected(float torque)
   motor.setTorque(torque);
 }
 
-float Limb::getTarget()
+float Limb::getTarget() const
 {
   if (lastControlMode != CONTROL_MODE_TARGET)
   {
@@ -155,11 +155,24 @@ void Limb::tryCalibration()
   }
 }
 
-State Limb::getState() { return state; }
+State Limb::getState() const { return state; }
 
-const MotorStatus Limb::getStatus() const { return motor.getStatus(); }
+const LimbStatus Limb::getStatus() const
+{
+  LimbStatus status;
+  status.target = getTarget();
+  status.position = getPosition();
+  status.velocity = getVelocity();
+  status.torque = getTorque();
+  status.temperature = getTemperature();
+  status.isCalibrating = state == STATE_CALIBRATION;
+  status.isOnline = motor.isOnline();
+  status.errorCode = getErrorCode();
 
-float Limb::getPosition()
+  return status;
+}
+
+float Limb::getPosition() const
 {
 
   float posDegrees = radToDegrees(motor.getPosition());
@@ -173,7 +186,7 @@ float Limb::getPosition()
   return posOffsetCorrected;
 }
 
-float Limb::getVelocity()
+float Limb::getVelocity() const
 {
   float vel = motor.getVelocity();
   if (inverted)
@@ -183,25 +196,24 @@ float Limb::getVelocity()
   return vel;
 }
 
-float Limb::getTorque() { return motor.getTorque(); }
+float Limb::getTorque() const { return motor.getTorque(); }
 
-uint8_t Limb::getTemperature() { return motor.getTemperature(); }
+uint8_t Limb::getTemperature() const { return motor.getTemperature(); }
 
-uint8_t Limb::getErrorCode() { return motor.getErrorCode(); }
+uint8_t Limb::getErrorCode() const { return motor.getErrorCode(); }
 
-float Limb::radToDegrees(float rad) { return rad * 180.0 / PI; }
+float Limb::radToDegrees(float rad) const { return rad * 180.0 / PI; }
 
-float Limb::degreesToRad(float degrees) { return degrees * PI / 180.0; }
+float Limb::degreesToRad(float degrees) const { return degrees * PI / 180.0; }
 
-float Limb::correctOffsetShaftToMotor(float shaftDegrees)
+float Limb::correctOffsetShaftToMotor(float shaftDegrees) const
 {
   return shaftDegrees - 180 + offset180 - offsetGearbox;
 }
 
-float Limb::correctOffsetMotorToShaft(float motorDegrees)
+float Limb::correctOffsetMotorToShaft(float motorDegrees) const
 {
   return motorDegrees + 180 - offset180 + offsetGearbox;
-  ;
 }
 
 void Limb::update()

@@ -5,6 +5,7 @@ export type LimbProps = {
   status?: LimbStatus;
   children: React.ReactNode;
 };
+
 export function Limb({ status, children }: LimbProps) {
   return (
     <div
@@ -16,6 +17,10 @@ export function Limb({ status, children }: LimbProps) {
       <div className="flex flex-col">
         {children}
         <div className="rounded-b-lg *:px-2">
+          <div className="even:bg-gray-600/50">
+            <h2 className="font-bold">Target</h2>
+            {status?.isOnline ? <p>{status?.target ?? '-'}</p> : <p>-</p>}
+          </div>
           <div className="even:bg-gray-600/50">
             <h2 className="font-bold">Position</h2>
             {status?.isOnline ? <p>{status?.position ?? '-'}</p> : <p>-</p>}
@@ -31,6 +36,12 @@ export function Limb({ status, children }: LimbProps) {
           <div className="even:bg-gray-600/50">
             <h2 className="font-bold">Temperature</h2>
             {status?.isOnline ? <p>{status?.temperature ?? '-'}</p> : <p>-</p>}
+          </div>
+          <div className="even:bg-gray-600/50">
+            <h2 className="font-bold">Calibration</h2>
+            <p className={cn(status?.isCalibrating ? 'text-red-600' : 'text-green-600')}>
+              {status?.isCalibrating ? 'Pending' : 'Done'}
+            </p>
           </div>
           <div className="even:bg-gray-600/50">
             <h2 className="font-bold">Status</h2>

@@ -31,40 +31,41 @@ Dashboard &Dashboard::setBatterySensor(const BatterySensor &sensor)
   return *this;
 }
 
-const MotorStatus Dashboard::getLeftArmStatus() const
+const LimbStatus Dashboard::getLeftArmStatus() const
 {
   return getLimbStatus(leftArm);
 }
 
-const MotorStatus Dashboard::getRightArmStatus() const
+const LimbStatus Dashboard::getRightArmStatus() const
 {
   return getLimbStatus(rightArm);
 }
 
-const MotorStatus Dashboard::getLeftLegStatus() const
+const LimbStatus Dashboard::getLeftLegStatus() const
 {
   return getLimbStatus(leftLeg);
 }
 
-const MotorStatus Dashboard::getRightLegStatus() const
+const LimbStatus Dashboard::getRightLegStatus() const
 {
   return getLimbStatus(rightLeg);
 }
 
-const MotorStatus Dashboard::getLimbStatus(const Limb *limb) const
+const LimbStatus Dashboard::getLimbStatus(const Limb *limb) const
 {
-  return limb != nullptr ? limb->getStatus() : MotorStatus{0.0, 0.0, 0.0, 0, false, 1};
+  return limb != nullptr ? limb->getStatus() : LimbStatus{0.0, 0.0, 0.0, 0.0, 0, false, false, 1};
 }
 
 StaticJsonDocument<90> Dashboard::getLimbStatusJson(const Limb *limb) const
 {
-  const MotorStatus status = getLimbStatus(limb);
+  const LimbStatus status = getLimbStatus(limb);
   StaticJsonDocument<200> doc;
   doc["position"] = status.position;
   doc["velocity"] = status.velocity;
   doc["torque"] = status.torque;
   doc["temperature"] = status.temperature;
-  doc["isOnline"] = rand() % 100 > 50; // status.isOnline;
+  doc["isCalibrating"] = status.isCalibrating;
+  doc["isOnline"] = status.isOnline;
   doc["errorCode"] = status.errorCode;
 
   return doc;

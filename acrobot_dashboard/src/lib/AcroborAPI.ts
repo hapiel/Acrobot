@@ -1,8 +1,10 @@
 export type LimbStatus = {
+  target: number;
   position: number;
   velocity: number;
   torque: number;
   temperature: number;
+  isCalibrating: boolean;
   isOnline: boolean;
 };
 
