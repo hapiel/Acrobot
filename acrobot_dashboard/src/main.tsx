@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from '@/routes/root.tsx';
 import { ErrorPage } from '@/routes/error-page';
 import { RobotStatus } from '@/routes/robot-status';
+import { SD } from '@/routes/sd';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
     errorElement: <Root />,
     children: [
       { index: true, element: <RobotStatus /> },
+      { path: 'sd', element: <SD /> },
       { path: '*', element: <ErrorPage /> }
     ]
   }
