@@ -1822,6 +1822,7 @@ void inits()
   async_server.addHandler(&ws);
   async_server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *request)
                   { request->send(200, "text/plain", "pong"); });
+  async_server.on("/sd", HTTP_GET, onSdRequest);
 
   async_server.onNotFound(notFound);
 

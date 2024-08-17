@@ -12,18 +12,6 @@ WebServer server(80);
 AsyncWebServer async_server(3000);
 AsyncWebSocket ws("/ws");
 
-void notFound(AsyncWebServerRequest *request)
-{
-  if (request->method() == HTTP_OPTIONS)
-  {
-    request->send(200);
-  }
-  else
-  {
-    request->send(404, "application/json", "{\"message\":\"Not found\"}");
-  }
-}
-
 // source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
 
 static bool hasSD = false;
@@ -327,6 +315,60 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
     Serial.println();
     client->text("Message received");
   }
+}
+void notFound(AsyncWebServerRequest *request)
+{
+  if (request->method() == HTTP_OPTIONS)
+  {
+    request->send(200);
+  }
+  else
+  {
+    request->send(404, "application/json", "{\"message\":\"Not found\"}");
+  }
+}
+
+void onSdRequest(AsyncWebServerRequest *request)
+{
+  Serial.println("processing SD request");
+  String path = "/";
+  File dir = SD.open((char *)path.c_str());
+  path = String();
+  if (!dir.isDirectory())
+  {
+    dir.close();
+    return request->send(400, "text/plain", "BAD PATH");
+  }
+  dir.rewindDirectory();
+
+  String response;
+  for (int cnt = 0; cnt < 10; ++cnt)
+  {
+    File entry = dir.openNextFile();
+    if (!entry)
+    {
+      break;
+    }
+
+    String output;
+    if (cnt > 0)
+    {
+      output = ',';
+    }
+
+    output += "{\"type\":\"";
+    output += (entry.isDirectory()) ? "dir" : "file";
+    output += "\",\"name\":\"";
+    output += entry.path();
+    Serial.println(entry.path());
+    output += "\"";
+    output += "}";
+    response += output;
+    entry.close();
+  }
+  response = "[" + response + "]";
+  dir.close();
+  request->send(200, "application/json", response);
 }
 
 #endif
