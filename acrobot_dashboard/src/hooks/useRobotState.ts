@@ -1,35 +1,89 @@
-import { GetStatusResponse } from '@/lib/AcroborAPI';
 import { create } from 'zustand';
 
-export type RobotStatus = {
-  status: GetStatusResponse;
-  setStatus: (status: GetStatusResponse) => void;
-  setRightArm: (status: GetStatusResponse['rightArm']) => void;
-  setLeftArm: (status: GetStatusResponse['leftArm']) => void;
-  setRightLeg: (status: GetStatusResponse['rightLeg']) => void;
+export type LimbStatus = {
+  target: number;
+  position: number;
+  velocity: number;
+  torque: number;
+  temperature: number;
+  isCalibrating: boolean;
+  isOnline: boolean;
 };
 
-export const useRobotStatus = create<RobotStatus>((set) => ({
-  status: {} as GetStatusResponse,
-  setStatus: (status: GetStatusResponse) => set({ status }),
-  setRightArm: (status: GetStatusResponse['rightArm']) => {
+export type RobotStatus = {
+  leftLeg: LimbStatus;
+  rightLeg: LimbStatus;
+  leftArm: LimbStatus;
+  rightArm: LimbStatus;
+};
+
+export type RobotStatusStore = {
+  status: RobotStatus;
+  setStatus: (status: RobotStatus) => void;
+  setRightArm: (status: RobotStatus['rightArm']) => void;
+  setLeftArm: (status: RobotStatus['leftArm']) => void;
+  setRightLeg: (status: RobotStatus['rightLeg']) => void;
+  setLeftLeg: (status: RobotStatus['leftLeg']) => void;
+};
+
+export const useRobotStatus = create<RobotStatusStore>((set) => ({
+  setStatus: (status: RobotStatus) => set({ status }),
+  setRightArm: (status: RobotStatus['rightArm']) => {
     set((state) => {
       return { status: { ...state.status, rightArm: status } };
     });
   },
-  setLeftArm: (status: GetStatusResponse['leftArm']) => {
+  setLeftArm: (status: RobotStatus['leftArm']) => {
     set((state) => {
       return { status: { ...state.status, leftArm: status } };
     });
   },
-  setRightLeg: (status: GetStatusResponse['rightLeg']) => {
+  setRightLeg: (status: RobotStatus['rightLeg']) => {
     set((state) => {
       return { status: { ...state.status, rightLeg: status } };
     });
   },
-  setLeftLeg: (status: GetStatusResponse['leftLeg']) => {
+  setLeftLeg: (status: RobotStatus['leftLeg']) => {
     set((state) => {
       return { status: { ...state.status, leftLeg: status } };
     });
-  }
+  },
+  status: {
+    leftArm: {
+      target: 0,
+      position: 0,
+      velocity: 0,
+      torque: 0,
+      temperature: 0,
+      isCalibrating: true,
+      isOnline: false
+    },
+    rightArm: {
+      target: 0,
+      position: 0,
+      velocity: 0,
+      torque: 0,
+      temperature: 0,
+      isCalibrating: true,
+      isOnline: false
+    },
+    leftLeg: {
+      target: 0,
+      position: 0,
+      velocity: 0,
+      torque: 0,
+      temperature: 0,
+      isCalibrating: true,
+      isOnline: false
+    },
+    rightLeg: {
+      target: 0,
+      position: 0,
+      velocity: 0,
+      torque: 0,
+      temperature: 0,
+      isCalibrating: true,
+      isOnline: false
+    }
+  } satisfies RobotStatus
 }));
