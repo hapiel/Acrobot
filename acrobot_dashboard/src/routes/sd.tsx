@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { File, Folder, Loader2, Play, Repeat } from 'lucide-react';
+import { File, Folder, Loader2, Play, Repeat, RotateCcw } from 'lucide-react';
 import { useQuery } from 'react-query';
 
 export function SD() {
@@ -36,6 +36,10 @@ export function SD() {
               >
                 <Play size={30} className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600" />
                 <Repeat size={30} className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600" />
+                <RotateCcw
+                  size={30}
+                  className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
+                />
               </div>
             </div>
           );
