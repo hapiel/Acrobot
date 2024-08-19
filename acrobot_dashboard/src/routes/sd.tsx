@@ -16,6 +16,8 @@ export function SD() {
     keepPreviousData: true
   });
   const fileContents = useQuery(['file_contents', fileName], ({ queryKey }) => fetchFileContents(queryKey[1]));
+
+  const [isSaving, setIsSaving] = useState(false);
   const pre = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
@@ -96,18 +98,29 @@ export function SD() {
         <div className="relative flex-grow overflow-x-auto border-l-2 border-gray-200">
           <div className="sticky left-0 bg-gray-700 p-2 text-center">
             <h3>{fileName}</h3>
-            <div className="absolute right-2 top-1 hover:cursor-pointer">
-              <Save
-                onClick={() => {
-                  const fileContents = pre.current?.innerText;
-                  if (fileContents) saveChanges({ fileName, fileContents });
-                }}
-                size={32}
-              />
+            <div className="absolute right-2 top-1">
+              {isSaving ? (
+                <Loader2 className="pointer-events-none animate-spin" size={32} />
+              ) : (
+                <Save
+                  className="hover:cursor-pointer"
+                  onClick={async () => {
+                    const fileContents = pre.current?.innerText;
+                    if (!fileContents) return;
+                    setIsSaving(true);
+                    try {
+                      await saveChanges({ fileName, fileContents });
+                    } finally {
+                      setIsSaving(false);
+                    }
+                  }}
+                  size={32}
+                />
+              )}
             </div>
           </div>
           {fileContents.isLoading ? (
-            <Loader2 className="animate-spin" />
+            <Loader2 size={32} className="animate-spin" />
           ) : (
             <pre ref={pre} contentEditable="plaintext-only" className="m-2 focus-visible:outline-none">
               {fileContents.data ? fileContents.data : null}
