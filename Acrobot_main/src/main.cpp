@@ -67,6 +67,7 @@ The project should be built in platformio
 #include "menu.h"
 #include "utilsAcrobot.h"
 #include "webserverFunctions.h"
+#include <functional>
 
 // parameters
 #include "motorIDs.h"
@@ -101,16 +102,27 @@ CSV_Parser cp("ssffffffff", false);
 
 // queue handling for tasks
 QueueHandle_t functionQueue;
+QueueHandle_t secondaryTaskQueue;
 
-using TaskFunction = void (*)();
+using Task = std::function<void()>;
 
 void executeTasksFromQueue()
 {
-  TaskFunction taskFunction;
+  Task task;
 
-  while (xQueueReceive(functionQueue, &taskFunction, 0))
+  while (xQueueReceive(functionQueue, &task, 0))
   {
-    taskFunction(); // Execute the task function
+    task(); // Execute the task function
+  }
+}
+
+void executeTasksFromSecondaryQueue()
+{
+  Task task;
+
+  while (xQueueReceive(secondaryTaskQueue, &task, 0))
+  {
+    task(); // Execute the task function
   }
 }
 
@@ -211,23 +223,23 @@ SUB_MENU(
     ITEM_COMMAND("sit",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_spiegel_acroyoga.csv",
                                           true, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     // act_circusstad.csv
     ITEM_COMMAND("spiegel-yoga",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_spiegel_acroyoga.csv",
                                           false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("mannequin",
@@ -237,12 +249,12 @@ SUB_MENU(
     ITEM_COMMAND("microphone",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_microphone.csv", false,
                                           false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("mannequin 2",
@@ -252,34 +264,34 @@ SUB_MENU(
     ITEM_COMMAND("stand",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_acro.csv", true, false,
                                           50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("lets dance",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_acro.csv", false, false,
                                           50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("I feel empty",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/circusstad_ending_alive.csv", false,
                                           false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
 );
@@ -288,76 +300,76 @@ SUB_MENU(kelderfestPage, mainMenu,
          ITEM_COMMAND("stand",
                       []()
                       {
-                        TaskFunction lambdaFunction = []()
+                        Task task = []()
                         {
                           movePlayer.startMove("/pose_stand.csv");
                         };
-                        xQueueSend(functionQueue, &lambdaFunction,
+                        xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
          // act_jamileh.csv
          ITEM_COMMAND("act Jamileh", []()
                       {
-           TaskFunction lambdaFunction = []() {
+           Task task = []() {
              movePlayer.startMove("/act_jamileh.csv", false, false, 50);
            };
-           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(agtPage, mainMenu,
          ITEM_COMMAND("stand",
                       []()
                       {
-                        TaskFunction lambdaFunction = []()
+                        Task task = []()
                         {
                           movePlayer.startMove("/pose_stand.csv");
                         };
-                        xQueueSend(functionQueue, &lambdaFunction,
+                        xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
          // act_moveyourfeet.csv
          ITEM_COMMAND("act move feet", []()
                       {
-           TaskFunction lambdaFunction = []() {
+           Task task = []() {
              movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50);
            };
-           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(fgtPage, mainMenu,
          ITEM_COMMAND("stand",
                       []()
                       {
-                        TaskFunction lambdaFunction = []()
+                        Task task = []()
                         {
                           movePlayer.startMove("/pose_stand.csv");
                         };
-                        xQueueSend(functionQueue, &lambdaFunction,
+                        xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
          // act_moveyourfeet.csv
          ITEM_COMMAND("act move feet",
                       []()
                       {
-                        TaskFunction lambdaFunction = []()
+                        Task task = []()
                         {
                           movePlayer.startMove("/FGT_lets_dance.csv", false,
                                                false, 50);
                         };
-                        xQueueSend(functionQueue, &lambdaFunction,
+                        xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
          ITEM_COMMAND("walk_normal", []()
                       {
-           TaskFunction lambdaFunction = []() {
+           Task task = []() {
              movePlayer.startMove("/walk_normal.csv", false, true);
            };
-           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(sequencerPage, mainMenu, ITEM_COMMAND("walk_test", []()
                                                {
-           TaskFunction lambdaFunction = []() {
+           Task task = []() {
              sequencer.startSequence("/routine_walk_test.csv");
            };
-           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(movesPage, mainMenu, ITEM_SUBMENU("Poses", movePosePage),
          ITEM_SUBMENU("Acro", moveAcroPage),
@@ -376,548 +388,548 @@ SUB_MENU(
     ITEM_COMMAND("wave_double",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/greeting_wave_double.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("wave_left",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/greeting_wave_left.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("nod",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/greeting_nod.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("bow_small",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/greeting_bow_small.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("bow_deep",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/greeting_bow_deep.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("shake_hand", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/greeting_shake_hand.csv");
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveWarmupPage, movesPage,
     ITEM_COMMAND("arm_swing",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/warmup_arm_swing.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("leg_stretch",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/warmup_leg_stretch.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("shoulder_stretch",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/warmup_shoulder_stretch.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("situp", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/warmup_situp.csv");
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(moveAcroPage, movesPage, ITEM_COMMAND("acro_podcheska", []()
                                                {
-           TaskFunction lambdaFunction = []() {
+           Task task = []() {
              movePlayer.startMove("/acro_podcheska.csv");
            };
-           xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveTravelPage, movesPage,
     ITEM_COMMAND("walk_normal",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_normal.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("walk_large",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_large.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("walk_backwards",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_backwards.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("walk_forwards",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_forwards.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("walk_zombie",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_zombie.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("crawl_sit",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/crawl_sit.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("crawl_scorpion", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/crawl_scorpion.csv", false, true);
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveQuick50Page, movesPage,
     ITEM_COMMAND("quick P50 01",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_01.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 02",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_02.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 03",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_03.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 04",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_04.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 05",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_05.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 06",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_06.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 07",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_07.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 08",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_08.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 09",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_09.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 10",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_10.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 11",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_11.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 12",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_12.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 13",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_13.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 14",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_14.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 15",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_15.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 16",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_16.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 17",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_17.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 18",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_18.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 19",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_19.csv", false, false, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 20", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/quick_20.csv", false, false, 50);
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveQuickPage, movesPage,
     ITEM_COMMAND("quick_01",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_01.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_02",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_02.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_03",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_03.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_04",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_04.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_05",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_05.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_06",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_06.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_07",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_07.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_08",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_08.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_09",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_09.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_10",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_10.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_11",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_11.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_12",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_12.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_13",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_13.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_14",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_14.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_15",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_15.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_16",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_16.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_17",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_17.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_18",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_18.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_19",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_19.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_20",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_20.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
 );
@@ -927,195 +939,195 @@ SUB_MENU(
     ITEM_COMMAND("quick P50 01",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_01.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 02",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_02.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 03",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_03.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 04",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_04.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 05",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_05.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 06",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_06.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P50 07",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_07.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 08",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_08.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 09",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_09.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 10",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_10.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 11",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_11.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 12",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_12.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 13",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_13.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 14",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_14.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 15",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_15.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 16",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_16.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 17",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_17.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 18",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_18.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 19",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_19.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick P50 20",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_20.csv", false, true, 50);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
 );
@@ -1125,492 +1137,492 @@ SUB_MENU(
     ITEM_COMMAND("quick_01",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_01.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_02",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_02.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_03",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_03.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_04",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_04.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_05",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_05.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_06",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_06.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick_07",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_07.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_08",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_08.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_09",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_09.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_10",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_10.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_11",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_11.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_12",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_12.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_13",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_13.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_14",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_14.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_15",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_15.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_16",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_16.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_17",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_17.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_18",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_18.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_19",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_19.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("quick_20", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/quick_20.csv", false, true);
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveQuickPowPage, movesPage,
     ITEM_COMMAND("quick P 10",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 10);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 20",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 20);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 40",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 40);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 60",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 60);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 80",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 80);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 100",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 100);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 120",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/quick_pow.csv", false, false, 120);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("quick P 150", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/quick_pow.csv", false, false, 150);
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     movePosePage, movesPage,
     ITEM_COMMAND("stand",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_stand.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("stand_legs_only",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_stand_legs_only.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("180",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_180.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("sit",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_sit.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("handstand",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_handstand.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("seven",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_seven.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("handstand_split",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_handstand_split.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("handstd oversplit",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_handstand_oversplit.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("planche",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_planche.csv", true, false, 30,
                                           3, 30);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("scorpion",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_scorpion.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("yoga_dog",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_yoga_dog.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("table",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/pose_table.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("split_l", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/pose_split_l.csv");
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(
     moveTestPage, movesPage,
     ITEM_COMMAND("walk repeat",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_normal.csv", false, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("walk begin only",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_normal.csv", true, true);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("w begin only slow",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_normal.csv", true, true, 5, 1,
                                           10);
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("walk non-repeat",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/walk_normal.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("test startallfront",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/test-start_front.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
     ITEM_COMMAND("rightarm_only",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/TEST_rightarm_only.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("righta_posemixer",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/TEST_rightarm_posemixer.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("ra non zero start",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/TEST_rightarm_nonzerostart.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("ra late start",
                  []()
                  {
-                   TaskFunction lambdaFunction = []()
+                   Task task = []()
                    {
                      movePlayer.startMove("/TEST_rightarm_latestart.csv");
                    };
-                   xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY);
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("ra weird curve", []()
                  {
-      TaskFunction lambdaFunction = []() {
+      Task task = []() {
         movePlayer.startMove("/TEST_rightarm_weirdcurve.csv");
       };
-      xQueueSend(functionQueue, &lambdaFunction, portMAX_DELAY); }));
+      xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(bootPage, mainMenu,
          ITEM_COMMAND("CALLIBRATE",
                       []()
                       {
-                        TaskFunction lambdaFunction = []()
+                        Task task = []()
                         {
                           legR.startCalibration();
                           legL.startCalibration();
                           armL.startCalibration();
                           armR.startCalibration();
                         };
-                        xQueueSend(functionQueue, &lambdaFunction,
+                        xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
          ITEM_BASIC(menu.bootAdc),   // adc
@@ -1750,14 +1762,12 @@ void inits()
   Serial.println("Next init: wifi");
   // WiFi.mode(WIFI_STA);
   WiFi.begin(wifiSsid, wifiPassword);
-  while (WiFi.status() != WL_CONNECTED)
+  if (WiFi.status() == WL_CONNECTED)
   {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+    Serial.println("Connected to WiFi");
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
   }
-  Serial.println("Connected to WiFi");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
 
   Serial.println("Next init: Debug");
   initDebug(); // AFTER WIFI!
@@ -1822,7 +1832,12 @@ void inits()
   async_server.addHandler(&ws);
   async_server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *request)
                   { request->send(200, "text/plain", "pong"); });
-  async_server.on("/sd", HTTP_GET, onSdRequest);
+  async_server.on("/sd", HTTP_GET, [](AsyncWebServerRequest *request)
+                  {
+                    Task task = [request]() {
+    onSdRequest(request);
+  };
+  xQueueSend(secondaryTaskQueue, &task, portMAX_DELAY); });
 
   async_server.onNotFound(notFound);
 
@@ -1836,13 +1851,6 @@ void inits()
             { returnOK(); }, handleFileUpload);
   server.on("/ping", HTTP_GET, []()
             { server.send(200, "text/plain", "pong"); });
-
-  server.on("/robot-status", HTTP_GET, []()
-            {
-              StaticJsonDocument<400> doc = dashboard.getRobotStatusJson();
-              String responseBody;
-              serializeJson(doc, responseBody);
-              server.send(200, "application/json", responseBody); });
 
   server.onNotFound(handleNotFound);
 
@@ -1952,6 +1960,7 @@ void taskSecondary(void *parameter)
   {
     updatesI2C();
     updatesWebsocket();
+    executeTasksFromSecondaryQueue();
     vTaskDelay(5);
   }
 }
@@ -1962,7 +1971,8 @@ void setup()
   Serial.println("setting up");
   inits();
   Serial.println("inits done");
-  functionQueue = xQueueCreate(5, sizeof(TaskFunction));
+  functionQueue = xQueueCreate(5, sizeof(Task));
+  secondaryTaskQueue = xQueueCreate(5, sizeof(Task));
 
   BaseType_t taskMainCreated = xTaskCreatePinnedToCore(taskMain, "taskMain", 8192, NULL, 1, NULL, 1);
   BaseType_t taskI2CCreated = xTaskCreatePinnedToCore(taskSecondary, "taskI2C", 20000, NULL, 1, NULL, 1);

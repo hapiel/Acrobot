@@ -1,9 +1,14 @@
 import { cn } from '@/lib/utils';
+import axios from 'axios';
 import { File, Folder, Loader2, Play, Repeat, RotateCcw } from 'lucide-react';
 import { useQuery } from 'react-query';
 
 export function SD() {
-  const { isLoading, isError, data, error } = useQuery('sd_contents', fetchSDContents);
+  const { isLoading, isError, data, error } = useQuery('sd_contents', fetchSDContents, {
+    staleTime: 600_000,
+    retryDelay: 60_000,
+    keepPreviousData: true
+  });
 
   if (isLoading) {
     return (
@@ -49,9 +54,17 @@ export function SD() {
   );
 }
 
-async function fetchSDContents(): Promise<{ type: string; name: string }[]> {
-  const response = await fetch('http://acrobot.local:3000/sd');
-  if (!response.ok) throw new Error(`Failed to fetch SD contents: ${response.statusText}`);
+export type GetSdResponse = { type: string; name: string }[];
 
-  return await response.json();
+async function fetchSDContents(): Promise<GetSdResponse> {
+  const files: GetSdResponse = [];
+  const dir = '/';
+  const { data } = await axios.get<GetSdResponse>(`/list`, {
+    baseURL: 'http://acrobot.local',
+    params: { dir }
+  });
+
+  files.push(...data);
+
+  return files;
 }

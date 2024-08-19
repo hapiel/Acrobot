@@ -331,6 +331,13 @@ void notFound(AsyncWebServerRequest *request)
 void onSdRequest(AsyncWebServerRequest *request)
 {
   Serial.println("processing SD request");
+
+  if (!SD.begin())
+  {
+    Serial.println("SD Card initialization failed!");
+    return request->send(500, "text/plain", "SD Card initialization failed");
+  }
+
   String path = "/";
   File dir = SD.open((char *)path.c_str());
   path = String();
@@ -341,34 +348,56 @@ void onSdRequest(AsyncWebServerRequest *request)
   }
   dir.rewindDirectory();
 
-  String response;
-  for (int cnt = 0; cnt < 10; ++cnt)
-  {
-    File entry = dir.openNextFile();
-    if (!entry)
-    {
-      break;
-    }
+  uint cnt = 0;
+  String data = "[";
+  bool done = false;
+  AsyncWebServerResponse *response = request->beginChunkedResponse(
+      "application/json",
+      [&dir, &cnt, &data, &done](uint8_t *buffer, size_t maxLen, size_t index) -> size_t
+      {
+        Serial.printf("maxLen: %d, index: %d\n", maxLen, index);
+        if (done)
+        {
+          return 0;
+        }
 
-    String output;
-    if (cnt > 0)
-    {
-      output = ',';
-    }
+        Serial.println("opening next file");
+        File entry = dir.openNextFile();
+        if (!entry)
+        {
+          String closing = "]";
+          memcpy(buffer, closing.c_str(), strlen(closing.c_str()));
+          dir.close();
+          done = true;
+          return strlen(closing.c_str());
+        }
 
-    output += "{\"type\":\"";
-    output += (entry.isDirectory()) ? "dir" : "file";
-    output += "\",\"name\":\"";
-    output += entry.path();
-    Serial.println(entry.path());
-    output += "\"";
-    output += "}";
-    response += output;
-    entry.close();
-  }
-  response = "[" + response + "]";
-  dir.close();
-  request->send(200, "application/json", response);
+        String type = entry.isDirectory() ? "dir" : "file";
+        String name = entry.path();
+        if (cnt > 0)
+        {
+          data += ",";
+        }
+        data += "{\"type\":\"" + type + "\",\"name\":\"" + name + "\"}]";
+        cnt += 1;
+
+        Serial.println(type + ", " + name + ", " + String(cnt));
+
+        entry.close();
+
+        const char *message = data.c_str();
+        size_t messageLen = strlen(message);
+        size_t chunkSize = min(maxLen, messageLen - index);
+        Serial.printf("message length %d,chunk size %d\n", messageLen, chunkSize);
+
+        memcpy(buffer, message + index, chunkSize);
+
+        return chunkSize;
+      });
+
+  response->setContentLength(CONTENT_LENGTH_UNKNOWN);
+
+  request->send(response);
 }
 
 #endif
