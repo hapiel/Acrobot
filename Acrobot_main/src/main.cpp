@@ -1844,6 +1844,30 @@ void inits()
   async_server.begin();
 
   server.enableCORS(true);
+  server.on("/play", HTTP_GET, []
+            {
+    if (!server.hasArg("mode")) {
+      server.send(400, "text/plain", "missing mode\r\n");
+    }
+
+    if (!server.hasArg("file")) {
+      server.send(400, "text/plain", "missing file\r\n");
+    }
+
+    if (!server.hasArg("power")) {
+      server.send(400, "text/plain", "missing power\r\n");
+    }
+
+    Task task = []() {
+      bool beginPosOnly = server.arg("mode") == "beginPosOnly";
+      bool repeat = server.arg("mode") == "repeat";
+      float power = server.arg("power").toInt();
+      movePlayer.startMove(server.arg("file").c_str(), beginPosOnly, repeat, power);
+    };
+    xQueueSend(functionQueue, &task, portMAX_DELAY);
+
+    server.send(200); });
+
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);
   server.on("/edit", HTTP_PUT, handleCreate);

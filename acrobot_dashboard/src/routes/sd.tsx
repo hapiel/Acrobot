@@ -15,6 +15,7 @@ export function SD() {
     retryDelay: 60_000,
     keepPreviousData: true
   });
+  const fileContents = useQuery(['file_contents', fileName], ({ queryKey }) => fetchFileContents(queryKey[1]));
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
@@ -35,7 +36,6 @@ export function SD() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [navigate, path]);
 
-  const fileContents = useQuery(['file_contents', fileName], ({ queryKey }) => fetchFileContents(queryKey[1]));
   if (sdContents.isLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -56,7 +56,7 @@ export function SD() {
                 key={type + name}
                 className={cn(
                   fileName === name ? 'bg-stone-500' : '',
-                  'flex justify-between gap-2 border-b-2 border-gray-700 px-1 transition-all hover:cursor-pointer hover:bg-stone-400'
+                  'flex justify-between gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:cursor-pointer hover:bg-stone-400'
                 )}
                 onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
               >
@@ -70,12 +70,17 @@ export function SD() {
                   )}
                 >
                   <Play
-                    onClick={() => console.log('playing once')}
+                    onClick={() => playFile({ file: name, mode: 'once', power: 50 })}
                     size={30}
                     className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
                   />
-                  <Repeat size={30} className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600" />
+                  <Repeat
+                    onClick={() => playFile({ file: name, mode: 'repeat', power: 50 })}
+                    size={30}
+                    className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
+                  />
                   <RotateCcw
+                    onClick={() => playFile({ file: name, mode: 'beginPosOnly', power: 50 })}
                     size={30}
                     className="rounded-md p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
                   />
@@ -84,9 +89,13 @@ export function SD() {
             );
           })}
         </div>
-        <div className="max-w-[100%] flex-grow border-2 border-gray-200">
-          <div className="bg-gray-700 p-2 text-center">{fileName}</div>
-          <pre className="m-2 overflow-x-auto">{fileContents.data ? fileContents.data : null}</pre>
+        <div className="relative max-w-[100%] flex-grow overflow-x-auto border-l-2 border-gray-200">
+          <h3 className="sticky left-0 bg-gray-700 p-2 text-center">{fileName}</h3>
+          {fileContents.isLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <pre className="m-2">{fileContents.data ? fileContents.data : null}</pre>
+          )}
         </div>
       </div>
     </div>
@@ -113,4 +122,16 @@ async function fetchFileContents(fileName: string): Promise<string> {
   });
 
   return data;
+}
+
+export type PlayFileOptions = {
+  file: string;
+  mode: 'once' | 'repeat' | 'beginPosOnly';
+  power: number;
+};
+async function playFile({ file, mode, power }: PlayFileOptions) {
+  await axios.get('/play', {
+    baseURL: 'http://acrobot.local',
+    params: { file, mode, power }
+  });
 }
