@@ -126,6 +126,11 @@ void executeTasksFromSecondaryQueue()
   }
 }
 
+void sendToSecondaryTaskQueue(Task task)
+{
+  xQueueSend(secondaryTaskQueue, &task, portMAX_DELAY);
+};
+
 // needed for csv_parser library
 char feedRowParser() { return file.read(); }
 bool rowParserFinished() { return ((file.available() > 0) ? false : true); }
@@ -1844,7 +1849,7 @@ void inits()
   async_server.begin();
 
   server.enableCORS(true);
-  server.on("/play", HTTP_GET, []
+  server.on("/play", HTTP_GET, []()
             {
     if (!server.hasArg("mode")) {
       server.send(400, "text/plain", "missing mode\r\n");
@@ -1861,12 +1866,19 @@ void inits()
     Task task = []() {
       bool beginPosOnly = server.arg("mode") == "beginPosOnly";
       bool repeat = server.arg("mode") == "repeat";
-      float power = server.arg("power").toInt();
+      float power = server.arg("power").toFloat();
       movePlayer.startMove(server.arg("file").c_str(), beginPosOnly, repeat, power);
     };
     xQueueSend(functionQueue, &task, portMAX_DELAY);
 
     server.send(200); });
+
+  server.on("/stop", HTTP_POST, []()
+            { returnOK(); }, []()
+            {
+              Task task = []()
+              { movePlayer.stop(); };
+              xQueueSend(functionQueue, &task, portMAX_DELAY); });
 
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);

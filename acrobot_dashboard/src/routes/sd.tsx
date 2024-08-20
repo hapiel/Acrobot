@@ -1,6 +1,8 @@
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import axios from 'axios';
-import { File as FileIcon, Folder, Loader2, Play, RotateCw, ArrowRightToLine, Save } from 'lucide-react';
+import { File as FileIcon, Folder, Loader2, Play, RotateCw, ArrowRightToLine, Save, StopCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +11,7 @@ export function SD() {
   const navigate = useNavigate();
   const [fileName, setFileName] = useState('/');
   const [path, setPath] = useState('/');
+  const [power, setPower] = useState(50);
 
   const sdContents = useQuery(['sd_contents', path], ({ queryKey }) => fetchSDContents(queryKey[1]), {
     staleTime: 600_000,
@@ -39,90 +42,117 @@ export function SD() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [navigate, path]);
 
-  if (sdContents.isLoading) {
-    return (
-      <div className="flex items-center justify-center">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
-  }
-
   if (sdContents.isError) return <div>Error: {`${sdContents.error}`}</div>;
 
   return (
     <div className="relative">
       <div className="flex max-w-[100vw] overflow-hidden">
-        <div className="flex flex-col gap-0">
-          {sdContents.data?.map(({ type, name }) => {
-            return (
-              <div
-                key={type + name}
-                className={cn(
-                  fileName === name ? 'bg-stone-500' : '',
-                  'flex items-center justify-between gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:cursor-pointer hover:bg-stone-400'
-                )}
-              >
+        <div className="flex min-h-[100vh] min-w-[450px] flex-col gap-0">
+          {sdContents.isLoading ? (
+            <div className="flex h-full w-full animate-spin items-center justify-center">
+              <Loader2 size={32} />
+            </div>
+          ) : (
+            sdContents.data?.map(({ type, name }) => {
+              return (
                 <div
-                  onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
-                  className="flex w-[450px] items-center"
-                >
-                  <div className="flex items-center overflow-x-auto py-1">
-                    {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
-                    <span className="ml-2">{name}</span>
-                  </div>
-                </div>
-                <div
+                  key={type + name}
                   className={cn(
-                    type === 'dir' ? 'pointer-events-none invisible' : '',
-                    'flex h-[100%] items-center justify-center bg-stone-800'
+                    fileName === name ? 'bg-stone-500' : '',
+                    'flex items-center border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
                   )}
                 >
-                  <Play
-                    onClick={() => playFile({ file: name, mode: 'once', power: 50 })}
-                    size={32}
-                    className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
-                  />
-                  <RotateCw
-                    onClick={() => playFile({ file: name, mode: 'repeat', power: 50 })}
-                    size={32}
-                    className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
-                  />
-                  <ArrowRightToLine
-                    onClick={() => playFile({ file: name, mode: 'beginPosOnly', power: 50 })}
-                    size={32}
-                    className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
-                  />
+                  <div
+                    onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
+                    className="flex flex-grow items-center hover:cursor-pointer"
+                  >
+                    <div className="flex items-center overflow-x-auto py-1">
+                      {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
+                      <span className="ml-2">{name}</span>
+                    </div>
+                  </div>
+                  <div
+                    className={cn(
+                      type === 'dir' ? 'pointer-events-none invisible' : '',
+                      'flex h-[100%] items-center justify-center bg-stone-800'
+                    )}
+                  >
+                    <Play
+                      onClick={() => playFile({ file: name, mode: 'once', power })}
+                      size={32}
+                      className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
+                    />
+                    <RotateCw
+                      onClick={() => playFile({ file: name, mode: 'repeat', power })}
+                      size={32}
+                      className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
+                    />
+                    <ArrowRightToLine
+                      onClick={() => playFile({ file: name, mode: 'beginPosOnly', power })}
+                      size={32}
+                      className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
-        <div className="relative flex-grow overflow-x-auto border-l-2 border-gray-200">
-          <div className="sticky left-0 bg-gray-700 p-2 text-center">
-            <h3>{fileName}</h3>
-            <div className="absolute right-2 top-1">
-              {isSaving ? (
-                <Loader2 className="pointer-events-none animate-spin" size={32} />
-              ) : (
-                <Save
-                  className="hover:cursor-pointer"
-                  onClick={async () => {
-                    const fileContents = pre.current?.innerText;
-                    if (!fileContents) return;
-                    setIsSaving(true);
-                    try {
-                      await saveChanges({ fileName, fileContents });
-                    } finally {
-                      setIsSaving(false);
-                    }
-                  }}
-                  size={32}
+        <div
+          className={cn(
+            sdContents.isLoading || fileContents.isLoading ? 'overflow-y-hidden' : 'overflow-y-auto',
+            'relative flex-grow overflow-x-auto border-l-2 border-gray-200'
+          )}
+        >
+          <div className="sticky left-0">
+            <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="power">Power</Label>
+                <Input
+                  type="number"
+                  value={power}
+                  onChange={(e) => setPower(parseFloat(e.target.value))}
+                  step={0.01}
+                  min={0}
+                  max={100}
+                  id="power"
+                  onFocus={(e) => e.target.select()}
                 />
-              )}
+              </div>
+              <StopCircle
+                className="transition-all hover:cursor-pointer hover:fill-red-300 hover:stroke-red-600"
+                size={32}
+                onClick={stop}
+              />
+            </div>
+            <div className="relative bg-gray-700 p-2 text-center">
+              <h3>{fileName}</h3>
+              <div className="absolute right-2 top-1">
+                {isSaving ? (
+                  <Loader2 className="pointer-events-none animate-spin" size={32} />
+                ) : (
+                  <Save
+                    className="hover:cursor-pointer"
+                    onClick={async () => {
+                      const fileContents = pre.current?.innerText;
+                      if (!fileContents) return;
+                      setIsSaving(true);
+                      try {
+                        await saveChanges({ fileName, fileContents });
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }}
+                    size={32}
+                  />
+                )}
+              </div>
             </div>
           </div>
-          {fileContents.isLoading ? (
-            <Loader2 size={32} className="animate-spin" />
+          {sdContents.isLoading || fileContents.isLoading ? (
+            <div className="flex h-full w-full animate-spin items-center justify-center">
+              <Loader2 size={32} />
+            </div>
           ) : (
             <pre ref={pre} contentEditable="plaintext-only" className="m-2 focus-visible:outline-none">
               {fileContents.data ? fileContents.data : null}
@@ -178,4 +208,8 @@ async function saveChanges({ fileName, fileContents }: SaveChangeOptions) {
   const form = new FormData();
   form.append('data', new File([new Blob([fileContents])], fileName));
   await axios.post('/edit', form, { baseURL: 'http://acrobot.local' });
+}
+
+async function stop() {
+  await axios.post('/stop', {}, { baseURL: 'http://acrobot.local' });
 }
