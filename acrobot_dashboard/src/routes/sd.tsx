@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import axios from 'axios';
-import { File as FileIcon, Folder, Loader2, Play, Repeat, RotateCcw, Save } from 'lucide-react';
+import { File as FileIcon, Folder, Loader2, Play, RotateCw, ArrowRightToLine, Save } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -80,12 +80,12 @@ export function SD() {
                     size={32}
                     className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
                   />
-                  <Repeat
+                  <RotateCw
                     onClick={() => playFile({ file: name, mode: 'repeat', power: 50 })}
                     size={32}
                     className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
                   />
-                  <RotateCcw
+                  <ArrowRightToLine
                     onClick={() => playFile({ file: name, mode: 'beginPosOnly', power: 50 })}
                     size={32}
                     className="h-[100%] p-1 transition-all hover:cursor-pointer hover:bg-stone-600"
