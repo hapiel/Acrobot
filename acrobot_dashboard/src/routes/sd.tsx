@@ -61,9 +61,11 @@ export function SD() {
                   fileName === name ? 'bg-stone-500' : '',
                   'flex items-center justify-between gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:cursor-pointer hover:bg-stone-400'
                 )}
-                onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
               >
-                <div className="flex w-[450px] items-center">
+                <div
+                  onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
+                  className="flex w-[450px] items-center"
+                >
                   <div className="flex items-center overflow-x-auto py-1">
                     {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
                     <span className="ml-2">{name}</span>
