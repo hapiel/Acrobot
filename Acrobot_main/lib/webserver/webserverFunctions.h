@@ -277,6 +277,12 @@ void printDirectory()
 
 void handleNotFound()
 {
+  if (server.method() == HTTP_OPTIONS)
+  {
+    server.send(204);
+    return;
+  }
+
   if (hasSD && loadFromSdCard(server.uri()))
   {
     return;
