@@ -31,8 +31,7 @@ export function RobotStatus() {
   });
 
   return (
-    <main className="flex min-w-full flex-col items-center justify-center pt-2">
-      <div className="flex flex-col gap-2"></div>
+    <div className="flex flex-1 flex-col items-center overflow-y-auto pt-2">
       <div className="relative cursor-pointer rounded-lg rounded-tr-none bg-gray-100/10 px-4 py-2 transition-all">
         <div
           className={cn(
@@ -63,6 +62,6 @@ export function RobotStatus() {
           <LimbName>Left leg</LimbName>
         </Limb>
       </div>
-    </main>
+    </div>
   );
 }

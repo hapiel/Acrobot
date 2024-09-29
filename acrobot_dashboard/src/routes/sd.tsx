@@ -45,9 +45,9 @@ export function SD() {
   if (sdContents.isError) return <div>Error: {`${sdContents.error}`}</div>;
 
   return (
-    <div className="relative">
-      <div className="flex max-w-[100vw] overflow-hidden">
-        <div className="flex min-h-[100vh] min-w-[450px] flex-col gap-0">
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex min-w-[600px] flex-shrink-0 flex-col gap-0 overflow-y-auto overflow-x-hidden">
           {sdContents.isLoading ? (
             <div className="flex h-full w-full animate-spin items-center justify-center">
               <Loader2 size={32} />
@@ -59,7 +59,7 @@ export function SD() {
                   key={type + name}
                   className={cn(
                     filePath === name ? 'bg-stone-500' : '',
-                    'flex items-center border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
+                    'flex items-center gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
                   )}
                 >
                   <div
@@ -104,7 +104,7 @@ export function SD() {
             'relative flex-grow overflow-x-auto border-l-2 border-gray-200'
           )}
         >
-          <div className="sticky left-0">
+          <div className="sticky left-0 top-0 bg-black">
             <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
               <div className="flex items-center gap-2">
                 <Label htmlFor="power">Power</Label>
