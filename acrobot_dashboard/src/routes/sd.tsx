@@ -175,7 +175,11 @@ async function fetchSDContents(dir: string): Promise<GetSdResponse> {
 
   files.push(...data);
 
-  return files;
+  return files.sort((a, b) => {
+    if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
+
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 }
 
 async function getFile(path: string): Promise<string> {
