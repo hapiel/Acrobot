@@ -1880,36 +1880,74 @@ void inits()
   async_server.begin();
 
   server.enableCORS(true);
-  server.on("/play", HTTP_GET, []()
+
+  server.on("/play", HTTP_POST, []()
             {
-    if (!server.hasArg("mode")) {
+    DynamicJsonDocument options(1024);
+    DeserializationError error = deserializeJson(options, server.arg("plain"));
+
+    if (error) {
+      Serial.println("Failed to parse JSON");
+      server.send(400, "text/plain", "Invalid JSON");
+      return;
+    }
+
+    if (!options.containsKey("mode")) {
       server.send(400, "text/plain", "missing mode\r\n");
+      return;
     }
 
-    if (!server.hasArg("file")) {
+    if (!options.containsKey("file")) {
       server.send(400, "text/plain", "missing file\r\n");
+      return;
     }
 
-    if (!server.hasArg("power")) {
+    if (!options.containsKey("power")) {
       server.send(400, "text/plain", "missing power\r\n");
+      return;
     }
 
-    Task task = []() {
-      bool beginPosOnly = server.arg("mode") == "beginPosOnly";
-      bool repeat = server.arg("mode") == "repeat";
-      float power = server.arg("power").toFloat();
-      movePlayer.startMove(server.arg("file").c_str(), beginPosOnly, repeat, power);
+    struct TaskParams {
+      String file;
+      float power;
+      bool beginPosOnly;
+      bool repeat;
     };
+
+    TaskParams *params = new TaskParams{options["file"], options["power"],
+                                        options["mode"] == "beginPosOnly",
+                                        options["mode"] == "repeat"};
+
+    Task task = [params]() {
+      movePlayer.startMove(params->file.c_str(), params->beginPosOnly,
+                           params->repeat, params->power);
+      delete params;
+    };
+
     xQueueSend(functionQueue, &task, portMAX_DELAY);
+    server.send(204); });
 
-    server.send(200); });
-
-  server.on("/stop", HTTP_POST, []()
-            { returnOK(); }, []()
+  server.on("/file", HTTP_GET, []()
             {
-              Task task = []()
-              { movePlayer.stop(); };
-              xQueueSend(functionQueue, &task, portMAX_DELAY); });
+    if (!server.hasArg("path")) {
+      server.send(400, "text/plain", "missing path\r\n");
+      return;
+    }
+    String path = server.arg("path");
+    bool exists = loadFromSdCard(path);
+    if (!exists) {
+      server.send(404, "text/plain", "file not found\r\n");
+    } });
+
+  server.on(
+      "/stop", HTTP_POST, []()
+      { returnOK(); },
+      []()
+      {
+        Task task = []()
+        { movePlayer.stop(); };
+        xQueueSend(functionQueue, &task, portMAX_DELAY);
+      });
 
   server.on("/list", HTTP_GET, printDirectory);
   server.on("/edit", HTTP_DELETE, handleDelete);

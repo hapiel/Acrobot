@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function SD() {
   const navigate = useNavigate();
-  const [fileName, setFileName] = useState('/');
+  const [filePath, setFilePath] = useState('/');
   const [path, setPath] = useState('/');
   const [power, setPower] = useState(50);
 
@@ -18,7 +18,7 @@ export function SD() {
     retryDelay: 60_000,
     keepPreviousData: true
   });
-  const fileContents = useQuery(['file_contents', fileName], ({ queryKey }) => fetchFileContents(queryKey[1]));
+  const fileContents = useQuery(['file_contents', filePath], ({ queryKey }) => getFile(queryKey[1]));
 
   const [isSaving, setIsSaving] = useState(false);
   const pre = useRef<HTMLPreElement>(null);
@@ -45,9 +45,9 @@ export function SD() {
   if (sdContents.isError) return <div>Error: {`${sdContents.error}`}</div>;
 
   return (
-    <div className="relative">
-      <div className="flex max-w-[100vw] overflow-hidden">
-        <div className="flex min-h-[100vh] min-w-[450px] flex-col gap-0">
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex min-w-[600px] flex-shrink-0 flex-col gap-0 overflow-y-auto overflow-x-hidden">
           {sdContents.isLoading ? (
             <div className="flex h-full w-full animate-spin items-center justify-center">
               <Loader2 size={32} />
@@ -58,12 +58,12 @@ export function SD() {
                 <div
                   key={type + name}
                   className={cn(
-                    fileName === name ? 'bg-stone-500' : '',
-                    'flex items-center border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
+                    filePath === name ? 'bg-stone-500' : '',
+                    'flex items-center gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
                   )}
                 >
                   <div
-                    onClick={() => (type === 'dir' ? setPath(name) : setFileName(name))}
+                    onClick={() => (type === 'dir' ? setPath(name) : setFilePath(name))}
                     className="flex flex-grow items-center hover:cursor-pointer"
                   >
                     <div className="flex items-center overflow-x-auto py-1">
@@ -104,7 +104,7 @@ export function SD() {
             'relative flex-grow overflow-x-auto border-l-2 border-gray-200'
           )}
         >
-          <div className="sticky left-0">
+          <div className="sticky left-0 top-0 bg-black">
             <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
               <div className="flex items-center gap-2">
                 <Label htmlFor="power">Power</Label>
@@ -126,7 +126,7 @@ export function SD() {
               />
             </div>
             <div className="relative bg-gray-700 p-2 text-center">
-              <h3>{fileName}</h3>
+              <h3>{filePath}</h3>
               <div className="absolute right-2 top-1">
                 {isSaving ? (
                   <Loader2 className="pointer-events-none animate-spin" size={32} />
@@ -138,7 +138,7 @@ export function SD() {
                       if (!fileContents) return;
                       setIsSaving(true);
                       try {
-                        await saveChanges({ fileName, fileContents });
+                        await saveChanges({ fileName: filePath, fileContents });
                       } finally {
                         setIsSaving(false);
                       }
@@ -175,12 +175,17 @@ async function fetchSDContents(dir: string): Promise<GetSdResponse> {
 
   files.push(...data);
 
-  return files;
+  return files.sort((a, b) => {
+    if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
+
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 }
 
-async function fetchFileContents(fileName: string): Promise<string> {
-  const { data } = await axios.get<string>(`${fileName}`, {
-    baseURL: 'http://acrobot.local'
+async function getFile(path: string): Promise<string> {
+  const { data } = await axios.get<string>('/file', {
+    baseURL: 'http://acrobot.local',
+    params: { path }
   });
 
   return data;
@@ -193,10 +198,14 @@ export type PlayFileOptions = {
 };
 
 async function playFile({ file, mode, power }: PlayFileOptions) {
-  await axios.get('/play', {
-    baseURL: 'http://acrobot.local',
-    params: { file, mode, power }
-  });
+  await axios.post(
+    '/play',
+    { file, mode, power },
+    {
+      baseURL: 'http://acrobot.local',
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
 }
 
 export type SaveChangeOptions = {

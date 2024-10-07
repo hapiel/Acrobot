@@ -1,0 +1,19 @@
+meta {
+  name: play
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://acrobot.local/play
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "mode": "once",
+    "file": "/acro_curbet.csv",
+    "power": 23.45
+  }
+}
