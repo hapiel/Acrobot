@@ -183,6 +183,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *arsPage[];
 extern MenuItem *circusstadPage[];
 extern MenuItem *kelderfestPage[];
 extern MenuItem *agtPage[];
@@ -210,18 +211,48 @@ extern MenuItem *aboutPage[];
 extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
-MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), ITEM_SUBMENU("FGT", fgtPage),
+MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("ARS", arsPage),
+          ITEM_SUBMENU("FGT", fgtPage),
           ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
-          ITEM_SUBMENU("AGT", agtPage), ITEM_SUBMENU("Moves", movesPage),
+          ITEM_SUBMENU("AGT", agtPage), 
+          ITEM_SUBMENU("Moves", movesPage),
           ITEM_SUBMENU("Sequencer", sequencerPage),
           ITEM_SUBMENU("Bottango Socket", bottangoPage),
-          ITEM_SUBMENU("Status", statusPage), ITEM_SUBMENU("Motors", motorPage),
+          ITEM_SUBMENU("Status", statusPage), 
+          ITEM_SUBMENU("Motors", motorPage),
           ITEM_SUBMENU("Change PI value", PIPage),
           ITEM_SUBMENU("Control mode", controlPage),
           ITEM_SUBMENU("Sequences old", sequencePage),
           ITEM_SUBMENU("Hardware", hardwarePage),
           ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(
+    arsPage, mainMenu,
+       ITEM_COMMAND("seq 2",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/ars/ars_sequence_2.csv", false,
+                                          true, 40);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("seq 1",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/ars/ars_sequence_1.csv", false,
+                                          true, 40);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 })
+
+);
+
 
 SUB_MENU(
     circusstadPage, mainMenu,

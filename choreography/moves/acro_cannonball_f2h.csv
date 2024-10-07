@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,acro_cannonball_f2h,Controller name:,acrobot_act,Duration:,8467,Created at,08/07/2024 16:46:39,,
+Animation Name:,acro_cannonball_f2h,Controller name:,acrobot_act,Duration:,8467,Created at,05/09/2024 08:45:33,,
 Start positions,ArmL ArmR legL legR,134.6484375,134.6484375,91.376953125,91.376953125,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,4000,134.6484375,1000,0.0,134.6484375,-1000,0.0
 sC,m_leg_l,0,4000,91.376953125,1000,0.0,91.376953125,-1000,0.0
