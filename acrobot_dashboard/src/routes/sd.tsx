@@ -32,6 +32,7 @@ export function SD() {
       setFilePath(firstNonDir.name);
     }
   });
+
   const fileContentsQuery = useQuery(['file_contents', filePath], ({ queryKey }) => getFile(queryKey[1]), {
     onSuccess: (data) => setFileContents(data)
   });
@@ -121,7 +122,7 @@ export function SD() {
         >
           <div className="sticky left-0 top-0 bg-black">
             <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
-              <UploadFile path={path} />
+              <UploadFile path={path} onUploadSuccess={() => sdContentsQuery.refetch()} />
               <div className="flex-end flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Label htmlFor="power">Power</Label>
@@ -247,9 +248,10 @@ async function stop() {
 
 type UploadFileProps = {
   path: string;
+  onUploadSuccess: () => Promise<unknown>;
 };
 
-function UploadFile({ path }: UploadFileProps) {
+function UploadFile({ path, onUploadSuccess }: UploadFileProps) {
   const [destination, setDestination] = useState<string>(path);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -278,6 +280,8 @@ function UploadFile({ path }: UploadFileProps) {
       console.log('Destination:', destination);
 
       await saveFile({ fileName: `${destination.replace(/\/*$/, '')}/${file.name}`, fileContents });
+      setIsOpen(false);
+      onUploadSuccess();
     } catch (error) {
       console.error('Error reading or uploading file:', error);
     } finally {
@@ -342,7 +346,7 @@ function UploadFile({ path }: UploadFileProps) {
             </Button>
           </DialogClose>
           <Button type="submit" variant="default" disabled={isLoading} onClick={handleUpload}>
-            Upload
+            {isLoading ? <Loader2 size={32} /> : 'Upload'}
           </Button>
         </DialogFooter>
       </DialogContent>
