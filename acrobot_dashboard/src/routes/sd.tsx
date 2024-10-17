@@ -5,10 +5,22 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import axios from 'axios';
-import { File as FileIcon, Folder, Loader2, Play, RotateCw, ArrowRightToLine, Save, StopCircle } from 'lucide-react';
+import {
+  File as FileIcon,
+  Folder,
+  Loader2,
+  Play,
+  RotateCw,
+  ArrowRightToLine,
+  Save,
+  StopCircle,
+  XCircleIcon
+} from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
+import { ContextMenuContent } from '@radix-ui/react-context-menu';
 
 export function SD() {
   const navigate = useNavigate();
@@ -78,15 +90,31 @@ export function SD() {
                     'flex items-center gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
                   )}
                 >
-                  <div
-                    onClick={() => (type === 'dir' ? setPath(name) : setFilePath(name))}
-                    className="flex flex-grow items-center hover:cursor-pointer"
-                  >
-                    <div className="flex items-center overflow-x-auto py-1">
-                      {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
-                      <span className="ml-2">{name}</span>
-                    </div>
-                  </div>
+                  <ContextMenu>
+                    <ContextMenuTrigger asChild>
+                      <div
+                        onClick={() => (type === 'dir' ? setPath(name) : setFilePath(name))}
+                        className="flex flex-grow items-center hover:cursor-pointer"
+                      >
+                        <div className="flex items-center overflow-x-auto py-1">
+                          {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
+                          <span className="ml-2">{name}</span>
+                        </div>
+                      </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="rounded-md bg-black p-2">
+                      <ContextMenuItem
+                        className="flex items-center justify-center gap-2 hover:cursor-pointer"
+                        onClick={async () => {
+                          await deleteFiles(name);
+                          sdContentsQuery.refetch();
+                        }}
+                      >
+                        <XCircleIcon size={18} />
+                        <p>Delete</p>
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                   <div
                     className={cn(
                       type === 'dir' ? 'pointer-events-none invisible' : '',
@@ -257,6 +285,12 @@ async function createPath(path: string) {
   const form = new FormData();
   form.append('path', path);
   await axios.put('/edit', form, { baseURL: 'http://acrobot.local' });
+}
+
+async function deleteFiles(path: string) {
+  const form = new FormData();
+  form.append('path', path);
+  await axios.delete('/edit', { baseURL: 'http://acrobot.local', data: form });
 }
 
 async function stop() {
