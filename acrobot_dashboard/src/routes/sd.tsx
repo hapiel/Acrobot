@@ -122,7 +122,18 @@ export function SD() {
         >
           <div className="sticky left-0 top-0 bg-black">
             <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
-              <UploadFile path={path} onUploadSuccess={() => sdContentsQuery.refetch()} />
+              <UploadFile
+                path={path}
+                onUploadSuccess={(filePath) => {
+                  if (filePath.split('/').slice(0, -1).join('/') === path) {
+                    sdContentsQuery.refetch();
+                    return;
+                  }
+
+                  setPath(filePath.split('/').slice(0, -1).join('/'));
+                  setFilePath(filePath);
+                }}
+              />
               <div className="flex-end flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Label htmlFor="power">Power</Label>
@@ -242,13 +253,19 @@ async function saveFile({ fileName, fileContents }: SaveChangeOptions) {
   await axios.post('/edit', form, { baseURL: 'http://acrobot.local' });
 }
 
+async function createPath(path: string) {
+  const form = new FormData();
+  form.append('path', path);
+  await axios.put('/edit', form, { baseURL: 'http://acrobot.local' });
+}
+
 async function stop() {
   await axios.post('/stop', {}, { baseURL: 'http://acrobot.local' });
 }
 
 type UploadFileProps = {
   path: string;
-  onUploadSuccess: () => Promise<unknown>;
+  onUploadSuccess: (filePath: string) => unknown;
 };
 
 function UploadFile({ path, onUploadSuccess }: UploadFileProps) {
@@ -279,9 +296,17 @@ function UploadFile({ path, onUploadSuccess }: UploadFileProps) {
       console.log('File contents:', fileContents);
       console.log('Destination:', destination);
 
-      await saveFile({ fileName: `${destination.replace(/\/*$/, '')}/${file.name}`, fileContents });
+      const components = destination.split('/');
+      for (let i = 1; i < components.length; i++) {
+        const path = components.slice(0, i + 1).join('/');
+        await createPath(path);
+      }
+
+      const fileName = `${destination.replace(/\/*$/, '')}/${file.name}`;
+
+      await saveFile({ fileName, fileContents });
       setIsOpen(false);
-      onUploadSuccess();
+      onUploadSuccess(fileName);
     } catch (error) {
       console.error('Error reading or uploading file:', error);
     } finally {

@@ -205,7 +205,7 @@ void handleCreate()
   String path = server.arg(0);
   if (path == "/" || SD.exists((char *)path.c_str()))
   {
-    returnFail("BAD PATH");
+    returnOK();
     return;
   }
 
