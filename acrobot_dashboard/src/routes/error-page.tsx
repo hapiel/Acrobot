@@ -9,7 +9,7 @@ export function ErrorPage() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <h1>Oops!</h1>
-      <p>Sorry, an error has occurred.</p>
+      <p>Sorry, something went wrong.</p>
       <p>
         <i>{statusText || message || 'Unknown'}</i>
       </p>
