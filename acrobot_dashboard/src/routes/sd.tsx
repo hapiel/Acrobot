@@ -1,27 +1,55 @@
+import { Button } from '@/components/ui/button';
+import { DialogClose, DialogDescription, DialogFooter, DialogHeader } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import axios from 'axios';
-import { File as FileIcon, Folder, Loader2, Play, RotateCw, ArrowRightToLine, Save, StopCircle } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import {
+  File as FileIcon,
+  Folder,
+  Loader2,
+  Play,
+  RotateCw,
+  ArrowRightToLine,
+  Save,
+  StopCircle,
+  XCircleIcon
+} from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
+import { ContextMenuContent } from '@radix-ui/react-context-menu';
 
 export function SD() {
   const navigate = useNavigate();
   const [filePath, setFilePath] = useState('/');
   const [path, setPath] = useState('/');
   const [power, setPower] = useState(50);
+  const [fileContents, setFileContents] = useState('');
 
-  const sdContents = useQuery(['sd_contents', path], ({ queryKey }) => fetchSDContents(queryKey[1]), {
+  const sdContentsQuery = useQuery(['sd_contents', path], ({ queryKey }) => fetchSDContents(queryKey[1]), {
     staleTime: 600_000,
     retryDelay: 60_000,
-    keepPreviousData: true
+    keepPreviousData: true,
+    onSuccess: (data) => {
+      const firstNonDir = data.find((e) => e.type !== 'dir');
+      if (!firstNonDir) {
+        setFilePath('');
+        setFileContents('');
+        return;
+      }
+
+      setFilePath(firstNonDir.name);
+    }
   });
-  const fileContents = useQuery(['file_contents', filePath], ({ queryKey }) => getFile(queryKey[1]));
+
+  const fileContentsQuery = useQuery(['file_contents', filePath], ({ queryKey }) => getFile(queryKey[1]), {
+    onSuccess: (data) => setFileContents(data)
+  });
 
   const [isSaving, setIsSaving] = useState(false);
-  const pre = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
@@ -42,18 +70,18 @@ export function SD() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [navigate, path]);
 
-  if (sdContents.isError) return <div>Error: {`${sdContents.error}`}</div>;
+  if (sdContentsQuery.isError) return <div>Error: {`${sdContentsQuery.error}`}</div>;
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden">
       <div className="flex flex-1 overflow-hidden">
         <div className="flex min-w-[600px] flex-shrink-0 flex-col gap-0 overflow-y-auto overflow-x-hidden">
-          {sdContents.isLoading ? (
+          {sdContentsQuery.isFetching ? (
             <div className="flex h-full w-full animate-spin items-center justify-center">
               <Loader2 size={32} />
             </div>
           ) : (
-            sdContents.data?.map(({ type, name }) => {
+            sdContentsQuery.data?.map(({ type, name }) => {
               return (
                 <div
                   key={type + name}
@@ -62,15 +90,31 @@ export function SD() {
                     'flex items-center gap-2 border-b-2 border-gray-700 pl-1 transition-all hover:bg-stone-400'
                   )}
                 >
-                  <div
-                    onClick={() => (type === 'dir' ? setPath(name) : setFilePath(name))}
-                    className="flex flex-grow items-center hover:cursor-pointer"
-                  >
-                    <div className="flex items-center overflow-x-auto py-1">
-                      {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
-                      <span className="ml-2">{name}</span>
-                    </div>
-                  </div>
+                  <ContextMenu>
+                    <ContextMenuTrigger asChild>
+                      <div
+                        onClick={() => (type === 'dir' ? setPath(name) : setFilePath(name))}
+                        className="flex flex-grow items-center hover:cursor-pointer"
+                      >
+                        <div className="flex items-center overflow-x-auto py-1">
+                          {type === 'dir' ? <Folder size={26} /> : <FileIcon size={26} />}{' '}
+                          <span className="ml-2">{name}</span>
+                        </div>
+                      </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="rounded-md bg-black p-2">
+                      <ContextMenuItem
+                        className="flex items-center justify-center gap-2 hover:cursor-pointer"
+                        onClick={async () => {
+                          await deleteFiles(name);
+                          sdContentsQuery.refetch();
+                        }}
+                      >
+                        <XCircleIcon size={18} />
+                        <p>Delete</p>
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                   <div
                     className={cn(
                       type === 'dir' ? 'pointer-events-none invisible' : '',
@@ -100,33 +144,53 @@ export function SD() {
         </div>
         <div
           className={cn(
-            sdContents.isLoading || fileContents.isLoading ? 'overflow-y-hidden' : 'overflow-y-auto',
+            sdContentsQuery.isFetching || fileContentsQuery.isFetching ? 'overflow-y-hidden' : 'overflow-y-auto',
             'relative flex-grow overflow-x-auto border-l-2 border-gray-200'
           )}
         >
           <div className="sticky left-0 top-0 bg-black">
             <div className="mb-1 flex items-center justify-between gap-2 bg-stone-600 p-2">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="power">Power</Label>
-                <Input
-                  type="number"
-                  value={power}
-                  onChange={(e) => setPower(parseFloat(e.target.value))}
-                  step={0.01}
-                  min={0}
-                  max={100}
-                  id="power"
-                  onFocus={(e) => e.target.select()}
+              <UploadFile
+                path={path}
+                onUploadSuccess={(filePath) => {
+                  if (filePath.split('/').slice(0, -1).join('/') === path) {
+                    sdContentsQuery.refetch();
+                    return;
+                  }
+
+                  setPath(filePath.split('/').slice(0, -1).join('/'));
+                  setFilePath(filePath);
+                }}
+              />
+              <div className="flex-end flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="power">Power</Label>
+                  <Input
+                    type="number"
+                    value={power}
+                    onChange={(e) => setPower(parseFloat(e.target.value))}
+                    step={0.01}
+                    min={0}
+                    max={100}
+                    id="power"
+                    onFocus={(e) => e.target.select()}
+                  />
+                </div>
+                <StopCircle
+                  className="transition-all hover:cursor-pointer hover:fill-red-300 hover:stroke-red-600"
+                  size={32}
+                  onClick={stop}
                 />
               </div>
-              <StopCircle
-                className="transition-all hover:cursor-pointer hover:fill-red-300 hover:stroke-red-600"
-                size={32}
-                onClick={stop}
-              />
             </div>
             <div className="relative bg-gray-700 p-2 text-center">
-              <h3>{filePath}</h3>
+              <h3 className="flex items-center justify-center">
+                {sdContentsQuery.isFetching ? (
+                  <Loader2 className="pointer-events-none animate-spin" size={24} />
+                ) : (
+                  filePath
+                )}
+              </h3>
               <div className="absolute right-2 top-1">
                 {isSaving ? (
                   <Loader2 className="pointer-events-none animate-spin" size={32} />
@@ -134,11 +198,10 @@ export function SD() {
                   <Save
                     className="hover:cursor-pointer"
                     onClick={async () => {
-                      const fileContents = pre.current?.innerText;
                       if (!fileContents) return;
                       setIsSaving(true);
                       try {
-                        await saveChanges({ fileName: filePath, fileContents });
+                        await saveFile({ fileName: filePath, fileContents });
                       } finally {
                         setIsSaving(false);
                       }
@@ -149,14 +212,12 @@ export function SD() {
               </div>
             </div>
           </div>
-          {sdContents.isLoading || fileContents.isLoading ? (
+          {sdContentsQuery.isFetching || fileContentsQuery.isFetching ? (
             <div className="flex h-full w-full animate-spin items-center justify-center">
               <Loader2 size={32} />
             </div>
           ) : (
-            <pre ref={pre} contentEditable="plaintext-only" className="m-2 focus-visible:outline-none">
-              {fileContents.data ? fileContents.data : null}
-            </pre>
+            <FileEditor fileContents={fileContents} setFileContents={setFileContents} />
           )}
         </div>
       </div>
@@ -168,6 +229,7 @@ export type GetSdResponse = { type: string; name: string }[];
 
 async function fetchSDContents(dir: string): Promise<GetSdResponse> {
   const files: GetSdResponse = [];
+  console.log(`fetching ${dir}`);
   const { data } = await axios.get<GetSdResponse>(`/list`, {
     baseURL: 'http://acrobot.local',
     params: { dir }
@@ -213,12 +275,185 @@ export type SaveChangeOptions = {
   fileContents: string;
 };
 
-async function saveChanges({ fileName, fileContents }: SaveChangeOptions) {
+async function saveFile({ fileName, fileContents }: SaveChangeOptions) {
   const form = new FormData();
   form.append('data', new File([new Blob([fileContents])], fileName));
   await axios.post('/edit', form, { baseURL: 'http://acrobot.local' });
 }
 
+async function createPath(path: string) {
+  const form = new FormData();
+  form.append('path', path);
+  await axios.put('/edit', form, { baseURL: 'http://acrobot.local' });
+}
+
+async function deleteFiles(path: string) {
+  const form = new FormData();
+  form.append('path', path);
+  await axios.delete('/edit', { baseURL: 'http://acrobot.local', data: form });
+}
+
 async function stop() {
   await axios.post('/stop', {}, { baseURL: 'http://acrobot.local' });
+}
+
+type UploadFileProps = {
+  path: string;
+  onUploadSuccess: (filePath: string) => unknown;
+};
+
+function UploadFile({ path, onUploadSuccess }: UploadFileProps) {
+  const [destination, setDestination] = useState<string>(path);
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => setDestination(path), [path]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setFile(files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const fileContents = await readFileContents(file);
+
+      console.log('File contents:', fileContents);
+      console.log('Destination:', destination);
+
+      const components = destination.split('/');
+      for (let i = 1; i < components.length; i++) {
+        const path = components.slice(0, i + 1).join('/');
+        await createPath(path);
+      }
+
+      const fileName = `${destination.replace(/\/*$/, '')}/${file.name}`;
+
+      await saveFile({ fileName, fileContents });
+      setIsOpen(false);
+      onUploadSuccess(fileName);
+    } catch (error) {
+      console.error('Error reading or uploading file:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const readFileContents = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          resolve(event.target.result as string);
+        } else {
+          reject(new Error('Failed to read file'));
+        }
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
+    });
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <DialogTrigger asChild>
+        <Button variant="outline" onClick={() => setIsOpen(true)}>
+          Upload file
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Upload file</DialogTitle>
+          <DialogDescription>Upload a file to the specified destination</DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center space-x-2">
+          <div className="grid flex-1 gap-2">
+            <Label htmlFor="destination">Destination</Label>
+            <Input
+              id="destination"
+              disabled={isLoading}
+              value={destination}
+              onInput={(e) => setDestination(e.currentTarget.value)}
+            />
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="grid flex-1 gap-2">
+            <Label htmlFor="file">File</Label>
+            <Input
+              id="file"
+              type="file"
+              disabled={isLoading}
+              onChange={handleFileChange}
+              className="file:text-white hover:cursor-pointer file:hover:cursor-pointer"
+            />
+          </div>
+        </div>
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button disabled={isLoading} type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+          <Button type="submit" variant="default" disabled={isLoading} onClick={handleUpload}>
+            {isLoading ? <Loader2 size={32} /> : 'Upload'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+type FileEditorProps = {
+  fileContents: string;
+  setFileContents: Dispatch<SetStateAction<string>>;
+};
+
+function FileEditor({ fileContents, setFileContents }: FileEditorProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.value = fileContents;
+    }
+  }, [fileContents]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFileContents(e.target.value);
+  };
+
+  useEffect(() => {
+    const adjustTextareaHeight = () => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      }
+    };
+
+    adjustTextareaHeight();
+    window.addEventListener('resize', adjustTextareaHeight);
+
+    return () => {
+      window.removeEventListener('resize', adjustTextareaHeight);
+    };
+  }, [fileContents]);
+
+  return (
+    <textarea
+      ref={textareaRef}
+      value={fileContents}
+      onChange={handleChange}
+      className="h-full w-full resize-none border-none bg-gray-800 p-2 font-mono text-sm text-white focus:outline-none"
+      spellCheck={false}
+    />
+  );
 }
