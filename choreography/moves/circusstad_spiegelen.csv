@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,circusstad_spiegelen,Controller name:,acrobot_act,Duration:,199667,Created at,05/09/2024 08:45:34,,
+Animation Name:,circusstad_spiegelen,Controller name:,acrobot_act,Duration:,199667,Created at,01/11/2024 11:45:08,,
 Start positions,ArmL ArmR legL legR,129.814453125,129.814453125,84.2724609375,84.2724609375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,9667,84.2724609375,2417,0.0,84.2724609375,-2417,0.0
 sC,m_leg_l,0,9667,84.2724609375,2417,0.0,84.2724609375,-2417,0.0

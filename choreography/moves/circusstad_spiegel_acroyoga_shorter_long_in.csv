@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,circusstad_spiegel_acroyoga_shorter_long_in,Controller name:,acrobot_act,Duration:,465467,Created at,05/09/2024 08:45:35,,
+Animation Name:,circusstad_spiegel_acroyoga_shorter_long_in,Controller name:,acrobot_act,Duration:,465467,Created at,01/11/2024 11:45:09,,
 Start positions,ArmL ArmR legL legR,129.814453125,129.814453125,84.2724609375,84.2724609375,0.0,0.0,0.0,0.0
 sC,m_leg_r,52433,10567,84.2724609375,2642,0.0,84.2724609375,-2642,0.0
 sC,m_leg_l,52433,10567,84.2724609375,2642,0.0,84.2724609375,-2642,0.0

@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,acro_contra_rolldown,Controller name:,acrobot_act,Duration:,19733,Created at,05/09/2024 08:45:33,,
+Animation Name:,acro_contra_rolldown,Controller name:,acrobot_act,Duration:,19733,Created at,01/11/2024 11:45:07,,
 Start positions,ArmL ArmR legL legR,0.0,0.0,180.0,180.0,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,6000,0.0,1500,0.0,0.0,-1500,0.0
 sC,m_leg_r,0,6000,180.0,1500,0.0,180.0,-1500,0.0

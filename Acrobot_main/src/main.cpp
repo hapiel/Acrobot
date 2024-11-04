@@ -212,8 +212,8 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("DST", fgtPage),
           ITEM_SUBMENU("ARS", arsPage),
-          ITEM_SUBMENU("FGT", fgtPage),
           ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
           ITEM_SUBMENU("AGT", agtPage), 
@@ -382,12 +382,12 @@ SUB_MENU(fgtPage, mainMenu,
                                    portMAX_DELAY);
                       }),
          // act_moveyourfeet.csv
-         ITEM_COMMAND("act move feet",
+         ITEM_COMMAND("act Cabeza",
                       []()
                       {
                         Task task = []()
                         {
-                          movePlayer.startMove("/FGT_lets_dance.csv", false,
+                          movePlayer.startMove("/tango-sequence-dst.csv", false,
                                                false, 50);
                         };
                         xQueueSend(functionQueue, &task,

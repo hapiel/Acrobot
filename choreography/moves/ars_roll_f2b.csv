@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,ars_roll_f2b,Controller name:,acrobot_act,Duration:,5467,Created at,05/09/2024 08:45:36,,
+Animation Name:,ars_roll_f2b,Controller name:,acrobot_act,Duration:,5467,Created at,01/11/2024 11:45:09,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,180.9521484375,180.9521484375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,1500,180.9521484375,375,0.0,180.9521484375,-375,0.0
 sC,m_arm_l,0,1500,180.0,375,0.0,359.82421875,-375,0.0

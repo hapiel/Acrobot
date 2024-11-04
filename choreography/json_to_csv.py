@@ -15,7 +15,7 @@ with open(json_file_path, "r") as json_file:
 # Extract and store controller setup data
 controller_name = data[0]["Controller Name"]
 controller_setup_commands = data[0]["Setup"]["Controller Setup Commands"]
-controller_setup_lines = controller_setup_commands.strip("\\n").split("\\n")
+controller_setup_lines = controller_setup_commands.strip("\n").split("\n")
 controller_data = {}
 
 
@@ -47,7 +47,7 @@ for animation in data[0]["Animations"]:
         continue
 
     # split the animation commands into multiple lines
-    animation_array = animation_commands.strip("\\n").split("\\n")
+    animation_array = animation_commands.strip("\n").split("\n")
     
     
     # Create a CSV file for each animation in the 'csv' subdirectory
@@ -127,6 +127,8 @@ for animation in data[0]["Animations"]:
                 continue
             
             motor_name = row_values[1]
+            
+            
             
             if motor_name in controller_data:
                 range_low, range_high = controller_data[motor_name]
