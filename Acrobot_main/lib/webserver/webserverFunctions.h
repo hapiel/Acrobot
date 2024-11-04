@@ -12,18 +12,6 @@ WebServer server(80);
 AsyncWebServer async_server(3000);
 AsyncWebSocket ws("/ws");
 
-void notFound(AsyncWebServerRequest *request)
-{
-  if (request->method() == HTTP_OPTIONS)
-  {
-    request->send(200);
-  }
-  else
-  {
-    request->send(404, "application/json", "{\"message\":\"Not found\"}");
-  }
-}
-
 // source: https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/examples/SDWebServer
 
 static bool hasSD = false;
@@ -217,7 +205,7 @@ void handleCreate()
   String path = server.arg(0);
   if (path == "/" || SD.exists((char *)path.c_str()))
   {
-    returnFail("BAD PATH");
+    returnOK();
     return;
   }
 
@@ -289,6 +277,12 @@ void printDirectory()
 
 void handleNotFound()
 {
+  if (server.method() == HTTP_OPTIONS)
+  {
+    server.send(204);
+    return;
+  }
+
   if (hasSD && loadFromSdCard(server.uri()))
   {
     return;
@@ -327,6 +321,89 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
     Serial.println();
     client->text("Message received");
   }
+}
+void notFound(AsyncWebServerRequest *request)
+{
+  if (request->method() == HTTP_OPTIONS)
+  {
+    request->send(200);
+  }
+  else
+  {
+    request->send(404, "application/json", "{\"message\":\"Not found\"}");
+  }
+}
+
+void onSdRequest(AsyncWebServerRequest *request)
+{
+  Serial.println("processing SD request");
+
+  if (!SD.begin())
+  {
+    Serial.println("SD Card initialization failed!");
+    return request->send(500, "text/plain", "SD Card initialization failed");
+  }
+
+  String path = "/";
+  File dir = SD.open((char *)path.c_str());
+  path = String();
+  if (!dir.isDirectory())
+  {
+    dir.close();
+    return request->send(400, "text/plain", "BAD PATH");
+  }
+  dir.rewindDirectory();
+
+  uint cnt = 0;
+  String data = "[";
+  bool done = false;
+  AsyncWebServerResponse *response = request->beginChunkedResponse(
+      "application/json",
+      [&dir, &cnt, &data, &done](uint8_t *buffer, size_t maxLen, size_t index) -> size_t
+      {
+        Serial.printf("maxLen: %d, index: %d\n", maxLen, index);
+        if (done)
+        {
+          return 0;
+        }
+
+        Serial.println("opening next file");
+        File entry = dir.openNextFile();
+        if (!entry)
+        {
+          String closing = "]";
+          memcpy(buffer, closing.c_str(), strlen(closing.c_str()));
+          dir.close();
+          done = true;
+          return strlen(closing.c_str());
+        }
+
+        String type = entry.isDirectory() ? "dir" : "file";
+        String name = entry.path();
+        if (cnt > 0)
+        {
+          data += ",";
+        }
+        data += "{\"type\":\"" + type + "\",\"name\":\"" + name + "\"}]";
+        cnt += 1;
+
+        Serial.println(type + ", " + name + ", " + String(cnt));
+
+        entry.close();
+
+        const char *message = data.c_str();
+        size_t messageLen = strlen(message);
+        size_t chunkSize = min(maxLen, messageLen - index);
+        Serial.printf("message length %d,chunk size %d\n", messageLen, chunkSize);
+
+        memcpy(buffer, message + index, chunkSize);
+
+        return chunkSize;
+      });
+
+  response->setContentLength(CONTENT_LENGTH_UNKNOWN);
+
+  request->send(response);
 }
 
 #endif

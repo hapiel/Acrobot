@@ -1,4 +1,4 @@
-import { LimbStatus } from '@/lib/AcroborAPI';
+import { LimbStatus } from '@/hooks/useRobotState';
 import { cn } from '@/lib/utils';
 
 export type LimbProps = {

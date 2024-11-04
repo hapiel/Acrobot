@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,acro_leg_exchange_L2R,Controller name:,acrobot_act,Duration:,13033,Created at,08/07/2024 16:46:39,,
+Animation Name:,acro_leg_exchange_L2R,Controller name:,acrobot_act,Duration:,13033,Created at,01/11/2024 11:45:07,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,189.3017578125,90.82763671875,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,6000,180.0,1500,0.0,180.0,-1500,0.0
 sC,m_leg_l,0,6000,189.3017578125,1500,0.0,189.3017578125,-1500,0.0
