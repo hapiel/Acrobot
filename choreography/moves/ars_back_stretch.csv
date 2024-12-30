@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,ars_back_stretch,Controller name:,acrobot_act,Duration:,114867,Created at,01/11/2024 11:45:09,,
+Animation Name:,ars_back_stretch,Controller name:,acrobot_act,Duration:,114867,Created at,03/12/2024 23:25:26,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,5233,180.0,1308,0.0,180.0,-1308,0.0
 sC,m_leg_l,0,33,185.01708984375,8,0.0,185.01708984375,-8,0.0

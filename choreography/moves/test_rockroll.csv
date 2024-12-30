@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,test_rockroll,Controller name:,acrobot_act,Duration:,32967,Created at,01/11/2024 11:45:07,,
+Animation Name:,test_rockroll,Controller name:,acrobot_act,Duration:,32967,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,135.966796875,135.966796875,180.0,180.0,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,3000,180.0,750,0.0,180.0,-750,0.0
 sC,m_leg_r,0,3000,180.0,750,0.0,180.0,-750,0.0

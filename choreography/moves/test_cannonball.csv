@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,test_cannonball,Controller name:,acrobot_act,Duration:,24367,Created at,01/11/2024 11:45:07,,
+Animation Name:,test_cannonball,Controller name:,acrobot_act,Duration:,24367,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,361.494140625,361.494140625,180.0,180.0,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,4000,361.494140625,1000,0.0,361.494140625,-1000,0.0
 sC,m_arm_r,0,4000,361.494140625,1000,0.0,361.494140625,-1000,0.0

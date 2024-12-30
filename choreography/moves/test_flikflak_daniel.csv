@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,test_flikflak_daniel,Controller name:,acrobot_act,Duration:,22633,Created at,01/11/2024 11:45:07,,
+Animation Name:,test_flikflak_daniel,Controller name:,acrobot_act,Duration:,22633,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,13.359375,-8.173828125,197.138671875,120.49072265625,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,1467,197.138671875,367,0.0,197.138671875,-367,0.0
 sC,m_arm_r,0,1433,-8.173828125,358,0.0,-8.173828125,-358,0.0

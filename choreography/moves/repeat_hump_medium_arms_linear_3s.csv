@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,repeat_hump_medium_arms_linear_3s,Controller name:,acrobot_act,Duration:,3000,Created at,01/11/2024 11:45:08,,
+Animation Name:,repeat_hump_medium_arms_linear_3s,Controller name:,acrobot_act,Duration:,3000,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,139.39453125,139.39453125,134.99267578125,134.99267578125,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,1500,139.39453125,0,0.0,227.63671875,0,0.0
 sC,m_arm_r,0,1500,139.39453125,0,0.0,227.63671875,0,0.0

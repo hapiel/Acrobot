@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,test_flop_roll,Controller name:,acrobot_act,Duration:,10100,Created at,01/11/2024 11:45:07,,
+Animation Name:,test_flop_roll,Controller name:,acrobot_act,Duration:,10100,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,-13.095703125,-13.095703125,41.279296875,41.279296875,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,2267,-13.095703125,567,0.0,-13.095703125,-567,0.0
 sC,m_leg_l,0,2267,41.279296875,567,0.0,41.279296875,-567,0.0

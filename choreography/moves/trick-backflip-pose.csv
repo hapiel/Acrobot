@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,trick-backflip-pose,Controller name:,acrobot_act,Duration:,3000,Created at,01/11/2024 11:45:10,,
+Animation Name:,trick-backflip-pose,Controller name:,acrobot_act,Duration:,3000,Created at,03/12/2024 23:25:26,,
 Start positions,ArmL ArmR legL legR,158.37890625,158.37890625,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,3000,158.37890625,750,0.0,158.37890625,-750,0.0
 sC,m_arm_r,0,3000,158.37890625,750,0.0,158.37890625,-750,0.0

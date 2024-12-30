@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,tango-downward-dog-sequence,Controller name:,acrobot_act,Duration:,32000,Created at,01/11/2024 11:45:10,,
+Animation Name:,tango-downward-dog-sequence,Controller name:,acrobot_act,Duration:,32000,Created at,03/12/2024 23:25:26,,
 Start positions,ArmL ArmR legL legR,0.0,0.0,89.9853515625,270.0146484375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,2033,270.0146484375,491,0.0,270.0146484375,-806,0.0
 sC,m_arm_r,0,2000,0.0,793,0.0,0.0,-440,0.0

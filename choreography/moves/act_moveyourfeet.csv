@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_moveyourfeet,Controller name:,acrobot_act,Duration:,114500,Created at,01/11/2024 11:45:06,,
+Animation Name:,act_moveyourfeet,Controller name:,acrobot_act,Duration:,114500,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,9433,185.01708984375,2358,0.0,185.01708984375,-2358,0.0
 sC,m_arm_l,0,5200,180.0,1300,0.0,180.0,-1300,0.0

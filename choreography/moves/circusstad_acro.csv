@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,circusstad_acro,Controller name:,acrobot_act,Duration:,367067,Created at,01/11/2024 11:45:08,,
+Animation Name:,circusstad_acro,Controller name:,acrobot_act,Duration:,367067,Created at,03/12/2024 23:25:25,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,6267,185.01708984375,1567,0.0,185.01708984375,-1567,0.0
 sC,m_arm_r,0,6200,180.0,1550,0.0,180.0,-1550,0.0

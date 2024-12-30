@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,trick-walkover,Controller name:,acrobot_act,Duration:,21000,Created at,01/11/2024 11:45:10,,
+Animation Name:,trick-walkover,Controller name:,acrobot_act,Duration:,21000,Created at,03/12/2024 23:25:26,,
 Start positions,ArmL ArmR legL legR,0.0,0.0,186.005859375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,3000,0.0,0,0.0,95.009765625,0,0.0
 sC,m_leg_r,0,3000,185.01708984375,0,0.0,73.2861328125,0,0.0

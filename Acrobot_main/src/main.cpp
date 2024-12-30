@@ -212,11 +212,11 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("AGT", agtPage), 
           ITEM_SUBMENU("DST", fgtPage),
           ITEM_SUBMENU("ARS", arsPage),
           ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
-          ITEM_SUBMENU("AGT", agtPage), 
           ITEM_SUBMENU("Moves", movesPage),
           ITEM_SUBMENU("Sequencer", sequencerPage),
           ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -509,10 +509,24 @@ SUB_MENU(
       };
       xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
-SUB_MENU(moveAcroPage, movesPage, ITEM_COMMAND("acro_podcheska", []()
+SUB_MENU(moveAcroPage, movesPage, 
+        
+        ITEM_COMMAND("forehead balance", []()
                                                {
            Task task = []() {
-             movePlayer.startMove("/acro_podcheska.csv");
+             movePlayer.startMove("/iso-forhead-balance.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+           ITEM_COMMAND("f2h catch rockroll", []()
+                                               {
+           Task task = []() {
+             movePlayer.startMove("/iso-f2h-catch-rockroll-seq.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+           ITEM_COMMAND("forehead balance", []()
+                                               {
+           Task task = []() {
+             movePlayer.startMove("/iso-lowh2h-standonshoulder.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 

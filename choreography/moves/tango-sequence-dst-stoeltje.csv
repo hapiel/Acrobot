@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,tango-sequence-dst-stoeltje,Controller name:,acrobot_act,Duration:,8567,Created at,01/11/2024 11:45:10,,
+Animation Name:,tango-sequence-dst-stoeltje,Controller name:,acrobot_act,Duration:,8567,Created at,26/11/2024 14:37:31,,
 Start positions,ArmL ArmR legL legR,108.017578125,108.017578125,134.99267578125,134.99267578125,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,533,108.017578125,131,0.0,182.28515625,-133,-24.697265625
 sC,m_leg_l,0,533,134.99267578125,131,0.0,248.51806640625,-133,-37.5

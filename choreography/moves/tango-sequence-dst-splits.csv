@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,tango-sequence-dst-splits,Controller name:,acrobot_act,Duration:,6500,Created at,01/11/2024 11:45:10,,
+Animation Name:,tango-sequence-dst-splits,Controller name:,acrobot_act,Duration:,6500,Created at,26/11/2024 14:37:31,,
 Start positions,ArmL ArmR legL legR,0.0,0.0,89.9853515625,270.0146484375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,1067,270.0146484375,266,0.0,270.0146484375,-266,0.0
 sC,m_arm_l,0,267,0.0,66,0.0,0.0,-66,0.0
