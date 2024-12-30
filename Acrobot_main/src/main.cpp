@@ -38,6 +38,7 @@ The project should be built in platformio
 #include "SPI.h"
 #include "WebServer.h"
 #include "WiFi.h"
+#include "esp_wifi.h"
 #include "Wire.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -59,6 +60,7 @@ The project should be built in platformio
 #include "HallSensor.h"
 #include "Joystick.h"
 #include "JoystickControl.h"
+#include "ESPNowControl.h"
 #include "Leg.h"
 #include "Motor.h"
 #include "MovePlayer.h"
@@ -171,6 +173,7 @@ BottangoSocket bottangoSocket(Debug, menu, armL, armR, legL, legR);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR,
                                 choreoPlayer, menu, eStop, movePlayer,
                                 sequencer, bottangoSocket);
+ESPNowControl ESPNowControl(Debug);
 
 // wifi
 bool wifiConnected = false;
@@ -1828,6 +1831,9 @@ void inits()
   debugI("Next init: Battery sensor");
   batterySensor.init();
 
+  debugI("Next init: ESPNow");
+  ESPNowControl.init();
+
   debugI("Next init: SPI");
   SPI.begin(SCK, MISO, MOSI, CS);
 
@@ -2034,6 +2040,7 @@ void updates()
   sequencer.update();
   bottangoSocket.update();
   movePlayer.update();
+  ESPNowControl.update();
 
   // webserver
   if (wifiConnected)
