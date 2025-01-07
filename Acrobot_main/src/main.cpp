@@ -173,7 +173,7 @@ BottangoSocket bottangoSocket(Debug, menu, armL, armR, legL, legR);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR,
                                 choreoPlayer, menu, eStop, movePlayer,
                                 sequencer, bottangoSocket);
-ESPNowControl ESPNowControl(Debug);
+ESPNowControl eSPNowControl(Debug, legL, legR, armL, armR, batterySensor);
 
 // wifi
 bool wifiConnected = false;
@@ -1832,7 +1832,7 @@ void inits()
   batterySensor.init();
 
   debugI("Next init: ESPNow");
-  ESPNowControl.init();
+  eSPNowControl.init();
 
   debugI("Next init: SPI");
   SPI.begin(SCK, MISO, MOSI, CS);
@@ -2040,7 +2040,7 @@ void updates()
   sequencer.update();
   bottangoSocket.update();
   movePlayer.update();
-  ESPNowControl.update();
+  eSPNowControl.update();
 
   // webserver
   if (wifiConnected)
