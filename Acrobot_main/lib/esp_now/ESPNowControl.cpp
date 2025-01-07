@@ -70,7 +70,7 @@ void ESPNowControl::sendRobotInfoFast(){
   armRTorque = armR.getTorque();
 
   char data[128];  // buffer
-  snprintf(data, sizeof(data), "4xMP_4xMT %f %f %f %f %f %f %f %f",
+  snprintf(data, sizeof(data), "4xMP_4xMT %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f",
          legLPos, legRPos, armLPos, armRPos, legLTorque, legRTorque, armLTorque, armRTorque);
 
   esp_err_t result = esp_now_send(receiverAddress, (uint8_t *)data, strlen(data) + 1);
