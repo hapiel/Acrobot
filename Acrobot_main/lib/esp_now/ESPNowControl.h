@@ -30,10 +30,14 @@ private:
   uint8_t receiverAddress[6] = {0xf4, 0x12, 0xfa, 0x7a, 0x4e, 0xf0}; // LilyGo dongle 
   // uint8_t receiverAddress[6] = {0x90, 0x15, 0x06, 0xdb, 0x41, 0x7c}; // G dongle
   String message; 
+  String receivedMessage;
   esp_now_peer_info_t peerInfo;
-  int32_t delayedTime = 0;
+  int32_t receiveDelayTime = 0;
+  int32_t sendDelayTime = 0;
   int32_t prevInfoUpdate = 0;
+
   bool canSend = true;
+  bool newData = false;
 
   float kP = 50;
   float kD = 2;
@@ -41,6 +45,27 @@ private:
   float legRTarget = 180;
   float armLTarget = 180;
   float armRTarget = 180;
+
+  // 'Fast' values
+  float legLPos;
+  float legRPos;
+  float armLPos;
+  float armRPos;
+  float legLTorque;
+  float legRTorque;
+  float armLTorque;
+  float armRTorque;
+
+  // 'Slow' values
+  int batteryPercentage;
+  uint8_t legLTemp;
+  uint8_t legRTemp;
+  uint8_t armLTemp;
+  uint8_t armRTemp;
+  State legLState;
+  State legRState;
+  State armLState;
+  State armRState;
 
   // void OnDataRec(const uint8_t *incomingData, int len);
   void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
