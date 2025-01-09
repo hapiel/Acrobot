@@ -12,7 +12,7 @@ void ESPNowControl::setSendMode(ESPNowSendMode mode){
 }
 
 void ESPNowControl::init(){
-  WiFi.mode(WIFI_STA);     // esp = wifi station, can connect to acces points
+  WiFi.mode(WIFI_AP_STA);     // !! IMPORTANT !! wifi station AND access point (needed for espnow communication)
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
