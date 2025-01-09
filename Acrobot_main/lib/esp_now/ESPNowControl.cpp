@@ -7,8 +7,12 @@ ESPNowControl::ESPNowControl(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL
     instance = this; 
 }
 
+void ESPNowControl::setSendMode(ESPNowSendMode mode){
+  sendMode = mode;
+}
+
 void ESPNowControl::init(){
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_STA);     // esp = wifi station, can connect to acces points
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
@@ -32,48 +36,73 @@ void ESPNowControl::init(){
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("Failed to add peer");
     return;
-  }
+  } 
 
   Serial.println("ESP-NOW R/S Initialized.");
 }
 
 void ESPNowControl::update(){
+  // Send info data back
+  // NOTE: I turned this off, because it was crashing the system. For now focus on receive only. 
+  // switch (sendMode)
+  // {
+  // case MODE_SEND_OFF:
+  //   // Only send info back if the motors are ON 
+  //   if (legL.getState() == STATE_ON && legR.getState() == STATE_ON && armL.getState() == STATE_ON && armR.getState() == STATE_ON){
+  //     Serial.println("Turning ON send mode");
+  //     setSendMode(MODE_SEND_ON);
+  //   } 
+  //   break;
+  // case MODE_SEND_ON:
+  //   if (legL.getState() != STATE_ON || legR.getState() != STATE_ON || armL.getState() != STATE_ON || armR.getState()!= STATE_ON){
+  //     Serial.println("Turning OFF send mode");
+  //     setSendMode(MODE_SEND_OFF);
+  //   } 
+
+    // Send back fast values (ASAP)
+    // sendRobotInfoFast();
+    // Send back low values (every 1s)
+    // if (millis() - prevInfoUpdate > 1000) {
+    //   sendRobotInfoSlow();
+    //   prevInfoUpdate = millis();
+    // }
+  //   break;
+  // default:
+  //   break;
+  // }
+
   // check if received new data via ESP_NOW
   if (newData){
     receiveDelayTime = millis() - receiveDelayTime;
     getDataFromMsg(receivedMessage);
     const char *msg = receivedMessage.c_str();
-    Serial.printf("Received msg: %s, delay: %d\n", msg, receiveDelayTime);
+    // Serial.printf("Received msg: %s, delay: %d\n", msg, receiveDelayTime);
     receiveDelayTime = millis();
 
     newData = false;
   }
 
-  // Send back ast values (ASAP)
-  sendRobotInfoFast();
-
-  // Send back low values (every 1s)
-  // if (millis() - prevInfoUpdate > 1000) {
-  //   sendRobotInfoSlow();
-  // }
 }
 
 void ESPNowControl::sendRobotInfoFast(){
-  canSend = false;
-  legLPos = legL.getPosition();
-  legRPos = legR.getPosition();
-  armLPos = armL.getPosition();
-  armRPos = armR.getPosition();
-  legLTorque = legL.getTorque();
-  legRTorque = legR.getTorque();
-  armLTorque = armL.getTorque();
-  armRTorque = armR.getTorque();
+  float legLPos = legL.getPosition();
+  float legRPos = legR.getPosition();
+  float armLPos = armL.getPosition();
+  float armRPos = armR.getPosition();
+  float legLTorque = legL.getTorque();
+  float legRTorque = legR.getTorque();
+  float armLTorque = armL.getTorque();
+  float armRTorque = armR.getTorque();
 
-  char data[128];  // buffer
+  char data[80];  // buffer
   snprintf(data, sizeof(data), "4xMP_4xMT %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f",
          legLPos, legRPos, armLPos, armRPos, legLTorque, legRTorque, armLTorque, armRTorque);
 
+  canSend = false;
   esp_err_t result = esp_now_send(receiverAddress, (uint8_t *)data, strlen(data) + 1);
+  if (sendStatus == 0){
+    Serial.printf("Error send msg: %s\n", data);
+  } 
 }
 
 void ESPNowControl::sendRobotInfoSlow(){
@@ -84,14 +113,14 @@ void ESPNowControl::sendRobotInfoSlow(){
   armLTemp = armL.getTemperature();
   armRTemp = armR.getTemperature();
 
-  //  TODO: deze werken nog niet, hebben type State, hoe naar String? 
+  //  TODO: deze werken nog niet, hebben type State --> hoe naar String? 
   // legLState = legL.getState();
   // legRState = legR.getState();
   // armLState = armL.getState();
   // armRState = armR.getState();
 
 
-  char data[128];  // buffer
+  char data[50];  // buffer
   snprintf(data, sizeof(data), "BP_4xMTMP %d %u %u %u %u",
          batteryPercentage,                  
          legLTemp, legRTemp, armLTemp, armRTemp);
@@ -106,6 +135,11 @@ void ESPNowControl::sendRobotInfoSlow(){
 
 
 void ESPNowControl::OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  if (status != ESP_NOW_SEND_SUCCESS){
+    sendStatus = 0;
+  } else {
+    sendStatus = 1;
+  }
   canSend = true;
 }
 

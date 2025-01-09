@@ -11,13 +11,19 @@
 #include "menu.h"
 #include "BatterySensor.h"
 
+enum ESPNowSendMode
+{
+  MODE_SEND_OFF,
+  MODE_SEND_ON
+};
+
 class ESPNowControl
 {
 public:
   ESPNowControl(RemoteDebug &Debug, Leg &legL, Leg &legR, Arm &armL, Arm &armR, BatterySensor &batterySensor);
   void init();
   void update();
-
+  void setSendMode(ESPNowSendMode mode);
 
 private:
   RemoteDebug &Debug; 
@@ -26,6 +32,7 @@ private:
   Arm &armL;
   Arm &armR;
   BatterySensor &batterySensor;
+  ESPNowSendMode sendMode = MODE_SEND_OFF;
   
   uint8_t receiverAddress[6] = {0xf4, 0x12, 0xfa, 0x7a, 0x4e, 0xf0}; // LilyGo dongle 
   // uint8_t receiverAddress[6] = {0x90, 0x15, 0x06, 0xdb, 0x41, 0x7c}; // G dongle
@@ -38,6 +45,7 @@ private:
 
   bool canSend = true;
   bool newData = false;
+  int sendStatus = 1;
 
   float kP = 50;
   float kD = 2;
@@ -45,16 +53,6 @@ private:
   float legRTarget = 180;
   float armLTarget = 180;
   float armRTarget = 180;
-
-  // 'Fast' values
-  float legLPos;
-  float legRPos;
-  float armLPos;
-  float armRPos;
-  float legLTorque;
-  float legRTorque;
-  float armLTorque;
-  float armRTorque;
 
   // 'Slow' values
   int batteryPercentage;
