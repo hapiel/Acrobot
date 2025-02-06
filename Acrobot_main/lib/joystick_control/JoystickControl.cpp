@@ -130,9 +130,10 @@ void JoystickControl::submodeArmNeutralJoystick()
 {
   if (joystick.getButtonL3Pressed())
   {
+    Serial.println(armNeutral);
     if (joystick.getAxisLYCorrected() > 10)
     {
-      if (armNeutral < 2.250)
+      if (armNeutral < 2250)
       {
         armNeutral += 90;
         joystick.setRumble(64, 10);
@@ -177,7 +178,6 @@ void JoystickControl::defaultSubmodes()
   submodeStopChoreo();
   submodeToggleSynch();
   submodeChangeVariableAngle();
-  // submodeCurrentRumble();
   // submodePoseButtons();
   submodeAGTButtons();
 }
@@ -221,30 +221,7 @@ void JoystickControl::submodeAGTButtons(){
 
 }
 
-void JoystickControl::submodeCurrentRumble()
-{
-  static long unsigned int lastRumble = 0;
-  if (millis() - lastRumble > 50)
-  {
-    lastRumble = millis();
-    int legCurrentThreshold = 5;
-    if (joystick.getButtonR1() || joystick.getR2() > 0) // benen
-    {
-      if (abs(legL.getTorque()) >= legCurrentThreshold || abs(legR.getTorque()) >= legCurrentThreshold)
-      {
-        joystick.setRumble(255, 150);
-      }
-    }
-    int armCurrentThreshold = 4;
-    if (joystick.getButtonL1() || joystick.getL2() > 0) // armen
-    {
-      if (abs(armL.getTorque()) >= armCurrentThreshold || abs(armR.getTorque()) >= armCurrentThreshold)
-      {
-        joystick.setRumble(255, 150);
-      }
-    }
-  }
-}
+
 
 void JoystickControl::submodeStopChoreo()
 {
@@ -276,77 +253,6 @@ void JoystickControl::submodeChangeVariableAngle()
     setLedValues();
   }
 }
-
-// void JoystickControl::modeAbsolute(int rotDegrees, float speed)
-// {
-
-//   // legs
-//   if (joystick.getButtonL1() || joystick.getL2() > 0)
-//   {
-
-//     if (joystick.getL2() > 0)
-//     {
-//       speed = fMap(joystick.getL2(), 0, 1020, 0, speedTriggerMax);
-//     }
-
-//     float displacement = speed * deltaT;
-
-//     float legLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, legNeutral - rotDegrees, legNeutral + rotDegrees);
-//     float legRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, legNeutral - rotDegrees, legNeutral + rotDegrees);
-
-//     legLTarget = adjustByDisplacement(legLTarget, legLPosJoystick, displacement);
-//     legRTarget = adjustByDisplacement(legRTarget, legRPosJoystick, displacement);
-
-//     legL.setTarget(legLTarget, menu.getP(), menu.getD());
-//     legR.setTarget(legRTarget, menu.getP(), menu.getD());
-//   }
-
-//   // arms
-//   if (joystick.getButtonR1() || joystick.getR2() > 0)
-//   {
-
-//     if (joystick.getR2() > 0)
-//     {
-//       speed = fMap(joystick.getR2(), 0, 1020, 0, speedTriggerMax);
-//     }
-
-//     float displacement = speed * deltaT;
-
-//     float armLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, armNeutral - rotDegrees, armNeutral + rotDegrees);
-//     float armRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, armNeutral - rotDegrees, armNeutral + rotDegrees);
-
-//     armLTarget = adjustByDisplacement(armLTarget, armLPosJoystick, displacement);
-//     armRTarget = adjustByDisplacement(armRTarget, armRPosJoystick, displacement);
-
-//     armL.setTarget(armLTarget, menu.getP(), menu.getD());
-//     armR.setTarget(armRTarget, menu.getP(), menu.getD());
-//   }
-// }
-
-// void JoystickControl::modeLegsRelative()
-// {
-//   if (joystick.getButtonL1()) // could be replaced with joystick being in center?
-//   {
-//     float legLPosJoystick = fMap(joystick.getAxisLYCorrected(), -128, 128, -1, 1);
-
-//     float displacementL = legLPosJoystick * speedRelativeMode * deltaT;
-
-//     legLTarget += displacementL;
-//     legLTarget = constrain(legLTarget, 40, 320);
-//     legL.setTarget(legLTarget, menu.getP(), menu.getD());
-//   }
-
-//   if (joystick.getButtonR1())
-//   {
-//     float legRPosJoystick = fMap(joystick.getAxisRYCorrected(), -128, 128, -1, 1);
-
-//     float displacementR = legRPosJoystick * speedRelativeMode * deltaT;
-
-//     legRTarget += displacementR;
-//     legRTarget = constrain(legRTarget, 40, 320);
-//     legR.setTarget(legRTarget, menu.getP(), menu.getD());
-//   }
-// }
 
 void JoystickControl::modeSummative(int rotDegrees, float speed)
 {

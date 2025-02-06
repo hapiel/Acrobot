@@ -338,7 +338,8 @@ void Joystick::update()
       }
       connected = true;
     } else {
-      debugE("Received non-joystick data. Len: %d, data: %s", receivedData.length(), receivedData.c_str());
+      // debugE("Received non-joystick data. Len: %d, data: %s", receivedData.length(), receivedData.c_str());
+      // printing debug caused viscous circle, serial data causes non-joystick data...?
     }
   }
 
