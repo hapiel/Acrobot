@@ -1,6 +1,7 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include <FastLED.h>
+#include <credentials.h>
 
 #define NUM_LEDS 1
 #define DATA_PIN 40 // Connected to IO40
@@ -12,8 +13,7 @@ uint8_t receiverAddress[] = {0x08, 0xB6, 0x1F, 0x3B, 0x65, 0x90}; // Robot
 // uint8_t receiverAddress[] = {0xf4, 0x12, 0xfa, 0x7a, 0x4e, 0xf0}; // LilyGo dongle 
 // uint8_t receiverAddress[] = {0x70, 0x04, 0x1d, 0xb5, 0x7a, 0xb4}; // LilyGo dongle 2
 
-const char* wifiSsid = "YOUR_WIFI_SSID";
-const char* wifiPassword = "YOUR_WIFI_PASSWORD";
+
 
 String message; 
 String newMessage;
@@ -97,7 +97,9 @@ void setup() {
 }
 
 
+
 void loop() {
+
   // Receiving data via ESP-NOW 
   if (newData) {
     Serial.println(newMessage);
@@ -116,9 +118,9 @@ void loop() {
 
       lastSendTime = millis() - lastSendTime;
       if (sendStatus == 0){
-        Serial.printf("Error send msg %s, delay %d\n", msg, lastSendTime);
+        Serial.printf("E %s, d %d\n", msg, lastSendTime);
       } else {
-        Serial.printf("Succes send msg %s, delay %d\n", msg, lastSendTime);
+        Serial.printf("S %s, d %d\n", msg, lastSendTime);
       }
 
       lastSendTime = millis();

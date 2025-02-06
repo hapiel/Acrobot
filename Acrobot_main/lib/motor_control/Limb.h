@@ -68,7 +68,7 @@ protected:
   float kPLimitStart =
       0.1; // during calibration this value is ramped up to end, then limit.
   float kPlimitRampEnd = 16;
-  float kdMinimum = 0.2; // safety feature, can be decreased later to 0
+  float kdMinimum = 0; // safety feature, used to be set to 0.2 
   float kDMinimumStart =
       5;                        // after starting this value is ramped down to kpMinimum
   int startRampDuration = 2000; // duration in ms to ramp kp and kd
@@ -80,12 +80,14 @@ protected:
   float lastKp;
   uint32_t lastSetTargetTime = 0;
   bool inverted;
-  const int SAFE_TARGET_RANGE_MIN = 12;
-  const int SAFE_TARGET_RANGE_MAX = 25;
+  const int SAFE_TARGET_RANGE_MIN = 15;
+  const int SAFE_TARGET_RANGE_MAX = 30;
   State state = STATE_OFF;
   LastControlMode lastControlMode = CONTROL_MODE_NONE;
+  int revolutionCount = 0;
+  const int revolutionMax = 5;
 
-  float safeMoveSpeed = 90;  // degrees/s
+  float safeMoveSpeed = 180;  // degrees/s
   float safeKpIncrease = 10; // kp per second
 
   void start();

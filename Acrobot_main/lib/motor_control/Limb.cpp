@@ -13,12 +13,45 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
+  Serial.print("original: ");
+  Serial.print(posDegrees);
+
   posDegrees = constrain(posDegrees, posMin, posMax);
+  posDegrees = fmod(fmod(posDegrees, 360) + 360, 360);
+
+  Serial.print(" constrained: ");
+  Serial.print(posDegrees);
+
+  Serial.print(" target: ");
+  Serial.print(getTarget());
+
+  float revError = fmod(fmod(getTarget(), 360) + 360, 360) - posDegrees;
+
+
+  if (revError > 180)
+  {
+    if (revolutionCount < revolutionMax)
+    {
+      revolutionCount++;
+    }
+  }
+  else if (revError < -180)
+  {
+    if (revolutionCount > -revolutionMax)
+    {
+    revolutionCount--;
+    }
+  }
+
+  posDegrees += revolutionCount * 360;
+
+  Serial.print(" with revs: ");
+  Serial.println(posDegrees);
+
+  float error = getTarget() - posDegrees;
 
   int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp,
                             SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
-
-  float error = getTarget() - posDegrees;
 
   if (abs(error) > safeRange)
   {

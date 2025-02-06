@@ -132,7 +132,7 @@ void JoystickControl::submodeArmNeutralJoystick()
   {
     if (joystick.getAxisLYCorrected() > 10)
     {
-      if (armNeutral < 430)
+      if (armNeutral < 2.250)
       {
         armNeutral += 90;
         joystick.setRumble(64, 10);
@@ -140,7 +140,7 @@ void JoystickControl::submodeArmNeutralJoystick()
     }
     if (joystick.getAxisLYCorrected() < -10)
     {
-      if (armNeutral > -90)
+      if (armNeutral > -1890)
       {
         armNeutral -= 90;
         joystick.setRumble(64, 10);
