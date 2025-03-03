@@ -1,0 +1,9 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,test_3limbs,Controller name:,acrobot_act,Duration:,4000,Created at,20/02/2025 02:55:46,,
+Start positions,ArmL ArmR legL legR,153.80859375,153.80859375,149.6044921875,9999.0,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,2000,153.80859375,500,0.0,217.6171875,-500,0.0
+sC,m_arm_r,0,2000,153.80859375,500,0.0,217.6171875,-500,0.0
+sC,m_leg_l,0,2000,149.6044921875,500,0.0,212.99560546875,-500,0.0
+sC,m_arm_l,2000,2000,217.6171875,500,0.0,153.80859375,-500,0.0
+sC,m_arm_r,2000,2000,217.6171875,500,0.0,153.80859375,-500,0.0
+sC,m_leg_l,2000,2000,212.99560546875,500,0.0,149.6044921875,-500,0.0

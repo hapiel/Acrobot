@@ -36,6 +36,9 @@ void JoystickControl::update()
   case MODE_MANNEQUIN:
     modeMannequin();
     break;
+  case MODE_MANNEQUIN_WEAKER:
+    modeMannequinWeaker();
+    break;
 
   case MODE_TELEPRESENCE:
     modeTelepresence();
@@ -403,6 +406,34 @@ void JoystickControl::modeMannequin(){
   if (torqLegR > 3){
     float diff = legR.getPosition() - legR.getTarget() ;
     legR.setTarget(legR.getTarget() + diff * 0.1, menu.getP(), menu.getD());
+  }
+}
+
+void JoystickControl::modeMannequinWeaker(){
+  if (!movePlayer.isIdle()){
+    return;
+  }
+  float torqArmL = abs(armL.getTorque());
+  float torqArmR = abs(armR.getTorque());
+  float torqLegL = abs(legL.getTorque());
+  float torqLegR = abs(legR.getTorque());
+
+  if (torqArmL > 2.2){
+    float diff = armL.getPosition() - armL.getTarget() ;
+    armL.setTarget(armL.getTarget() + diff * 0.1,  20, 2);
+  }
+  if (torqArmR > 2.2){
+    float diff = armR.getPosition() - armR.getTarget() ;
+    armR.setTarget(armR.getTarget() + diff * 0.1,  20, 2);
+  }
+
+  if (torqLegL > 2.5){
+    float diff = legL.getPosition() - legL.getTarget() ;
+    legL.setTarget(legL.getTarget() + diff * 0.1,  18, 1.8);
+  }
+  if (torqLegR > 2.5){
+    float diff = legR.getPosition() - legR.getTarget() ;
+    legR.setTarget(legR.getTarget() + diff * 0.1,  18, 1.8);
   }
 }
 

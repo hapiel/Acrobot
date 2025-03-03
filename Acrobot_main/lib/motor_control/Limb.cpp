@@ -132,7 +132,7 @@ void Limb::setTorqueUnprotected(float torque)
 
 float Limb::getTarget() const
 {
-  if (lastControlMode != CONTROL_MODE_TARGET)
+  if (lastControlMode != CONTROL_MODE_TARGET || lastKp < 0.1)
   {
     return getPosition();
   }

@@ -1,0 +1,20 @@
+Start time,,Move type,File,Duration,Repeat,Start speed °/s,kP,kI,Notes
+0,0:0.000,movement,pose_stand.csv,33,true,45,0,0,OFF
+19000,0:19.900,start_only,act_salto_p4_hit.csv,500,false,45,20,2,
+20500,0:20.050,movement,act_salto_p4_hit.csv,500,false,45,20,1,
+21200,0:21.120,movement,pose_stand.csv,33,false,45,0,0,OFF
+24500,0:24.450,start_only,act_salto_p4_kick.csv,700,false,45,20,2,
+25500,0:25.550,movement,act_salto_p4_kick.csv,700,false,45,20,1,
+26500,0:26.650,movement,pose_stand.csv,33,false,45,0,0,OFF
+31000,0:31.100,start_only,act_salto_p4_flipover.csv,13800,false,45,50,2,
+32000,0:32.200,movement,act_salto_p4_flipover.csv,13800,false,45,50,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,
+,0:0.000,,,#N/A,false,45,20,2,

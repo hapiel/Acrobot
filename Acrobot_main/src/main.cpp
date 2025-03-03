@@ -186,6 +186,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *saltoPage[];
 extern MenuItem *arsPage[];
 extern MenuItem *circusstadPage[];
 extern MenuItem *kelderfestPage[];
@@ -216,10 +217,9 @@ extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
           ITEM_SUBMENU("AGT", agtPage), 
-          ITEM_SUBMENU("DST", fgtPage),
-          ITEM_SUBMENU("ARS", arsPage),
           ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
+          ITEM_SUBMENU("Salto", saltoPage),
           ITEM_SUBMENU("Moves", movesPage),
           ITEM_SUBMENU("Sequencer", sequencerPage),
           ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -227,6 +227,8 @@ MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage),
           ITEM_SUBMENU("Motors", motorPage),
           ITEM_SUBMENU("Change PI value", PIPage),
           ITEM_SUBMENU("Control mode", controlPage),
+          ITEM_SUBMENU("DST", fgtPage),
+          ITEM_SUBMENU("ARS", arsPage),
           ITEM_SUBMENU("Sequences old", sequencePage),
           ITEM_SUBMENU("Hardware", hardwarePage),
           ITEM_SUBMENU("About", aboutPage));
@@ -254,6 +256,32 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
+);
+
+SUB_MENU(
+    saltoPage, mainMenu,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mannequin WEAKER",
+                 []()
+                 { joystickControl.setMode(MODE_MANNEQUIN_WEAKER); }),
+    ITEM_COMMAND("d2_dans_acro v02",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/salto_d2_dans_acro_03.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  })
 );
 
 
@@ -1820,6 +1848,14 @@ void inits()
     Serial.println("Connected to WiFi");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+  }
+
+  uint8_t baseMac[6];
+  esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
+  if (ret == ESP_OK) {
+    Serial.printf("mac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+                  baseMac[0], baseMac[1], baseMac[2],
+                  baseMac[3], baseMac[4], baseMac[5]);
   }
 
   Serial.println("Next init: Debug");

@@ -182,8 +182,8 @@ void MovePlayer::parseStartCSV()
 
 bool MovePlayer::limbActive(int limbIndex)
 {
-  // inactive limbs have a start position of 999.0
-  return abs(startPositions[limbIndex] - 999.0) > 0.01;
+  // inactive limbs have a start position of 9999.0 as set in the csv
+  return abs(startPositions[limbIndex] - 9999.0) > 0.01;
 }
 
 void MovePlayer::moveTowardsStart(int limbIndex)
