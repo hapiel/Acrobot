@@ -265,23 +265,63 @@ SUB_MENU(
                  {
                    Task task = []()
                    {
-                     movePlayer.startMove("/pose_stand.csv");
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_COMMAND("mannequin WEAKER",
                  []()
                  { joystickControl.setMode(MODE_MANNEQUIN_WEAKER); }),
-    ITEM_COMMAND("d2_dans_acro v02",
+    ITEM_COMMAND("full act salto",
+                []()
+                {
+                  Task task = []()
+                  {
+                    sequencer.startSequence("/routine_act_salto.csv");
+                  };
+                  xQueueSend(functionQueue, &task, portMAX_DELAY);
+                }),      
+
+    ITEM_COMMAND("p2_dans_acro v03",
                   []()
                   {
                     Task task = []()
                     {
-                      movePlayer.startMove("/salto_d2_dans_acro_03.csv", false, false,
+                      movePlayer.startMove("/act_salto_p2_dans_acro_03.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p4_broken routine",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      sequencer.startSequence("/routine_salto_p4.csv");
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p5_overload",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p5_overload.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p6_finale",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p6_finale.csv", false, false,
                                             50);
                     };
                     xQueueSend(functionQueue, &task, portMAX_DELAY);
                   })
+
 );
 
 
