@@ -19,7 +19,11 @@ def threadedRead(s):
 	while socketThreadAlive:
 		# get data from network buffer		
 		try:
-			data = s.recv(1024);			
+			data = s.recv(1024);	
+			if data == b'':  
+				print("Connection closed by the peer. Exiting loop...")
+				break  
+
 		except Exception as e:
 			socketThreadAlive = False
 			print("Unable to recieve data: ")
@@ -39,6 +43,9 @@ def threadedRead(s):
 			# last element of the split will either be an incomplete command or an empty string
 			cmdBuffer = commands[-1]
 
+	socketThreadAlive = False
+	startLoop()
+
 def onExit(s):
 	s.close()
 
@@ -48,12 +55,14 @@ def startLoop():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		atexit.register(onExit, s)
 
-		try:			
-			s.connect((src.CallbacksAndConfiguration.address, src.CallbacksAndConfiguration.port))
-		except Exception as e:
-			print("Unable to connect: ")
-			print(e)
-			exit()
+		while True:
+			try:			
+				s.connect((src.CallbacksAndConfiguration.address, src.CallbacksAndConfiguration.port))
+				break
+			except Exception as e:
+				print("Unable to connect: ")
+				print(e)
+				time.sleep(.5)
 		
 		if src.CallbacksAndConfiguration.log:
 			print ('connected')
