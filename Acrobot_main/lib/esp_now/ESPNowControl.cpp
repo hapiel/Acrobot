@@ -169,6 +169,7 @@ void ESPNowControl::getDataFromMsg(String infoMessage){
       // Serial.printf("KP: %.3f, KD: %.3f\n", kP, kD);
     } else {
       Serial.printf("message in incorrect format: %s\n", infoMessage);
+      return;
     }
   
   updateLimbs();

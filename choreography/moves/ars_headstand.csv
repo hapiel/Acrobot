@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,ars_headstand,Controller name:,acrobot_act,Duration:,79367,Created at,03/12/2024 23:25:26,,
+Animation Name:,ars_headstand,Controller name:,acrobot_act,Duration:,79367,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,4933,180.0,1233,0.0,106.962890625,-1233,0.0
 sC,m_leg_r,0,33,185.01708984375,8,0.0,185.01708984375,-8,0.0

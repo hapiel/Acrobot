@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,iso-shoulderbird-kneehandstand,Controller name:,acrobot_act,Duration:,22167,Created at,03/12/2024 23:25:26,,
+Animation Name:,iso-shoulderbird-kneehandstand,Controller name:,acrobot_act,Duration:,22167,Created at,20/03/2025 17:56:26,,
 Start positions,ArmL ArmR legL legR,93.603515625,97.03125,185.09033203125,185.09033203125,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,2933,97.03125,733,0.0,107.138671875,-733,0.0
 sC,m_arm_l,0,2933,93.603515625,733,0.0,105.732421875,-733,0.0

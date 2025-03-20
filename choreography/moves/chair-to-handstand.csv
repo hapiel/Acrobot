@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,chair-to-handstand,Controller name:,acrobot_act,Duration:,21967,Created at,03/12/2024 23:25:26,,
+Animation Name:,chair-to-handstand,Controller name:,acrobot_act,Duration:,21967,Created at,20/03/2025 17:56:26,,
 Start positions,ArmL ArmR legL legR,108.017578125,108.017578125,134.99267578125,134.99267578125,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,3967,134.99267578125,993,0.0,323.44482421875,-991,7.5439453125
 sC,m_arm_r,0,3967,108.017578125,993,0.0,233.26171875,-991,0.0

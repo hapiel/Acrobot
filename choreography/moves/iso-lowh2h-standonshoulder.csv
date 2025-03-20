@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,iso-lowh2h-standonshoulder,Controller name:,acrobot_act,Duration:,43100,Created at,03/12/2024 23:25:26,,
+Animation Name:,iso-lowh2h-standonshoulder,Controller name:,acrobot_act,Duration:,43100,Created at,20/03/2025 17:56:26,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.09033203125,185.23681640625,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,1333,180.0,333,0.0,155.91796875,-333,0.0
 sC,m_arm_l,0,1333,180.0,333,0.0,155.91796875,-333,0.0

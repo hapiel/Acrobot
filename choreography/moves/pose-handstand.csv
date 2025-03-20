@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,pose-handstand,Controller name:,acrobot_act,Duration:,1000,Created at,20/03/2025 17:56:26,,
+Start positions,ArmL ArmR legL legR,3.1640625,3.1640625,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,1000,3.1640625,250,0.0,3.1640625,-250,0.0
+sC,m_arm_r,0,1000,3.1640625,250,0.0,3.1640625,-250,0.0
+sC,m_leg_l,0,1000,185.01708984375,250,0.0,185.01708984375,-250,0.0
+sC,m_leg_r,0,1000,185.01708984375,250,0.0,185.01708984375,-250,0.0

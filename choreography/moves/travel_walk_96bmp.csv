@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,travel_walk_96bmp,Controller name:,acrobot_act,Duration:,1333,Created at,03/12/2024 23:25:25,,
+Animation Name:,travel_walk_96bmp,Controller name:,acrobot_act,Duration:,1333,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,197.314453125,159.609375,165.64453125,197.3583984375,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,667,197.314453125,167,0.0,159.609375,-167,0.0
 sC,m_arm_r,0,667,159.609375,167,0.0,197.314453125,-167,0.0
