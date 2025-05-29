@@ -205,7 +205,7 @@ void JoystickControl::submodePoseButtons(){
 void JoystickControl::submodeAGTButtons(){
   if (joystick.getButtonTrianglePressed())
   {
-    movePlayer.startMove("/greetings_wave.csv", false, false, 20, 2, 75);
+    movePlayer.startMove("/pose-highfive.csv", false, false, 30, 2, 75);
   }
   if (joystick.getButtonCirclePressed())
   {

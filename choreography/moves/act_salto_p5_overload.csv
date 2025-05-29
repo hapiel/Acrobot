@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_salto_p5_overload,Controller name:,acrobot_act,Duration:,39967,Created at,17/03/2025 14:00:36,,
+Animation Name:,act_salto_p5_overload,Controller name:,acrobot_act,Duration:,39967,Created at,22/03/2025 18:36:02,,
 Start positions,ArmL ArmR legL legR,27.24609375,27.24609375,165.5712890625,165.5712890625,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,2133,165.5712890625,532,0.0,165.5712890625,-533,0.0
 sC,m_leg_r,0,2133,165.5712890625,532,0.0,165.5712890625,-533,0.0

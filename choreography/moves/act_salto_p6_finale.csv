@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_salto_p6_finale,Controller name:,acrobot_act,Duration:,103067,Created at,17/03/2025 14:00:36,,
+Animation Name:,act_salto_p6_finale,Controller name:,acrobot_act,Duration:,103067,Created at,22/03/2025 18:36:02,,
 Start positions,ArmL ArmR legL legR,179.47265625,159.78515625,185.2001953125,185.2001953125,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,2033,185.2001953125,508,0.0,185.2001953125,-508,0.0
 sC,m_leg_r,0,2033,185.2001953125,508,0.0,185.2001953125,-508,0.0

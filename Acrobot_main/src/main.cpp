@@ -186,6 +186,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *streetPage[];
 extern MenuItem *saltoPage[];
 extern MenuItem *arsPage[];
 extern MenuItem *circusstadPage[];
@@ -216,8 +217,9 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("Tango", fgtPage), 
+          ITEM_SUBMENU("Street", streetPage), 
           ITEM_SUBMENU("AGT", agtPage), 
-          ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
           ITEM_SUBMENU("Salto", saltoPage),
           ITEM_SUBMENU("Moves", movesPage),
@@ -227,7 +229,7 @@ MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage),
           ITEM_SUBMENU("Motors", motorPage),
           ITEM_SUBMENU("Change PI value", PIPage),
           ITEM_SUBMENU("Control mode", controlPage),
-          ITEM_SUBMENU("DST", fgtPage),
+          ITEM_SUBMENU("Circusstad", circusstadPage),
           ITEM_SUBMENU("ARS", arsPage),
           ITEM_SUBMENU("Sequences old", sequencePage),
           ITEM_SUBMENU("Hardware", hardwarePage),
@@ -255,6 +257,74 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
+
+);
+
+SUB_MENU(
+  streetPage, mainMenu,
+  ITEM_COMMAND("stand",
+               []()
+               {
+                 Task task = []()
+                 {
+                   movePlayer.startMove("/pose_stand.csv", false, false, 70);
+                 };
+                 xQueueSend(functionQueue, &task, portMAX_DELAY);
+               }),
+  ITEM_COMMAND("demo opening",
+                []()
+                {
+                  Task task = []()
+                  {
+                    movePlayer.startMove("/street_demo_opening.csv", false, false, 50);
+                  };
+                  xQueueSend(functionQueue, &task, portMAX_DELAY);
+                }),
+    ITEM_COMMAND("acroyoga",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+  ITEM_COMMAND("mic PREP",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_prep.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("mic MOVES ACT ",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_scene.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("mic DONE",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_end.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("lets dance seq",
+              []()
+              {
+                Task task = []()
+                {
+                  sequencer.startSequence("/routine_street_letsdance.csv");
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              })
 
 );
 
@@ -439,6 +509,13 @@ SUB_MENU(agtPage, mainMenu,
            Task task = []() {
              movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50);
            };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+           ITEM_COMMAND("walk_normal", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/walk_normal.csv", false, true);
+           };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(fgtPage, mainMenu,
@@ -468,6 +545,13 @@ SUB_MENU(fgtPage, mainMenu,
                       {
            Task task = []() {
              movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+          
+          ITEM_COMMAND("highfive", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/pose-highfive.csv", false, false, 30);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
