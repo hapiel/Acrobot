@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,repeat_random_individual_20s,Controller name:,acrobot_act,Duration:,20000,Created at,03/12/2024 23:25:25,,
+Animation Name:,repeat_random_individual_20s,Controller name:,acrobot_act,Duration:,20000,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,453.603515625,453.603515625,64.82666015625,64.82666015625,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,4000,453.603515625,1000,0.0,453.603515625,-1000,0.0
 sC,m_arm_r,0,2000,453.603515625,500,0.0,418.623046875,-500,0.0

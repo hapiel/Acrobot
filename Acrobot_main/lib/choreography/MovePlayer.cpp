@@ -22,7 +22,7 @@ void MovePlayer::update()
       if (limbActive(i))
       {
 
-        if (abs(limbs[i]->getTarget() - startPositions[i]) > START_DISTANCE_TOLERANCE)
+        if (abs(fmod(fmod(limbs[i]->getTarget() , 360) + 360, 360)- fmod(fmod(startPositions[i] , 360) + 360, 360)) > START_DISTANCE_TOLERANCE)
         {
           readyToMoveCurves = false;
           moveTowardsStart(i);
@@ -182,14 +182,14 @@ void MovePlayer::parseStartCSV()
 
 bool MovePlayer::limbActive(int limbIndex)
 {
-  // inactive limbs have a start position of 999.0
-  return abs(startPositions[limbIndex] - 999.0) > 0.01;
+  // inactive limbs have a start position of 9999.0 as set in the csv
+  return abs(startPositions[limbIndex] - 9999.0) > 0.01;
 }
 
 void MovePlayer::moveTowardsStart(int limbIndex)
 {
-  float target = startPositions[limbIndex];
-  float current = limbs[limbIndex]->getTarget();
+  float target = fmod(fmod(startPositions[limbIndex] , 360) + 360, 360);
+  float current = fmod(fmod(limbs[limbIndex]->getTarget() , 360) + 360, 360);
   float error = target - current;
 
   // move towards target at speed startMoveSpeed

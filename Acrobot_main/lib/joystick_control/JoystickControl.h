@@ -19,7 +19,8 @@ enum JoystickControlMode
   MODE_NONE,
   MODE_SUMMATIVE_90,
   MODE_TELEPRESENCE,
-  MODE_MANNEQUIN
+  MODE_MANNEQUIN,
+  MODE_MANNEQUIN_WEAKER
 };
 
 class JoystickControl
@@ -103,6 +104,7 @@ private:
   void modeTelepresence();
   void modeSynch(int rotDegrees, float speed);
   void modeMannequin();
+  void modeMannequinWeaker();
 
   float adjustByDisplacement(float currentVal, float target, float displacement);
   float calcTelepresenceTorque(float angleDiff, float velDiff, float localVel);

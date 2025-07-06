@@ -1,6 +1,6 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,greetings_wave,Controller name:,acrobot_act,Duration:,7500,Created at,03/12/2024 23:25:25,,
-Start positions,ArmL ArmR legL legR,180.0,180.0,999.0,999.0,0.0,0.0,0.0,0.0
+Animation Name:,greetings_wave,Controller name:,acrobot_act,Duration:,7500,Created at,20/03/2025 17:56:25,,
+Start positions,ArmL ArmR legL legR,180.0,180.0,9999.0,9999.0,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,1000,180.0,250,0.0,5.185546875,-250,0.0
 sC,m_arm_l,0,1000,180.0,250,0.0,5.185546875,-250,0.0
 sC,m_arm_r,1000,433,5.185546875,108,0.0,25.927734375,-108,0.0

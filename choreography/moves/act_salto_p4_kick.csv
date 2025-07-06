@@ -1,0 +1,4 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,act_salto_p4_kick,Controller name:,acrobot_act,Duration:,700,Created at,05/03/2025 13:36:31,,
+Start positions,ArmL ArmR legL legR,9999.0,9999.0,185.01708984375,9999.0,0.0,0.0,0.0,0.0
+sC,m_leg_l,0,700,185.01708984375,174,0.0,103.388671875,-173,0.0

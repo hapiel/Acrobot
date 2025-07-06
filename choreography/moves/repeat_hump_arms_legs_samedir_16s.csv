@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,repeat_hump_arms_legs_samedir_16s,Controller name:,acrobot_act,Duration:,16000,Created at,03/12/2024 23:25:25,,
+Animation Name:,repeat_hump_arms_legs_samedir_16s,Controller name:,acrobot_act,Duration:,16000,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,332.9296875,332.9296875,330.0,330.0,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,8000,332.9296875,2019,4.5703125,29.267578125,-1997,0.0
 sC,m_arm_r,0,8000,332.9296875,2000,4.482421875,29.267578125,-2000,0.0

@@ -1,6 +1,6 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,pattern-3-limbs-referentie,Controller name:,acrobot_act,Duration:,3333,Created at,03/12/2024 23:25:26,,
-Start positions,ArmL ArmR legL legR,93.603515625,93.603515625,89.9853515625,999.0,0.0,0.0,0.0,0.0
+Animation Name:,pattern-3-limbs-referentie,Controller name:,acrobot_act,Duration:,3333,Created at,20/03/2025 17:56:25,,
+Start positions,ArmL ArmR legL legR,93.603515625,93.603515625,89.9853515625,9999.0,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,333,93.603515625,83,0.0,93.603515625,-83,9.66796875
 sC,m_arm_l,333,667,93.603515625,166,-19.3359375,36.03515625,-165,0.0
 sC,m_arm_r,667,333,93.603515625,83,0.0,93.603515625,-41,6.240234375

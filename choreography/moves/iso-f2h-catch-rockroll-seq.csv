@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,iso-f2h-catch-rockroll-seq,Controller name:,acrobot_act,Duration:,29967,Created at,03/12/2024 23:25:26,,
+Animation Name:,iso-f2h-catch-rockroll-seq,Controller name:,acrobot_act,Duration:,29967,Created at,20/03/2025 17:56:26,,
 Start positions,ArmL ArmR legL legR,135.966796875,135.966796875,180.0,180.0,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,500,135.966796875,125,0.0,114.78515625,-125,0.0
 sC,m_leg_l,0,8467,180.0,2116,0.0,180.0,-2116,0.0

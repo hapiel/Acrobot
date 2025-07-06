@@ -3,8 +3,8 @@
 Arm::Arm(Motor &motor, HallSensor &hallSensor, RemoteDebug &Debug,DebugLed &debugLed, int motorID, float offset180, bool inverted, int16_t _calibrationTreshold)
   : Limb(motor, hallSensor, Debug, debugLed, motorID, offset180, inverted)
 {
-  posMin = -180;
-  posMax = 540;
+  posMin = -1980;
+  posMax = 2340;
   if (inverted){
     posMax = 360 - posMin;
     posMin = 360 - posMax;

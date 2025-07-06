@@ -74,10 +74,10 @@ for animation in data[0]["Animations"]:
         
         # get start positions for each motor, 999.0 is default.
         
-        first_arm_l_pos = 999.0
-        first_arm_r_pos = 999.0
-        first_leg_l_pos = 999.0
-        first_leg_r_pos = 999.0
+        first_arm_l_pos = 9999.0
+        first_arm_r_pos = 9999.0
+        first_leg_l_pos = 9999.0
+        first_leg_r_pos = 9999.0
         
         # search until the first m_arm_l is found
         for row in animation_array:

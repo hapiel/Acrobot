@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,trick-ropeskipping,Controller name:,acrobot_act,Duration:,7000,Created at,03/12/2024 23:25:26,,
+Animation Name:,trick-ropeskipping,Controller name:,acrobot_act,Duration:,7000,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,-177.802734375,-177.802734375,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,7000,185.01708984375,1750,0.0,185.01708984375,-1750,0.0
 sC,m_arm_r,0,1000,-177.802734375,250,0.0,-177.802734375,0,0.0

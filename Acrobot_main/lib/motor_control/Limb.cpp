@@ -13,19 +13,54 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
     return;
   }
 
+  // Serial.print("original: ");
+  // Serial.print(posDegrees);
+
   posDegrees = constrain(posDegrees, posMin, posMax);
+  posDegrees = fmod(fmod(posDegrees, 360) + 360, 360);
+
+  // Serial.print(" constrained: ");
+  // Serial.print(posDegrees);
+
+  // Serial.print(" target: ");
+  // Serial.print(getTarget());
+
+  float revError = getTarget() - posDegrees - revolutionCount * 360;
+
+
+  if (revError > 180)
+  {
+    if (revolutionCount < revolutionMax)
+    {
+      revolutionCount++;
+    }
+  }
+  else if (revError < -180)
+  {
+    if (revolutionCount > -revolutionMax)
+    {
+    revolutionCount--;
+    }
+  }
+  // target, posdegrees, revcount, error
+  // Serial.printf("t: %f, p: %f, r: %d, e: %f\n", getTarget(), posDegrees, revolutionCount, revError);
+
+  posDegrees += revolutionCount * 360;
+
+  // Serial.print(" with revs: ");
+  // Serial.println(posDegrees);
+
+  float error = getTarget() - posDegrees;
 
   int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp,
                             SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
 
-  float error = getTarget() - posDegrees;
-
   if (abs(error) > safeRange)
   {
     debugLed.setRTemp(255, 100);
-    debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d, "
-           "target: %f, lastTarget: %f",
-           motorID, error, safeRange, posDegrees, getTarget());
+    // debugW("Limb %d: target out of safe range. Error: %f, safeRange: %d, "
+    //        "target: %f, lastTarget: %f",
+    //        motorID, error, safeRange, posDegrees, getTarget());
 
     int32_t deltaTime = millis() - lastSetTargetTime;
     int deltaConstrained =
@@ -97,7 +132,7 @@ void Limb::setTorqueUnprotected(float torque)
 
 float Limb::getTarget() const
 {
-  if (lastControlMode != CONTROL_MODE_TARGET)
+  if (lastControlMode != CONTROL_MODE_TARGET || lastKp < 0.1)
   {
     return getPosition();
   }

@@ -1,0 +1,198 @@
+Metadata-Version: 2.1
+Name: python-osc
+Version: 1.9.3
+Summary: Open Sound Control server and client implementations in pure Python
+Author-email: attwad <tmusoft@gmail.com>
+License: This is free and unencumbered software released into the public domain.
+        
+        Anyone is free to copy, modify, publish, use, compile, sell, or
+        distribute this software, either in source code form or as a compiled
+        binary, for any purpose, commercial or non-commercial, and by any
+        means.
+        
+        In jurisdictions that recognize copyright laws, the author or authors
+        of this software dedicate any and all copyright interest in the
+        software to the public domain. We make this dedication for the benefit
+        of the public at large and to the detriment of our heirs and
+        successors. We intend this dedication to be an overt act of
+        relinquishment in perpetuity of all present and future rights to this
+        software under copyright law.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+        EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+        IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+        OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+        ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+        OTHER DEALINGS IN THE SOFTWARE.
+        
+        For more information, please refer to <http://unlicense.org/>
+        
+Project-URL: Repository, https://github.com/attwad/python-osc
+Keywords: osc,sound,midi,music
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: Freely Distributable
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Multimedia :: Sound/Audio
+Classifier: Topic :: System :: Networking
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+
+==========
+python-osc
+==========
+
+Open Sound Control server and client implementations in **pure python**.
+
+.. image:: https://github.com/attwad/python-osc/actions/workflows/python-test.yml/badge.svg
+    :target: https://github.com/attwad/python-osc/actions/workflows/python-test.yml
+
+
+Current status
+==============
+
+This library was developed following the
+`OpenSoundControl Specification 1.0 <https://opensoundcontrol.stanford.edu/spec-1_0.html>`_
+and is currently in a stable state.
+
+Features
+========
+
+* UDP and TCP blocking/threading/forking/asyncio server implementations
+* UDP and TCP clients, including asyncio support
+* TCP support for 1.0 and 1.1 protocol formats
+* int, int64, float, string, double, MIDI, timestamps, blob, nil OSC arguments
+* simple OSC address<->callback matching system
+* support for sending responses from callback handlers in client and server
+* extensive unit test coverage
+* basic client and server examples
+
+Documentation
+=============
+
+Available at https://python-osc.readthedocs.io/.
+
+Installation
+============
+
+python-osc is a pure python library that has no external dependencies,
+to install it just use pip (prefered):
+
+.. image:: https://img.shields.io/pypi/v/python-osc.svg
+    :target: https://pypi.python.org/pypi/python-osc
+
+.. code-block:: bash
+
+    $ pip install python-osc
+
+Examples
+========
+
+Simple client
+-------------
+
+.. code-block:: python
+
+  """Small example OSC client
+
+  This program sends 10 random values between 0.0 and 1.0 to the /filter address,
+  waiting for 1 seconds between each value.
+  """
+  import argparse
+  import random
+  import time
+
+  from pythonosc import udp_client
+
+
+  if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="127.0.0.1",
+        help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=5005,
+        help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+
+    for x in range(10):
+      client.send_message("/filter", random.random())
+      time.sleep(1)
+
+Simple server
+-------------
+
+.. code-block:: python
+
+  """Small example OSC server
+
+  This program listens to several addresses, and prints some information about
+  received packets.
+  """
+  import argparse
+  import math
+
+  from pythonosc.dispatcher import Dispatcher
+  from pythonosc import osc_server
+
+  def print_volume_handler(unused_addr, args, volume):
+    print("[{0}] ~ {1}".format(args[0], volume))
+
+  def print_compute_handler(unused_addr, args, volume):
+    try:
+      print("[{0}] ~ {1}".format(args[0], args[1](volume)))
+    except ValueError: pass
+
+  if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip",
+        default="127.0.0.1", help="The ip to listen on")
+    parser.add_argument("--port",
+        type=int, default=5005, help="The port to listen on")
+    args = parser.parse_args()
+
+    dispatcher = Dispatcher()
+    dispatcher.map("/filter", print)
+    dispatcher.map("/volume", print_volume_handler, "Volume")
+    dispatcher.map("/logvolume", print_compute_handler, "Log volume", math.log)
+
+    server = osc_server.ThreadingOSCUDPServer(
+        (args.ip, args.port), dispatcher)
+    print("Serving on {}".format(server.server_address))
+    server.serve_forever()
+
+Building bundles
+----------------
+
+.. code-block:: python
+
+    from pythonosc import osc_bundle_builder
+    from pythonosc import osc_message_builder
+
+    bundle = osc_bundle_builder.OscBundleBuilder(
+        osc_bundle_builder.IMMEDIATELY)
+    msg = osc_message_builder.OscMessageBuilder(address="/SYNC")
+    msg.add_arg(4.0)
+    # Add 4 messages in the bundle, each with more arguments.
+    bundle.add_content(msg.build())
+    msg.add_arg(2)
+    bundle.add_content(msg.build())
+    msg.add_arg("value")
+    bundle.add_content(msg.build())
+    msg.add_arg(b"\x01\x02\x03")
+    bundle.add_content(msg.build())
+
+    sub_bundle = bundle.build()
+    # Now add the same bundle inside itself.
+    bundle.add_content(sub_bundle)
+    # The bundle has 5 elements in total now.
+
+    bundle = bundle.build()
+    # You can now send it via a client with the `.send()` method:
+    client.send(bundle)
+
+License?
+========
+Unlicensed, do what you want with it. (http://unlicense.org)

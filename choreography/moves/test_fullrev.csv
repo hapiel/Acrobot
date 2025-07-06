@@ -1,0 +1,5 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,test_fullrev,Controller name:,acrobot_act,Duration:,8000,Created at,20/02/2025 02:55:46,,
+Start positions,ArmL ArmR legL legR,180.0,180.0,9999.0,9999.0,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,8000,180.0,2000,0.0,-540.0,-2000,0.0
+sC,m_arm_r,0,8000,180.0,2000,0.0,900.0,-2000,0.0

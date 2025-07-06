@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,iso-forhead-balance,Controller name:,acrobot_act,Duration:,8400,Created at,03/12/2024 23:25:26,,
+Animation Name:,iso-forhead-balance,Controller name:,acrobot_act,Duration:,8400,Created at,20/03/2025 17:56:26,,
 Start positions,ArmL ArmR legL legR,185.80078125,188.173828125,191.42578125,191.68212890625,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,3733,191.68212890625,933,0.0,30.62255859375,-933,0.0
 sC,m_leg_l,0,3733,191.42578125,933,0.0,209.5166015625,-933,0.0

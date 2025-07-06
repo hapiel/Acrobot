@@ -1,0 +1,6 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,chataigne_test,Controller name:,acrobot_act,Duration:,2000,Created at,20/03/2025 17:56:26,,
+Start positions,ArmL ArmR legL legR,163.740234375,9999.0,153.66943359375,9999.0,0.0,0.0,0.0,0.0
+sC,m_leg_l,0,400,153.66943359375,112,0.0,155.28076171875,-151,-3.8818359375
+sC,m_leg_l,400,1600,155.28076171875,523,13.51318359375,203.8037109375,-388,0.0
+sC,m_arm_l,400,733,163.740234375,183,0.0,111.26953125,-183,0.0

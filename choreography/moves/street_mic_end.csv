@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,street_mic_end,Controller name:,acrobot_act,Duration:,2033,Created at,22/03/2025 18:36:02,,
+Start positions,ArmL ArmR legL legR,102.48046875,180.0,189.26513671875,189.26513671875,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,2033,102.48046875,508,0.0,180.0,-508,0.0
+sC,m_arm_r,0,2033,180.0,508,0.0,180.0,-508,0.0
+sC,m_leg_l,0,2033,189.26513671875,508,0.0,185.01708984375,-508,0.0
+sC,m_leg_r,0,2033,189.26513671875,508,0.0,185.01708984375,-508,0.0

@@ -1,0 +1,65 @@
+!!!!!!!
+
+For detailed instructions on how to use this exported data, create your own playback logic, etc. refer to the BottangoArduinoDocumentation.pdf file in the Bottango Arduino driver. The following is a summary, the documentation goes into more detail:
+
+Requirements:
+
+1) You will need to provide your own SD Card reader module on your hardware.
+2) You will need to change the pin definitions in the BottangoArduinoConfig file for how you hooked up your SD card module.
+3) Currently only ESP32 based dev boards are supported for SD card reading. More boards will be added in the future.
+
+Process:
+
+1) In the Bottango Arduino folder, you will find the file “BottangoArduinoModules.h.” You will need to uncomment the line in that file that has the definition USE_SD_CARD_COMMAND_STREAM.” This tells the code to read commands from the sd card module, instead of from your computer over USB.
+
+To uncomment a line, simply remove the “//“ characters from the beginning of that line.
+
+2) Place the generated folder "anim" in the root of your SD card.
+
+Insert your SD card into your reader, and Re-upload the BottangoArduino.ino file to your Arduino. To go back to live mode, reverse these two steps and then upload to your Arduino again.
+
+
+—————
+
+If you have multiple drivers in your project, and exported them, you will have a folder for each driver. Repeat these steps for each driver, using the generated code for each driver.
+
+__________
+
+
+When you exported the code, you set some playback settings (such as which animation to play on start, when to trigger animations based on button press, etc). You can also implement your own playback logic.
+
+In the Bottango Arduino folder, locate the file BottangoArduinoCallbacks.cpp. This file has an area to place all your own logic and code into the Bottango driver. Look for the method "void onEarlyLoop()" and place your custom playback code there.
+
+There are three methods that will help you write your own playback logic:
+
+void BottangoCore::commandStreamProvider->startCommandStream(byte index, bool shouldLoop)
+This lets you start an animation by index (0 is the first animation in your project file exported, and then each animation is the next number) and to set whether to loop or not
+You can also refer to the configuration file of each exported animation, it has the animation name in the comments of the file to help refer index to animation name.
+
+bool BottangoCore::commandStreamProvider->streamIsInProgress()
+This returns if anything is currently playing
+
+void BottangoCore::commandStreamProvider->stop()
+This stops playing.
+
+
+As an example:
+
+void onEarlyLoop()
+{
+	// if not currently playing
+    if (BottangoCore::commandStreamProvider->streamIsInProgress() == false)
+    {
+    	// play animation index 2 (the third animation exported), and make it loop
+        BottangoCore::commandStreamProvider->startCommandStream(2, true);
+    }
+
+    // if I had some sensor that I was monitoring
+    if (mySensor.personIsNear() == false)
+    {
+    	// I could stop playing based on the sensor state
+    	BottangoCore::commandStreamProvider->stop();
+    }
+}
+
+You can add your own logic to make a playlist, respond to sensor inputs, etc. 

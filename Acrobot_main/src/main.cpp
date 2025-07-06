@@ -38,6 +38,7 @@ The project should be built in platformio
 #include "SPI.h"
 #include "WebServer.h"
 #include "WiFi.h"
+#include "esp_wifi.h"
 #include "Wire.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -59,6 +60,7 @@ The project should be built in platformio
 #include "HallSensor.h"
 #include "Joystick.h"
 #include "JoystickControl.h"
+#include "ESPNowControl.h"
 #include "Leg.h"
 #include "Motor.h"
 #include "MovePlayer.h"
@@ -149,8 +151,8 @@ DebugLed debugLed;
 Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75,
          true); // offset values
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
-Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true, 11100);
-Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false, 10750);
+Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true, 11300);
+Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false, 10950);
 Dashboard dashboard;
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
@@ -171,6 +173,7 @@ BottangoSocket bottangoSocket(Debug, menu, armL, armR, legL, legR);
 JoystickControl joystickControl(Debug, joystick, legL, legR, armL, armR,
                                 choreoPlayer, menu, eStop, movePlayer,
                                 sequencer, bottangoSocket);
+ESPNowControl eSPNowControl(Debug, legL, legR, armL, armR, batterySensor);
 
 // wifi
 bool wifiConnected = false;
@@ -183,6 +186,9 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *HGTStrandPage[];
+extern MenuItem *streetPage[];
+extern MenuItem *saltoPage[];
 extern MenuItem *arsPage[];
 extern MenuItem *circusstadPage[];
 extern MenuItem *kelderfestPage[];
@@ -212,11 +218,12 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("HGT Strand", HGTStrandPage), 
           ITEM_SUBMENU("AGT", agtPage), 
-          ITEM_SUBMENU("DST", fgtPage),
-          ITEM_SUBMENU("ARS", arsPage),
-          ITEM_SUBMENU("Circusstad", circusstadPage),
+          ITEM_SUBMENU("Tango", fgtPage), 
+          ITEM_SUBMENU("Street", streetPage), 
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
+          ITEM_SUBMENU("Salto", saltoPage),
           ITEM_SUBMENU("Moves", movesPage),
           ITEM_SUBMENU("Sequencer", sequencerPage),
           ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -224,9 +231,38 @@ MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage),
           ITEM_SUBMENU("Motors", motorPage),
           ITEM_SUBMENU("Change PI value", PIPage),
           ITEM_SUBMENU("Control mode", controlPage),
+          ITEM_SUBMENU("Circusstad", circusstadPage),
+          ITEM_SUBMENU("ARS", arsPage),
           ITEM_SUBMENU("Sequences old", sequencePage),
           ITEM_SUBMENU("Hardware", hardwarePage),
           ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(HGTStrandPage, mainMenu,
+         ITEM_COMMAND("stand",
+                      []()
+                      {
+                        Task task = []()
+                        {
+                          movePlayer.startMove("/pose_stand.csv");
+                        };
+                        xQueueSend(functionQueue, &task,
+                                   portMAX_DELAY);
+                      }),
+         // act_moveyourfeet.csv
+         ITEM_COMMAND("HGT strand act", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/act_la_mer.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+           ITEM_COMMAND("walk_normal", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
+
 
 SUB_MENU(
     arsPage, mainMenu,
@@ -250,6 +286,140 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
+
+);
+
+SUB_MENU(
+  streetPage, mainMenu,
+  ITEM_COMMAND("stand",
+               []()
+               {
+                 Task task = []()
+                 {
+                   movePlayer.startMove("/pose_stand.csv", false, false, 70);
+                 };
+                 xQueueSend(functionQueue, &task, portMAX_DELAY);
+               }),
+  ITEM_COMMAND("demo opening",
+                []()
+                {
+                  Task task = []()
+                  {
+                    movePlayer.startMove("/street_demo_opening.csv", false, false, 50);
+                  };
+                  xQueueSend(functionQueue, &task, portMAX_DELAY);
+                }),
+    ITEM_COMMAND("acroyoga",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+  ITEM_COMMAND("mic PREP",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_prep.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("mic MOVES ACT ",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_scene.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("mic DONE",
+              []()
+              {
+                Task task = []()
+                {
+                  movePlayer.startMove("/street_mic_end.csv", false, false, 50);
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              }),
+  ITEM_COMMAND("lets dance seq",
+              []()
+              {
+                Task task = []()
+                {
+                  sequencer.startSequence("/routine_street_letsdance.csv");
+                };
+                xQueueSend(functionQueue, &task, portMAX_DELAY);
+              })
+
+);
+
+SUB_MENU(
+    saltoPage, mainMenu,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mannequin WEAKER",
+                 []()
+                 { joystickControl.setMode(MODE_MANNEQUIN_WEAKER); }),
+    ITEM_COMMAND("full act salto",
+                []()
+                {
+                  Task task = []()
+                  {
+                    sequencer.startSequence("/routine_act_salto.csv");
+                  };
+                  xQueueSend(functionQueue, &task, portMAX_DELAY);
+                }),      
+
+    ITEM_COMMAND("p2_dans_acro v03",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p2_dans_acro_03.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p4_broken routine",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      sequencer.startSequence("/routine_salto_p4.csv");
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p5_overload",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p5_overload.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
+    ITEM_COMMAND("p6_finale",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p6_finale.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  })
 
 );
 
@@ -368,6 +538,13 @@ SUB_MENU(agtPage, mainMenu,
            Task task = []() {
              movePlayer.startMove("/act_moveyourfeet.csv", false, false, 50);
            };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+           ITEM_COMMAND("walk_normal", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/walk_normal.csv", false, true);
+           };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 SUB_MENU(fgtPage, mainMenu,
@@ -397,6 +574,13 @@ SUB_MENU(fgtPage, mainMenu,
                       {
            Task task = []() {
              movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+          
+          ITEM_COMMAND("highfive", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/pose-highfive.csv", false, false, 30);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
@@ -1819,6 +2003,14 @@ void inits()
     Serial.println(WiFi.localIP());
   }
 
+  uint8_t baseMac[6];
+  esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
+  if (ret == ESP_OK) {
+    Serial.printf("mac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+                  baseMac[0], baseMac[1], baseMac[2],
+                  baseMac[3], baseMac[4], baseMac[5]);
+  }
+
   Serial.println("Next init: Debug");
   initDebug(); // AFTER WIFI!
 
@@ -1827,6 +2019,9 @@ void inits()
 
   debugI("Next init: Battery sensor");
   batterySensor.init();
+
+  debugI("Next init: ESPNow");
+  eSPNowControl.init();
 
   debugI("Next init: SPI");
   SPI.begin(SCK, MISO, MOSI, CS);
@@ -2034,6 +2229,7 @@ void updates()
   sequencer.update();
   bottangoSocket.update();
   movePlayer.update();
+  eSPNowControl.update();
 
   // webserver
   if (wifiConnected)

@@ -1,0 +1,5 @@
+{
+  "code-runner.executorMap": {
+      "python": "C:\\FILES\\3projects\\acrobotics\\code\\Bottango_Networked_Driver\\chataigne_env\\Scripts\\activate.bat && python -u"
+  }
+}

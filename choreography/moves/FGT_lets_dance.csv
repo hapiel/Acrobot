@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,FGT_lets_dance,Controller name:,acrobot_act,Duration:,142333,Created at,03/12/2024 23:25:25,,
+Animation Name:,FGT_lets_dance,Controller name:,acrobot_act,Duration:,142333,Created at,20/03/2025 17:56:25,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,6200,180.0,1550,0.0,180.0,-1550,0.0
 sC,m_arm_l,0,6200,180.0,1550,0.0,180.0,-1550,0.0

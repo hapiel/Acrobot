@@ -1,0 +1,6 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,pose-highfive,Controller name:,acrobot_act,Duration:,2233,Created at,29/05/2025 01:29:22,,
+Start positions,ArmL ArmR legL legR,9999.0,180.0,9999.0,9999.0,0.0,0.0,0.0,0.0
+sC,m_arm_r,0,1833,180.0,458,0.0,3.427734375,-458,0.0
+sC,m_arm_r,1833,167,3.427734375,41,0.0,7.822265625,-41,0.0
+sC,m_arm_r,2000,233,7.822265625,58,0.0,3.427734375,-58,0.0
