@@ -186,6 +186,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *HGTStrandPage[];
 extern MenuItem *streetPage[];
 extern MenuItem *saltoPage[];
 extern MenuItem *arsPage[];
@@ -217,9 +218,10 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
+          ITEM_SUBMENU("HGT Strand", HGTStrandPage), 
+          ITEM_SUBMENU("AGT", agtPage), 
           ITEM_SUBMENU("Tango", fgtPage), 
           ITEM_SUBMENU("Street", streetPage), 
-          ITEM_SUBMENU("AGT", agtPage), 
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
           ITEM_SUBMENU("Salto", saltoPage),
           ITEM_SUBMENU("Moves", movesPage),
@@ -234,6 +236,33 @@ MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage),
           ITEM_SUBMENU("Sequences old", sequencePage),
           ITEM_SUBMENU("Hardware", hardwarePage),
           ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(HGTStrandPage, mainMenu,
+         ITEM_COMMAND("stand",
+                      []()
+                      {
+                        Task task = []()
+                        {
+                          movePlayer.startMove("/pose_stand.csv");
+                        };
+                        xQueueSend(functionQueue, &task,
+                                   portMAX_DELAY);
+                      }),
+         // act_moveyourfeet.csv
+         ITEM_COMMAND("HGT strand act", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/act_la_mer.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+           ITEM_COMMAND("walk_normal", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
+
 
 SUB_MENU(
     arsPage, mainMenu,
