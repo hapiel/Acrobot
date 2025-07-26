@@ -1,8 +1,8 @@
 // !!! DRIVER VERSION: 0.7.0a1 !!!
 // !!! Api Version: 8 !!!
 
-// Modified by Daniel Simu for the Acrobot Workshop
-// https://github.com/hapiel/workshop_bot
+// Modified by Daniel Simu for the Acrobot Show, http://acrobot.nl
+
 
 #include "src/BottangoCore.h"
 #include "src/BasicCommands.h"

@@ -80,6 +80,9 @@ public:
 
   void setDeadzoneSize(unsigned int size);
 
+  void acceptData();
+
+
   void update();
 
 private:
@@ -90,6 +93,7 @@ private:
   long gyroX, gyroY, gyroZ, accelX, accelY, accelZ;
 
   bool connected = false;
+  bool acceptingData = false; // if true, joystick is accepting data, otherwise it is not
   uint32_t lastSeen = 0;
   int timeOut = 300;
   unsigned int prevButtons;

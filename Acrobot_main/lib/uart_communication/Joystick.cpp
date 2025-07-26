@@ -308,13 +308,25 @@ void Joystick::setPlayerLEDs(int ledMask)
   Serial2.printf("jP=%d\n", ledMask);
 }
 
+void Joystick::acceptData()
+{
+  acceptingData = true;
+}
+
 void Joystick::update()
 {
+
+  if (!acceptingData)
+  {
+    // if not accepting data, just return
+    return;
+  }
+
   // Update previous button states
   prevButtons = buttons;
   prevMisc = misc;
   prevDpad = dpad;
-;
+
 
   // read the new button states
   if (Serial2.available())

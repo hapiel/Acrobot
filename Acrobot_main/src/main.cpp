@@ -224,6 +224,15 @@ MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage),
           ITEM_SUBMENU("Street", streetPage), 
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
           ITEM_SUBMENU("Salto", saltoPage),
+          ITEM_COMMAND("turn on BT",
+                       []()
+                       {
+                         Task task = []()
+                         {
+                           joystick.acceptData();
+                         };
+                         xQueueSend(functionQueue, &task, portMAX_DELAY);
+                       }),
           ITEM_SUBMENU("Moves", movesPage),
           ITEM_SUBMENU("Sequencer", sequencerPage),
           ITEM_SUBMENU("Bottango Socket", bottangoPage),
@@ -368,9 +377,9 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-    ITEM_COMMAND("mannequin WEAKER",
+    ITEM_COMMAND("mannequin SNAP",
                  []()
-                 { joystickControl.setMode(MODE_MANNEQUIN_WEAKER); }),
+                 { joystickControl.setMode(MODE_MANNEQUIN_SNAP_DOWN); }),
     ITEM_COMMAND("full act salto",
                 []()
                 {
@@ -380,6 +389,17 @@ SUB_MENU(
                   };
                   xQueueSend(functionQueue, &task, portMAX_DELAY);
                 }),      
+
+    ITEM_COMMAND("p1_opening",
+                  []()
+                  {
+                    Task task = []()
+                    {
+                      movePlayer.startMove("/act_salto_p1_opening.csv", false, false,
+                                            50);
+                    };
+                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+                  }),
 
     ITEM_COMMAND("p2_dans_acro v03",
                   []()
