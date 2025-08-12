@@ -1,4 +1,0 @@
-Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_salto_p4_hit_02,Controller name:,acrobot_act,Duration:,600,Created at,05/03/2025 13:36:31,,
-Start positions,ArmL ArmR legL legR,-6.6796875,9999.0,9999.0,9999.0,0.0,0.0,0.0,0.0
-sC,m_arm_l,0,600,-6.6796875,149,0.0,120.5859375,-149,0.0

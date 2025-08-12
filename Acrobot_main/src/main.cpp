@@ -218,12 +218,12 @@ extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
 MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
-          ITEM_SUBMENU("HGT Strand", HGTStrandPage), 
+          // ITEM_SUBMENU("HGT Strand", HGTStrandPage), 
+          ITEM_SUBMENU("Salto", saltoPage),
           ITEM_SUBMENU("AGT", agtPage), 
           ITEM_SUBMENU("Tango", fgtPage), 
           ITEM_SUBMENU("Street", streetPage), 
           ITEM_SUBMENU("Antwerpen", kelderfestPage),
-          ITEM_SUBMENU("Salto", saltoPage),
           ITEM_COMMAND("turn on BT",
                        []()
                        {
@@ -401,45 +401,38 @@ SUB_MENU(
                     xQueueSend(functionQueue, &task, portMAX_DELAY);
                   }),
 
-    ITEM_COMMAND("p2_dans_acro v03",
+    ITEM_COMMAND("p3_finale",
                   []()
                   {
                     Task task = []()
                     {
-                      movePlayer.startMove("/act_salto_p2_dans_acro_03.csv", false, false,
+                      movePlayer.startMove("/act_salto_p3_tango_finale.csv", false, false,
                                             50);
                     };
                     xQueueSend(functionQueue, &task, portMAX_DELAY);
                   }),
-    ITEM_COMMAND("p4_broken routine",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      sequencer.startSequence("/routine_salto_p4.csv");
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  }),
-    ITEM_COMMAND("p5_overload",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      movePlayer.startMove("/act_salto_p5_overload.csv", false, false,
-                                            50);
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  }),
-    ITEM_COMMAND("p6_finale",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      movePlayer.startMove("/act_salto_p6_finale.csv", false, false,
-                                            50);
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  })
+
+                  ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+                                   ITEM_COMMAND("JUGGLE",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/dreieich_sit_juggle.csv", false, true, 30);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 })
+
+    
 
 );
 
