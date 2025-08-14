@@ -1,9 +1,9 @@
 Start time,,Move type,File,Duration,Repeat,Start speed °/s,kP,kI,Notes
 0,0:0.000,start_only,act_salto_p1_opening.csv,147467,false,190,50,2,
 150,0:0.150,movement,act_salto_p1_opening.csv,147467,false,190,50,2,
-147700,2:27.700,movement,pose_stand.csv,33,false,45,0,0,OFF
-151700,2:31.700,movement,pose_stand.csv,33,false,45,0,0.15,Iets spanning zodat benen niet overklappen
-164640,2:44.640,start_only,act_salto_p2_slapstick.csv,18600,false,55,30,2,
+147700,2:27.700,movement,pose_stand.csv,33,false,75,0,0,OFF
+151700,2:31.700,movement,pose_stand.csv,33,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+164640,2:44.640,start_only,act_salto_p2_slapstick.csv,18600,false,75,30,2,
 165140,2:45.140,movement,act_salto_p2_slapstick.csv,18600,false,45,30,2,
 185140,3:5.140,movement,pose_stand.csv,33,false,45,0,0,OFF
 201050,3:21.050,start_only,act_salto_p3_tango_finale.csv,168300,false,190,50,2,

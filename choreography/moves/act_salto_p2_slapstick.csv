@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_salto_p2_slapstick,Controller name:,acrobot_act,Duration:,18600,Created at,12/08/2025 16:43:51,,
+Animation Name:,act_salto_p2_slapstick,Controller name:,acrobot_act,Duration:,18600,Created at,12/08/2025 16:57:43,,
 Start positions,ArmL ArmR legL legR,-1.7578125,-1.7578125,185.01708984375,30.0,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,500,185.01708984375,125,0.0,185.01708984375,-125,0.0
 sC,m_arm_r,0,12500,-1.7578125,3125,0.0,-1.7578125,-3125,0.0
