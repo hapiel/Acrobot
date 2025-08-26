@@ -188,9 +188,13 @@ bool MovePlayer::limbActive(int limbIndex)
 
 void MovePlayer::moveTowardsStart(int limbIndex)
 {
-  float target = fmod(fmod(startPositions[limbIndex] , 360) + 360, 360);
-  float current = fmod(fmod(limbs[limbIndex]->getTarget() , 360) + 360, 360); // ISSUE, IF ROBOT IS TURNED LOW KP IT SHOULD BE CURRENT POSITION, NOT TARGET
-  float error = target - current;
+  float target = fmod(fmod(startPositions[limbIndex] , 360) + 360, 360); // 358
+  float current = fmod(fmod(limbs[limbIndex]->getTarget() , 360) + 360, 360); // case 1 = 355, case 2 = 5
+  float error = target - current; // case 1 = 3, case 2 = 353
+
+    // Wrap into [-180, 180]
+  if (error > 180.0)   error -= 360.0;
+  if (error < -180.0)  error += 360.0;
 
   // move towards target at speed startMoveSpeed
   int32_t deltaTime = millis() - lastStartMovementTime[limbIndex];

@@ -17,7 +17,7 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   // Serial.print(posDegrees);
 
   posDegrees = constrain(posDegrees, posMin, posMax);
-  posDegrees = fmod(fmod(posDegrees, 360) + 360, 360);
+  posDegrees = fmod(fmod(posDegrees, 360) + 360, 360); //355
 
   // Serial.print(" constrained: ");
   // Serial.print(posDegrees);
@@ -25,32 +25,50 @@ void Limb::setTarget(float posDegrees, float kp, float kd)
   // Serial.print(" target: ");
   // Serial.print(getTarget());
 
-  float revError = getTarget() - posDegrees - revolutionCount * 360;
+  float revError = getTarget() - posDegrees - revolutionCount * 360; 
+  // CASE 1: 5 - 355 - 0 = -350
+  // CASE 2: 355 - 5 = 350
+
+  // if (motorID == 1 || motorID == 2){
+  //   Serial.printf("Limb %d: tar: %f, posD: %f, revError: %f, revolutionCount: %d\n", motorID, getTarget(), posDegrees, revError, revolutionCount);
+  // }
+  
 
 
-  if (revError > 180)
+  while (revError > 180)
   {
-    if (revolutionCount < revolutionMax)
+    if (revolutionCount >= revolutionMax)
     {
-      revolutionCount++;
+      break;
     }
+    revolutionCount++; // CASE 2: 1
+    revError = getTarget() - posDegrees - revolutionCount * 360;
   }
-  else if (revError < -180)
+
+  while (revError < -180)
   {
-    if (revolutionCount > -revolutionMax)
+    if (revolutionCount <= -revolutionMax)
     {
-    revolutionCount--;
+      break;
     }
+    revolutionCount--; // CASE 1: -1
+    revError = getTarget() - posDegrees - revolutionCount * 360;
   }
-  // target, posdegrees, revcount, error
-  // Serial.printf("t: %f, p: %f, r: %d, e: %f\n", getTarget(), posDegrees, revolutionCount, revError);
 
-  posDegrees += revolutionCount * 360;
 
-  // Serial.print(" with revs: ");
-  // Serial.println(posDegrees);
 
-  float error = getTarget() - posDegrees;
+  posDegrees += revolutionCount * 360; 
+  // CASE 1: 355 + -360 = -5
+  // CASE 2: 5 + 360 = 365
+
+
+  float error = getTarget() - posDegrees; 
+  // CASE 1: 5 -- 5 = 10
+  // CASE 2: 355 - 365 = -10
+
+  // if (motorID == 1 || motorID == 2){
+  //   Serial.printf("Limb %d: error: %f, revolutionCount: %d\n", motorID, error, revolutionCount);  
+  // }
 
   int safeRange = constrain(SAFE_TARGET_RANGE_MAX - 0.5 * kp,
                             SAFE_TARGET_RANGE_MIN, SAFE_TARGET_RANGE_MAX);
