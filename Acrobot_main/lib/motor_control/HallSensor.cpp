@@ -2,6 +2,7 @@
 
 HallSensor::HallSensor(TwoWire &Wire, RemoteDebug &Debug) : Wire(Wire), Debug(Debug)
 {
+
   ADS = new ADS1115(address, &Wire);
   motorIDToSensorTable[ARM_L_ID - 1] = 2;
   motorIDToSensorTable[ARM_R_ID - 1] = 0;
@@ -12,6 +13,18 @@ HallSensor::HallSensor(TwoWire &Wire, RemoteDebug &Debug) : Wire(Wire), Debug(De
 
 void HallSensor::init()
 {
+  Wire.beginTransmission(address);
+  uint8_t error = Wire.endTransmission();
+  if (error != 0)
+  {
+    isPresent = false;
+    debugI("ADC not present, robot v4");
+    return;
+  }
+  debugI("ADC found, robot v3");
+  isPresent = true;
+  
+  
   ADS->begin();
   ADS->setGain(1);
 }

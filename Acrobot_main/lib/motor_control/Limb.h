@@ -71,7 +71,7 @@ protected:
   float kdMinimum = 0; // safety feature, used to be set to 0.2 
   float kDMinimumStart =
       5;                        // after starting this value is ramped down to kpMinimum
-  int startRampDuration = 2000; // duration in ms to ramp kp and kd
+  int startRampDuration = 1000; // duration in ms to ramp kp and kd
   uint32_t startTime = 0;       // moment the motor starts. Used to ramp
   float posMin;                 // set in children
   float posMax;                 // set in children

@@ -148,11 +148,24 @@ Motor motorArmL(ARM_L_ID, canHandler, Debug);
 Motor motorArmR(ARM_R_ID, canHandler, Debug);
 HallSensor hallSensor(Wire, Debug);
 DebugLed debugLed;
+
+#ifdef ROBOT_V4_A
+
+// offset values
+Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 0.17, true, 11300);
+Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, 7.94, false, 10950);
+Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, -5.55, true); 
+Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 5.83, false); // -0.14
+
+#else
+
 Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75,
          true); // offset values
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 0.99, false);
 Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 28.64, true, 11300);
 Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, -3.25, false, 10950);
+#endif
+
 Dashboard dashboard;
 EStop eStop(ESTOP_PIN, Debug);
 Buzzer buzzer(BUZZER_PIN, Debug);
@@ -217,34 +230,38 @@ extern MenuItem *aboutPage[];
 extern MenuItem *moveQuickRepeatPage[];
 extern MenuItem *moveQuick50RepeatPage[];
 
-MAIN_MENU(ITEM_SUBMENU("Boot motors", bootPage), 
-          // ITEM_SUBMENU("HGT Strand", HGTStrandPage), 
-          ITEM_SUBMENU("Salto", saltoPage),
-          ITEM_SUBMENU("AGT", agtPage), 
-          ITEM_SUBMENU("Tango", fgtPage), 
-          ITEM_SUBMENU("Street", streetPage), 
-          ITEM_SUBMENU("Antwerpen", kelderfestPage),
-          ITEM_COMMAND("turn on BT",
-                       []()
-                       {
-                         Task task = []()
-                         {
-                           joystick.acceptData();
-                         };
-                         xQueueSend(functionQueue, &task, portMAX_DELAY);
-                       }),
-          ITEM_SUBMENU("Moves", movesPage),
-          ITEM_SUBMENU("Sequencer", sequencerPage),
-          ITEM_SUBMENU("Bottango Socket", bottangoPage),
-          ITEM_SUBMENU("Status", statusPage), 
-          ITEM_SUBMENU("Motors", motorPage),
-          ITEM_SUBMENU("Change PI value", PIPage),
-          ITEM_SUBMENU("Control mode", controlPage),
-          ITEM_SUBMENU("Circusstad", circusstadPage),
-          ITEM_SUBMENU("ARS", arsPage),
-          ITEM_SUBMENU("Sequences old", sequencePage),
-          ITEM_SUBMENU("Hardware", hardwarePage),
-          ITEM_SUBMENU("About", aboutPage));
+MAIN_MENU(
+
+#ifdef ROBOT_V3
+    ITEM_SUBMENU("Boot motors", bootPage),
+#endif
+    // ITEM_SUBMENU("HGT Strand", HGTStrandPage),
+    ITEM_SUBMENU("Salto", saltoPage),
+    ITEM_SUBMENU("AGT", agtPage),
+    ITEM_SUBMENU("Tango", fgtPage),
+    ITEM_SUBMENU("Street", streetPage),
+    ITEM_SUBMENU("Antwerpen", kelderfestPage),
+    ITEM_COMMAND("turn on BT",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     joystick.acceptData();
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_SUBMENU("Moves", movesPage),
+    ITEM_SUBMENU("Sequencer", sequencerPage),
+    ITEM_SUBMENU("Bottango Socket", bottangoPage),
+    ITEM_SUBMENU("Status", statusPage),
+    ITEM_SUBMENU("Motors", motorPage),
+    ITEM_SUBMENU("Change PI value", PIPage),
+    ITEM_SUBMENU("Control mode", controlPage),
+    ITEM_SUBMENU("Circusstad", circusstadPage),
+    ITEM_SUBMENU("ARS", arsPage),
+    ITEM_SUBMENU("Sequences old", sequencePage),
+    ITEM_SUBMENU("Hardware", hardwarePage),
+    ITEM_SUBMENU("About", aboutPage));
 
 SUB_MENU(HGTStrandPage, mainMenu,
          ITEM_COMMAND("stand",
@@ -265,17 +282,16 @@ SUB_MENU(HGTStrandPage, mainMenu,
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
 
-           ITEM_COMMAND("walk_normal", []()
+         ITEM_COMMAND("walk_normal", []()
                       {
            Task task = []() {
              movePlayer.startMove("/walk_normal.csv", false, true);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
-
 SUB_MENU(
     arsPage, mainMenu,
-       ITEM_COMMAND("seq 2",
+    ITEM_COMMAND("seq 2",
                  []()
                  {
                    Task task = []()
@@ -299,70 +315,70 @@ SUB_MENU(
 );
 
 SUB_MENU(
-  streetPage, mainMenu,
-  ITEM_COMMAND("stand",
-               []()
-               {
-                 Task task = []()
+    streetPage, mainMenu,
+    ITEM_COMMAND("stand",
+                 []()
                  {
-                   movePlayer.startMove("/pose_stand.csv", false, false, 70);
-                 };
-                 xQueueSend(functionQueue, &task, portMAX_DELAY);
-               }),
-  ITEM_COMMAND("demo opening",
-                []()
-                {
-                  Task task = []()
-                  {
-                    movePlayer.startMove("/street_demo_opening.csv", false, false, 50);
-                  };
-                  xQueueSend(functionQueue, &task, portMAX_DELAY);
-                }),
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 70);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("demo opening",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/street_demo_opening.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
     ITEM_COMMAND("acroyoga",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  }),
-  ITEM_COMMAND("mic PREP",
-              []()
-              {
-                Task task = []()
-                {
-                  movePlayer.startMove("/street_mic_prep.csv", false, false, 50);
-                };
-                xQueueSend(functionQueue, &task, portMAX_DELAY);
-              }),
-  ITEM_COMMAND("mic MOVES ACT ",
-              []()
-              {
-                Task task = []()
-                {
-                  movePlayer.startMove("/street_mic_scene.csv", false, false, 50);
-                };
-                xQueueSend(functionQueue, &task, portMAX_DELAY);
-              }),
-  ITEM_COMMAND("mic DONE",
-              []()
-              {
-                Task task = []()
-                {
-                  movePlayer.startMove("/street_mic_end.csv", false, false, 50);
-                };
-                xQueueSend(functionQueue, &task, portMAX_DELAY);
-              }),
-  ITEM_COMMAND("lets dance seq",
-              []()
-              {
-                Task task = []()
-                {
-                  sequencer.startSequence("/routine_street_letsdance.csv");
-                };
-                xQueueSend(functionQueue, &task, portMAX_DELAY);
-              })
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic PREP",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/street_mic_prep.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic MOVES ACT ",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/street_mic_scene.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic DONE",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/street_mic_end.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("lets dance seq",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     sequencer.startSequence("/routine_street_letsdance.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 })
 
 );
 
@@ -381,38 +397,38 @@ SUB_MENU(
                  []()
                  { joystickControl.setMode(MODE_MANNEQUIN_SNAP_DOWN); }),
     ITEM_COMMAND("full act salto",
-                []()
-                {
-                  Task task = []()
-                  {
-                    sequencer.startSequence("/routine_act_salto.csv");
-                  };
-                  xQueueSend(functionQueue, &task, portMAX_DELAY);
-                }),      
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     sequencer.startSequence("/routine_act_salto.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
 
     ITEM_COMMAND("p1_opening",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      movePlayer.startMove("/act_salto_p1_opening.csv", false, false,
-                                            50);
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  }),
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p1_opening.csv", false, false,
+                                          50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
 
     ITEM_COMMAND("p3_finale",
-                  []()
-                  {
-                    Task task = []()
-                    {
-                      movePlayer.startMove("/act_salto_p3_tango_finale.csv", false, false,
-                                            50);
-                    };
-                    xQueueSend(functionQueue, &task, portMAX_DELAY);
-                  }),
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p3_tango_finale.csv", false, false,
+                                          50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
 
-                  ITEM_COMMAND("stand",
+    ITEM_COMMAND("stand",
                  []()
                  {
                    Task task = []()
@@ -422,7 +438,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
-                                   ITEM_COMMAND("JUGGLE",
+    ITEM_COMMAND("JUGGLE",
                  []()
                  {
                    Task task = []()
@@ -432,10 +448,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
-    
-
 );
-
 
 SUB_MENU(
     circusstadPage, mainMenu,
@@ -553,10 +566,24 @@ SUB_MENU(agtPage, mainMenu,
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
 
-           ITEM_COMMAND("walk_normal", []()
+         ITEM_COMMAND("walk_normal", []()
                       {
            Task task = []() {
              movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+          
+          ITEM_COMMAND("studio demo", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/studio-demo.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+          
+          ITEM_COMMAND("handstand low", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/handstand-low.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
@@ -589,8 +616,8 @@ SUB_MENU(fgtPage, mainMenu,
              movePlayer.startMove("/walk_normal.csv", false, true);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-          
-          ITEM_COMMAND("highfive", []()
+
+         ITEM_COMMAND("highfive", []()
                       {
            Task task = []() {
              movePlayer.startMove("/pose-highfive.csv", false, false, 30);
@@ -706,22 +733,22 @@ SUB_MENU(
       };
       xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
-SUB_MENU(moveAcroPage, movesPage, 
-        
-        ITEM_COMMAND("forehead balance", []()
-                                               {
+SUB_MENU(moveAcroPage, movesPage,
+
+         ITEM_COMMAND("forehead balance", []()
+                      {
            Task task = []() {
              movePlayer.startMove("/iso-forhead-balance.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-           ITEM_COMMAND("f2h catch rockroll", []()
-                                               {
+         ITEM_COMMAND("f2h catch rockroll", []()
+                      {
            Task task = []() {
              movePlayer.startMove("/iso-f2h-catch-rockroll-seq.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-           ITEM_COMMAND("forehead balance", []()
-                                               {
+         ITEM_COMMAND("forehead balance", []()
+                      {
            Task task = []() {
              movePlayer.startMove("/iso-lowh2h-standonshoulder.csv", false, false, 50);
            };
@@ -2018,7 +2045,8 @@ void inits()
 
   uint8_t baseMac[6];
   esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
-  if (ret == ESP_OK) {
+  if (ret == ESP_OK)
+  {
     Serial.printf("mac: %02x:%02x:%02x:%02x:%02x:%02x\n",
                   baseMac[0], baseMac[1], baseMac[2],
                   baseMac[3], baseMac[4], baseMac[5]);
@@ -2026,6 +2054,12 @@ void inits()
 
   Serial.println("Next init: Debug");
   initDebug(); // AFTER WIFI!
+
+#ifdef ROBOT_V4
+  debugI("Robot version: V4");
+#else
+  debugI("Robot version: V3");
+#endif
 
   debugI("Next init: Serial2 with joystick");
   Serial2.begin(115200); // Initialize UART2 for receiving data from joystick
@@ -2255,7 +2289,10 @@ void updates()
 void updatesI2C()
 {
   menu.updateI2C();
-  hallSensor.update();
+  if (hallSensor.isPresent)
+  {
+    hallSensor.update();
+  }
 }
 
 void updatesWebsocket()

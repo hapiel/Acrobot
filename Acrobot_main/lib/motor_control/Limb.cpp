@@ -276,6 +276,10 @@ void Limb::update()
     offsetGearbox = 0; // reset offset when power is off.
     state = STATE_OFF;
   }
+  if (!hallSensor.isPresent && motor.isOnline() && state == STATE_OFF){
+    // if v4, start straight away
+    start();
+  }
 
   if (state == STATE_CALIBRATION)
   {

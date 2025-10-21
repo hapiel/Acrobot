@@ -16,6 +16,7 @@ public:
 
   int16_t getValFromID(int motorID);
   bool getReadyFromID(int motorID, int16_t calibrationTreshold);
+  bool isPresent;
 
 
 private:
