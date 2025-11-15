@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,dreieich_sit_juggle,Controller name:,acrobot_act,Duration:,19333,Created at,15/08/2025 18:21:33,,
+Animation Name:,dreieich_sit_juggle,Controller name:,acrobot_act,Duration:,19333,Created at,04/11/2025 17:06:55,,
 Start positions,ArmL ArmR legL legR,109.16015625,79.98046875,91.19384765625,91.19384765625,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,933,91.19384765625,233,0.0,91.19384765625,-233,0.0
 sC,m_arm_r,0,467,79.98046875,116,0.0,109.16015625,-116,0.0

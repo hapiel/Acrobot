@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,act_salto_p3_tango_finale,Controller name:,acrobot_act,Duration:,176967,Created at,15/08/2025 18:25:24,,
+Animation Name:,act_salto_p3_tango_finale,Controller name:,acrobot_act,Duration:,176967,Created at,04/11/2025 17:06:55,,
 Start positions,ArmL ArmR legL legR,187.20703125,187.20703125,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,133,185.01708984375,33,0.0,182.490234375,-33,0.0
 sC,m_leg_l,0,133,185.01708984375,33,0.0,182.490234375,-33,0.0

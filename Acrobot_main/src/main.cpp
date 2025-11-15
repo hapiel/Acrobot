@@ -201,7 +201,8 @@ bool wifiConnected = false;
 extern MenuItem *bootPage[];
 extern MenuItem *HGTStrandPage[];
 extern MenuItem *streetPage[];
-extern MenuItem *saltoPage[];
+extern MenuItem *monacoPage[];
+extern MenuItem *friendPage[];
 extern MenuItem *arsPage[];
 extern MenuItem *circusstadPage[];
 extern MenuItem *kelderfestPage[];
@@ -236,7 +237,8 @@ MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
 #endif
     // ITEM_SUBMENU("HGT Strand", HGTStrandPage),
-    ITEM_SUBMENU("Salto", saltoPage),
+    ITEM_SUBMENU("Friend", friendPage),
+    ITEM_SUBMENU("Moncao", monacoPage),
     ITEM_SUBMENU("AGT", agtPage),
     ITEM_SUBMENU("Tango", fgtPage),
     ITEM_SUBMENU("Street", streetPage),
@@ -383,7 +385,7 @@ SUB_MENU(
 );
 
 SUB_MENU(
-    saltoPage, mainMenu,
+    friendPage, mainMenu,
     ITEM_COMMAND("stand",
                  []()
                  {
@@ -396,7 +398,31 @@ SUB_MENU(
     ITEM_COMMAND("mannequin SNAP",
                  []()
                  { joystickControl.setMode(MODE_MANNEQUIN_SNAP_DOWN); }),
-    ITEM_COMMAND("full act salto",
+    ITEM_COMMAND("friend in me",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     sequencer.startSequence("/routine_act_salto_friend.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }));
+
+SUB_MENU(
+    monacoPage, mainMenu,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mannequin SNAP",
+                 []()
+                 { joystickControl.setMode(MODE_MANNEQUIN_SNAP_DOWN); }),
+    ITEM_COMMAND("full act monaco",
                  []()
                  {
                    Task task = []()
