@@ -209,6 +209,7 @@ extern MenuItem *kelderfestPage[];
 extern MenuItem *agtPage[];
 extern MenuItem *fgtPage[];
 extern MenuItem *movesPage[];
+extern MenuItem *samPage[];
 extern MenuItem *sequencerPage[];
 extern MenuItem *bottangoPage[];
 extern MenuItem *moveTestPage[];
@@ -253,6 +254,7 @@ MAIN_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_SUBMENU("Moves", movesPage),
+    ITEM_SUBMENU("Sam", samPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
     ITEM_SUBMENU("Bottango Socket", bottangoPage),
     ITEM_SUBMENU("Status", statusPage),
@@ -442,6 +444,21 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
+
+
+    
+    ITEM_COMMAND("p2_slapstick",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p2_slapstick.csv", false, false,
+                                          30);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+
 
     ITEM_COMMAND("p3_finale",
                  []()
@@ -659,6 +676,7 @@ SUB_MENU(sequencerPage, mainMenu, ITEM_COMMAND("walk_test", []()
 
 SUB_MENU(movesPage, mainMenu, ITEM_SUBMENU("Poses", movePosePage),
          ITEM_SUBMENU("Acro", moveAcroPage),
+         ITEM_SUBMENU("Sam", samPage),
          ITEM_SUBMENU("Travel", moveTravelPage),
          ITEM_SUBMENU("Warmup", moveWarmupPage),
          ITEM_SUBMENU("Greeting", moveGreetingPage),
@@ -668,6 +686,113 @@ SUB_MENU(movesPage, mainMenu, ITEM_SUBMENU("Poses", movePosePage),
          ITEM_SUBMENU("Quick P50 rep", moveQuick50RepeatPage),
          ITEM_SUBMENU("Quick POW", moveQuickPowPage),
          ITEM_SUBMENU("MovePlayer TESTS", moveTestPage));
+
+
+SUB_MENU(
+    samPage, movesPage,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("balance SLOW",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/balance_slow.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+                
+    ITEM_COMMAND("balance MID",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/balance_mid.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+                
+    ITEM_COMMAND("balance FAST",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/balance_fast.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+
+    ITEM_COMMAND("p1 walk chair",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p1_walk_chair.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+  ITEM_COMMAND("p2 splithang cradle",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p2_splithang_cradle.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p3 handstnd split",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p3_handstand_split_swan.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p4 cannonball",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p4_cannonball.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+        ITEM_COMMAND("p5 cradledrop>swing",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p5_cradledrop_swing_flag.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p6 podcheska finale",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/SAM_salto_p6_podcheska_finale.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 })
+
+                
+                );
+
 
 SUB_MENU(
     moveGreetingPage, movesPage,
@@ -791,6 +916,18 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
+
+
+     ITEM_COMMAND("salsa",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/travel_salsa.csv", false, true, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+                 
     ITEM_COMMAND("walk_large",
                  []()
                  {
