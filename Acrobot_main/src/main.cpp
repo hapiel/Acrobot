@@ -154,7 +154,7 @@ DebugLed debugLed;
 // offset values
 Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, 0.17, true, 11300);
 Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, 7.94, false, 10950);
-Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, -5.55, true); 
+Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, -5.55, true);
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 5.83, false); // -0.14
 
 #else
@@ -254,7 +254,6 @@ MAIN_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
     ITEM_SUBMENU("Moves", movesPage),
-    ITEM_SUBMENU("Sam", samPage),
     ITEM_SUBMENU("Sequencer", sequencerPage),
     ITEM_SUBMENU("Bottango Socket", bottangoPage),
     ITEM_SUBMENU("Status", statusPage),
@@ -445,8 +444,6 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
-
-    
     ITEM_COMMAND("p2_slapstick",
                  []()
                  {
@@ -457,8 +454,6 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-
-
 
     ITEM_COMMAND("p3_finale",
                  []()
@@ -615,15 +610,15 @@ SUB_MENU(agtPage, mainMenu,
              movePlayer.startMove("/walk_normal.csv", false, true);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-          
-          ITEM_COMMAND("studio demo", []()
+
+         ITEM_COMMAND("studio demo", []()
                       {
            Task task = []() {
              movePlayer.startMove("/studio-demo.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-          
-          ITEM_COMMAND("handstand low", []()
+
+         ITEM_COMMAND("handstand low", []()
                       {
            Task task = []() {
              movePlayer.startMove("/handstand-low.csv", false, false, 50);
@@ -674,9 +669,10 @@ SUB_MENU(sequencerPage, mainMenu, ITEM_COMMAND("walk_test", []()
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
-SUB_MENU(movesPage, mainMenu, ITEM_SUBMENU("Poses", movePosePage),
-         ITEM_SUBMENU("Acro", moveAcroPage),
+SUB_MENU(movesPage, mainMenu,
+         ITEM_SUBMENU("Poses", movePosePage),
          ITEM_SUBMENU("Sam", samPage),
+         ITEM_SUBMENU("Acro", moveAcroPage),
          ITEM_SUBMENU("Travel", moveTravelPage),
          ITEM_SUBMENU("Warmup", moveWarmupPage),
          ITEM_SUBMENU("Greeting", moveGreetingPage),
@@ -686,7 +682,6 @@ SUB_MENU(movesPage, mainMenu, ITEM_SUBMENU("Poses", movePosePage),
          ITEM_SUBMENU("Quick P50 rep", moveQuick50RepeatPage),
          ITEM_SUBMENU("Quick POW", moveQuickPowPage),
          ITEM_SUBMENU("MovePlayer TESTS", moveTestPage));
-
 
 SUB_MENU(
     samPage, movesPage,
@@ -708,7 +703,7 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-                
+
     ITEM_COMMAND("balance MID",
                  []()
                  {
@@ -718,7 +713,7 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-                
+
     ITEM_COMMAND("balance FAST",
                  []()
                  {
@@ -728,7 +723,6 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-
 
     ITEM_COMMAND("p1 walk chair",
                  []()
@@ -740,7 +734,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
-  ITEM_COMMAND("p2 splithang cradle",
+    ITEM_COMMAND("p2 splithang cradle",
                  []()
                  {
                    Task task = []()
@@ -770,7 +764,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
-        ITEM_COMMAND("p5 cradledrop>swing",
+    ITEM_COMMAND("p5 cradledrop>swing",
                  []()
                  {
                    Task task = []()
@@ -790,9 +784,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  })
 
-                
-                );
-
+);
 
 SUB_MENU(
     moveGreetingPage, movesPage,
@@ -898,7 +890,7 @@ SUB_MENU(moveAcroPage, movesPage,
              movePlayer.startMove("/iso-f2h-catch-rockroll-seq.csv", false, false, 50);
            };
            xQueueSend(functionQueue, &task, portMAX_DELAY); }),
-         ITEM_COMMAND("forehead balance", []()
+         ITEM_COMMAND("lowh2h > 2high", []()
                       {
            Task task = []() {
              movePlayer.startMove("/iso-lowh2h-standonshoulder.csv", false, false, 50);
@@ -917,8 +909,7 @@ SUB_MENU(
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
 
-
-     ITEM_COMMAND("salsa",
+    ITEM_COMMAND("salsa",
                  []()
                  {
                    Task task = []()
@@ -927,7 +918,7 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-                 
+
     ITEM_COMMAND("walk_large",
                  []()
                  {

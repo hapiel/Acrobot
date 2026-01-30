@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,studio-demo,Controller name:,acrobot_act,Duration:,72633,Created at,27/10/2025 16:40:51,,
+Animation Name:,studio-demo,Controller name:,acrobot_act,Duration:,72633,Created at,28/01/2026 14:30:54,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,200,180.0,50,0.0,180.0,-50,0.0
 sC,m_leg_r,0,267,185.01708984375,66,0.0,185.01708984375,-66,0.0
