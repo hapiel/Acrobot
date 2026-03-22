@@ -96,6 +96,7 @@ for animation in data[0]["Animations"]:
                 range_low, range_high = controller_data[motor_name]
                 first_arm_r_pos = fMap(int(row_values[4]), 0, 8192, range_low, range_high)
                 break
+
         
         for row in animation_array:
             row_values = row.split(",")
@@ -136,7 +137,7 @@ for animation in data[0]["Animations"]:
                 row_values[6] = fMap(int(row_values[6]), 0, 8192, range_low, range_high) - range_low
                 row_values[7] = fMap(int(row_values[7]), 0, 8192, range_low, range_high)
                 row_values[9] = fMap(int(row_values[9]), 0, 8192, range_low, range_high) - range_low
-                
+
             csvwriter.writerow(row_values)
     
     # Remove the last newline char
@@ -151,3 +152,4 @@ for animation in data[0]["Animations"]:
         csvfile.writelines(lines)
     
     print(f"CSV file created for animation: {csv_file_path}")
+

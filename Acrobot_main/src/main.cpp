@@ -199,6 +199,8 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *leipzigPage[];
+extern MenuItem *leipzigActPage[];
 extern MenuItem *HGTStrandPage[];
 extern MenuItem *streetPage[];
 extern MenuItem *monacoPage[];
@@ -238,8 +240,9 @@ MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
 #endif
     // ITEM_SUBMENU("HGT Strand", HGTStrandPage),
+    ITEM_SUBMENU("Leipzig", leipzigPage),
+    ITEM_SUBMENU("Monaco", monacoPage),
     ITEM_SUBMENU("Friend", friendPage),
-    ITEM_SUBMENU("Moncao", monacoPage),
     ITEM_SUBMENU("AGT", agtPage),
     ITEM_SUBMENU("Tango", fgtPage),
     ITEM_SUBMENU("Street", streetPage),
@@ -265,6 +268,151 @@ MAIN_MENU(
     ITEM_SUBMENU("Sequences old", sequencePage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
+
+SUB_MENU(leipzigPage, mainMenu,
+         ITEM_SUBMENU("Leipzig Act", leipzigActPage),
+         ITEM_COMMAND("stand",
+                      []()
+                      {
+                        Task task = []()
+                        {
+                          movePlayer.startMove("/pose_stand.csv");
+                        };
+                        xQueueSend(functionQueue, &task,
+                                   portMAX_DELAY);
+                      }),
+
+          ITEM_COMMAND("Pole dance", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_pole_love.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+
+         ITEM_COMMAND("pause STARTPOS", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_pause.csv", true, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+         ITEM_COMMAND("pause butterflies", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_pause.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+         ITEM_COMMAND("trio STARTPOS", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_trio.csv", true, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+
+         ITEM_COMMAND("trio", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_trio.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+         ITEM_COMMAND("trio-SIT", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_trio_sit.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+         ITEM_COMMAND("baby", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/leipzig_baby.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); })
+
+);
+
+
+SUB_MENU(
+    leipzigActPage, leipzigPage,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mannequin SNAP",
+                 []()
+                 { joystickControl.setMode(MODE_MANNEQUIN_SNAP_DOWN); }),
+    ITEM_COMMAND("full act Leipzig",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     sequencer.startSequence("/routine_act_leipzig.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("Bows",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/leipzig_bows.csv", false, false,
+                                          50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p1_opening",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p1_opening.csv", false, false,
+                                          50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p2_slapstick",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p2_slapstick.csv", false, false,
+                                          30);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("p3_finale",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/act_salto_p3_tango_finale_leipzig_bows.csv", false, false,
+                                          50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }));
 
 SUB_MENU(HGTStrandPage, mainMenu,
          ITEM_COMMAND("stand",

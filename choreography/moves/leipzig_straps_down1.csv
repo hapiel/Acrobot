@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,leipzig_straps_down,Controller name:,acrobot_act,Duration:,6067,Created at,18/03/2026 12:31:43,,
+Start positions,ArmL ArmR legL legR,44.6484375,44.6484375,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,6067,44.6484375,3154,29.1796875,180.0,-728,-1.93359375
+sC,m_arm_r,0,6067,44.6484375,3154,29.1796875,180.0,-728,-1.93359375
+sC,m_leg_l,0,6067,185.01708984375,1516,0.0,185.01708984375,-1516,0.0
+sC,m_leg_r,0,6067,185.01708984375,1516,0.0,185.01708984375,-1516,0.0

@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,SAM_salto_p5_cradledrop_swing_flag,Controller name:,acrobot_act,Duration:,31033,Created at,09/01/2026 12:50:05,,
+Animation Name:,SAM_salto_p5_cradledrop_swing_flag,Controller name:,acrobot_act,Duration:,31033,Created at,13/03/2026 13:35:51,,
 Start positions,ArmL ArmR legL legR,136.93359375,136.93359375,180.0,180.0,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,4033,180.0,1008,0.0,180.0,-1008,0.0
 sC,m_leg_l,0,4033,180.0,1008,0.0,180.0,-1008,0.0

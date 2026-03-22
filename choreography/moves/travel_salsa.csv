@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,travel_salsa,Controller name:,acrobot_act,Duration:,1067,Created at,09/01/2026 12:50:05,,
+Animation Name:,travel_salsa,Controller name:,acrobot_act,Duration:,1067,Created at,13/03/2026 13:35:51,,
 Start positions,ArmL ArmR legL legR,119.53125,119.53125,176.22802734375,195.85693359375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,533,119.53125,133,0.52734375,119.53125,-133,-0.52734375
 sC,m_leg_l,0,533,176.22802734375,133,0.0,195.85693359375,-133,0.0

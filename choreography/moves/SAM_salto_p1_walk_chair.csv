@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,SAM_salto_p1_walk_chair,Controller name:,acrobot_act,Duration:,38633,Created at,09/01/2026 12:50:05,,
+Animation Name:,SAM_salto_p1_walk_chair,Controller name:,acrobot_act,Duration:,38633,Created at,13/03/2026 13:35:50,,
 Start positions,ArmL ArmR legL legR,180.0,180.0,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,1600,180.0,400,0.0,180.0,-400,0.0
 sC,m_leg_l,0,1600,185.01708984375,400,0.0,185.01708984375,-400,0.0

@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,SAM_salto_p3_handstand_split_swan,Controller name:,acrobot_act,Duration:,15667,Created at,09/01/2026 12:50:05,,
+Animation Name:,SAM_salto_p3_handstand_split_swan,Controller name:,acrobot_act,Duration:,15667,Created at,13/03/2026 13:35:51,,
 Start positions,ArmL ArmR legL legR,0.3515625,0.3515625,201.93603515625,181.0986328125,0.0,0.0,0.0,0.0
 sC,m_leg_l,0,1133,201.93603515625,283,0.0,255.6591796875,-283,0.0
 sC,m_arm_r,0,1133,0.3515625,283,0.0,41.66015625,-283,0.0

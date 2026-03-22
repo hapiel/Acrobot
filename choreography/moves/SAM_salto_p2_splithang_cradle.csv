@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,SAM_salto_p2_splithang_cradle,Controller name:,acrobot_act,Duration:,24267,Created at,09/01/2026 12:50:05,,
+Animation Name:,SAM_salto_p2_splithang_cradle,Controller name:,acrobot_act,Duration:,24267,Created at,13/03/2026 13:35:51,,
 Start positions,ArmL ArmR legL legR,55.37109375,55.37109375,65.009765625,240.2783203125,0.0,0.0,0.0,0.0
 sC,m_arm_l,0,600,55.37109375,150,0.0,108.984375,-150,-0.3515625
 sC,m_arm_r,0,600,55.37109375,150,0.0,108.984375,-150,-0.3515625

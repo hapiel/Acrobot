@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,balance_fast,Controller name:,acrobot_act,Duration:,12867,Created at,09/01/2026 12:50:05,,
+Animation Name:,balance_fast,Controller name:,acrobot_act,Duration:,12867,Created at,13/03/2026 13:35:51,,
 Start positions,ArmL ArmR legL legR,178.76953125,178.76953125,191.02294921875,191.02294921875,0.0,0.0,0.0,0.0
 sC,m_leg_r,0,4867,191.02294921875,1216,0.0,191.02294921875,-1216,0.0
 sC,m_arm_l,0,4867,178.76953125,1216,0.0,178.76953125,-1216,0.0

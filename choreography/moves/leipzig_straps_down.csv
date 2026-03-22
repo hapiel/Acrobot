@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,leipzig_trio_startpos,Controller name:,acrobot_act,Duration:,900,Created at,20/03/2026 13:28:27,,
+Start positions,ArmL ArmR legL legR,144.4921875,144.4921875,93.427734375,93.427734375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,900,144.4921875,225,0.0,144.4921875,-225,0.0
+sC,m_arm_r,0,900,144.4921875,225,0.0,144.4921875,-225,0.0
+sC,m_leg_l,0,900,93.427734375,225,0.0,93.427734375,-225,0.0
+sC,m_leg_r,0,900,93.427734375,225,0.0,93.427734375,-225,0.0

@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,leipzig_buildup_06_straight,Controller name:,acrobot_act,Duration:,433,Created at,19/03/2026 11:53:26,,
+Start positions,ArmL ArmR legL legR,1.58203125,1.58203125,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,433,1.58203125,108,0.0,1.58203125,-999,0.0
+sC,m_arm_r,0,433,1.58203125,108,0.0,1.58203125,-999,0.0
+sC,m_leg_l,0,433,185.01708984375,108,0.0,185.01708984375,-999,0.0
+sC,m_leg_r,0,433,185.01708984375,108,0.0,185.01708984375,-999,0.0

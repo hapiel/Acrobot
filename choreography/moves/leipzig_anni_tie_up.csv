@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,leipzig_anni_tie_up,Controller name:,acrobot_act,Duration:,967,Created at,19/03/2026 11:53:25,,
+Start positions,ArmL ArmR legL legR,263.49609375,263.49609375,179.12109375,179.12109375,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,967,263.49609375,241,0.0,263.49609375,-241,0.0
+sC,m_arm_r,0,967,263.49609375,241,0.0,263.49609375,-241,0.0
+sC,m_leg_l,0,967,179.12109375,241,0.0,179.12109375,-241,0.0
+sC,m_leg_r,0,967,179.12109375,241,0.0,179.12109375,-241,0.0
