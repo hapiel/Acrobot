@@ -157,6 +157,15 @@ Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, 7.94, false, 10950);
 Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, -5.55, true);
 Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 5.83, false); // -0.14
 
+
+#elif ROBOT_V4_B
+
+// offset values
+Arm armL(motorArmL, hallSensor, Debug, debugLed, ARM_L_ID, -98.73, true, 11300);
+Arm armR(motorArmR, hallSensor, Debug, debugLed, ARM_R_ID, 182.96, false, 10950);
+Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, -127.65, true);
+Leg legR(motorLegR, hallSensor, Debug, debugLed, LEG_R_ID, 48.83, false); 
+
 #else
 
 Leg legL(motorLegL, hallSensor, Debug, debugLed, LEG_L_ID, 32.75,
@@ -199,6 +208,7 @@ bool wifiConnected = false;
 // This section needs to be in the same file that inits the lcdMenu.
 
 extern MenuItem *bootPage[];
+extern MenuItem *streetNewPage[];
 extern MenuItem *leipzigPage[];
 extern MenuItem *leipzigActPage[];
 extern MenuItem *HGTStrandPage[];
@@ -240,13 +250,14 @@ MAIN_MENU(
     ITEM_SUBMENU("Boot motors", bootPage),
 #endif
     // ITEM_SUBMENU("HGT Strand", HGTStrandPage),
-    ITEM_SUBMENU("Leipzig", leipzigPage),
     ITEM_SUBMENU("Monaco", monacoPage),
+    ITEM_SUBMENU("Street NEW", streetNewPage),
     ITEM_SUBMENU("Friend", friendPage),
     ITEM_SUBMENU("AGT", agtPage),
-    ITEM_SUBMENU("Tango", fgtPage),
     ITEM_SUBMENU("Street", streetPage),
     ITEM_SUBMENU("Antwerpen", kelderfestPage),
+    ITEM_SUBMENU("Tango", fgtPage),
+    ITEM_SUBMENU("Leipzig", leipzigPage),
     ITEM_COMMAND("turn on BT",
                  []()
                  {
@@ -268,6 +279,8 @@ MAIN_MENU(
     ITEM_SUBMENU("Sequences old", sequencePage),
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
+
+
 
 SUB_MENU(leipzigPage, mainMenu,
          ITEM_SUBMENU("Leipzig Act", leipzigActPage),
@@ -476,12 +489,12 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-    ITEM_COMMAND("demo opening",
+    ITEM_COMMAND("Reveal",
                  []()
                  {
                    Task task = []()
                    {
-                     movePlayer.startMove("/street_demo_opening.csv", false, false, 50);
+                     movePlayer.startMove("/streetNew_reveal.csv", false, false, 50);
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
@@ -494,7 +507,7 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-    ITEM_COMMAND("mic PREP",
+   ITEM_COMMAND("mic PREP",
                  []()
                  {
                    Task task = []()
@@ -518,6 +531,75 @@ SUB_MENU(
                    Task task = []()
                    {
                      movePlayer.startMove("/street_mic_end.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("lets dance seq",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     sequencer.startSequence("/routine_street_letsdance.csv");
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 })
+
+);
+
+
+SUB_MENU(
+    streetNewPage, mainMenu,
+    ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 70);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("Reveal",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/streetshow_reveal.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("acroyoga TEMP",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/streetshow_acroyoga.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic 1",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/streetshow_mic_p1.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic 2 ",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/streetshow_mic_p2.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+    ITEM_COMMAND("mic 3",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/streetshow_mic_p3.csv", false, false, 50);
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
@@ -2357,8 +2439,11 @@ void inits()
   Serial.println("Next init: Debug");
   initDebug(); // AFTER WIFI!
 
-#ifdef ROBOT_V4
+#ifdef ROBOT_V4_a
   debugI("Robot version: V4");
+
+#elif ROBOT_V4_B
+  debugI("Robot version: V4 B");
 #else
   debugI("Robot version: V3");
 #endif

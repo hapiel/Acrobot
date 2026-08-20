@@ -1,0 +1,7 @@
+Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
+Animation Name:,quick_16,Controller name:,acrobot_act,Duration:,3600,Created at,22/07/2026 18:53:53,,
+Start positions,ArmL ArmR legL legR,39.55078125,319.04296875,274.66552734375,84.08935546875,0.0,0.0,0.0,0.0
+sC,m_arm_l,0,3600,39.55078125,900,0.0,161.3671875,-900,0.0
+sC,m_leg_r,0,3600,84.08935546875,900,0.0,185.01708984375,-900,0.0
+sC,m_leg_l,0,3600,274.66552734375,900,0.0,185.01708984375,-900,0.0
+sC,m_arm_r,0,3600,319.04296875,900,0.0,180.0,-900,0.0

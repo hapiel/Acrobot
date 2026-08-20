@@ -1,0 +1,205 @@
+Start time,,Move type,File,Duration,Repeat,Start speed °/s,kP,kI,Notes
+0,0:0.000,start_only,act_salto_p1_opening.csv,147467,false,190,50,2,
+150,0:0.150,movement,act_salto_p1_opening.csv,147467,false,190,50,2,
+500,0:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+4500,0:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+8500,0:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+12500,0:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+16500,0:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+20500,0:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+24500,0:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+28500,0:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+32500,0:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+36500,0:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+40500,0:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+44500,0:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+48500,0:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+52500,0:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+56500,0:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+60500,1:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+64500,1:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+68500,1:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+72500,1:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+76500,1:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+80500,1:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+84500,1:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+88500,1:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+92500,1:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+96500,1:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+100500,1:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+104500,1:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+108500,1:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+112500,1:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+116500,1:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+120500,2:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+124500,2:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+128500,2:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+132500,2:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+136500,2:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+140500,2:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+144500,2:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+148500,2:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+152500,2:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+156500,2:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+160500,2:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+164500,2:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+168500,2:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+172500,2:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+176500,2:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+180500,3:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+184500,3:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+188500,3:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+192500,3:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+196500,3:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+200500,3:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+204500,3:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+208500,3:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+212500,3:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+216500,3:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+220500,3:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+224500,3:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+228500,3:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+232500,3:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+236500,3:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+240500,4:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+244500,4:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+248500,4:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+252500,4:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+256500,4:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+260500,4:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+264500,4:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+268500,4:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+272500,4:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+276500,4:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+280500,4:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+284500,4:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+288500,4:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+292500,4:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+296500,4:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+300500,5:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+304500,5:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+308500,5:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+312500,5:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+316500,5:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+320500,5:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+324500,5:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+328500,5:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+332500,5:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+336500,5:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+340500,5:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+344500,5:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+348500,5:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+352500,5:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+356500,5:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+360500,6:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+364500,6:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+368500,6:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+372500,6:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+376500,6:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+380500,6:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+384500,6:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+388500,6:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+392500,6:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+396500,6:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+400500,6:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+404500,6:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+408500,6:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+412500,6:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+416500,6:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+420500,7:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+424500,7:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+428500,7:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+432500,7:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+436500,7:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+440500,7:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+444500,7:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+448500,7:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+452500,7:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+456500,7:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+460500,7:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+464500,7:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+468500,7:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+472500,7:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+476500,7:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+480500,8:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+484500,8:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+488500,8:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+492500,8:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+496500,8:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+500500,8:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+504500,8:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+508500,8:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+512500,8:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+516500,8:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+520500,8:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+524500,8:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+528500,8:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+532500,8:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+536500,8:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+540500,9:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+544500,9:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+548500,9:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+552500,9:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+556500,9:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+560500,9:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+564500,9:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+568500,9:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+572500,9:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+576500,9:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+580500,9:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+584500,9:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+588500,9:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+592500,9:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+596500,9:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+600500,10:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+604500,10:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+608500,10:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+612500,10:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+616500,10:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+620500,10:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+624500,10:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+628500,10:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+632500,10:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+636500,10:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+640500,10:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+644500,10:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+648500,10:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+652500,10:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+656500,10:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+660500,11:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+664500,11:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+668500,11:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+672500,11:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+676500,11:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+680500,11:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+684500,11:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+688500,11:28.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+692500,11:32.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+696500,11:36.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+700500,11:40.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+704500,11:44.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+708500,11:48.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+712500,11:52.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+716500,11:56.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+720500,12:0.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+724500,12:4.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+728500,12:8.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+732500,12:12.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+736500,12:16.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+740500,12:20.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+744500,12:24.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+748500,12:28.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+752500,12:32.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+756500,12:36.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+760500,12:40.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+764500,12:44.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+768500,12:48.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+772500,12:52.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+776500,12:56.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+780500,13:0.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+784500,13:4.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+788500,13:8.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+792500,13:12.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+796500,13:16.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen
+800500,13:20.500,movement,act_salto_slapstick_pose.csv,1000,false,75,0,0,OFF
+804500,13:24.500,movement,act_salto_slapstick_pose.csv,1000,true,75,0,0.15,Iets spanning zodat benen niet overklappen

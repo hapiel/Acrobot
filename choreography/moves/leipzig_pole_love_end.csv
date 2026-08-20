@@ -1,5 +1,5 @@
 Command,Motor,Time start,Duration,Start pos,Start cp X,Start cp Y,End pos,End cp X,End cp Y
-Animation Name:,leipzig_pole_love_end,Controller name:,acrobot_act,Duration:,60633,Created at,22/03/2026 13:26:48,,
+Animation Name:,leipzig_pole_love_end,Controller name:,acrobot_act,Duration:,60633,Created at,09/04/2026 22:41:46,,
 Start positions,ArmL ArmR legL legR,97.3828125,97.3828125,185.01708984375,185.01708984375,0.0,0.0,0.0,0.0
 sC,m_arm_r,0,2067,97.3828125,516,0.0,97.3828125,-516,0.0
 sC,m_arm_l,0,2067,97.3828125,516,0.0,97.3828125,-516,0.0
