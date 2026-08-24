@@ -212,6 +212,7 @@ extern MenuItem *streetNewPage[];
 extern MenuItem *leipzigPage[];
 extern MenuItem *leipzigActPage[];
 extern MenuItem *HGTStrandPage[];
+extern MenuItem *europaparkPage[];
 extern MenuItem *streetPage[];
 extern MenuItem *monacoPage[];
 extern MenuItem *friendPage[];
@@ -253,6 +254,7 @@ MAIN_MENU(
     ITEM_SUBMENU("Monaco", monacoPage),
     ITEM_SUBMENU("Street NEW", streetNewPage),
     ITEM_SUBMENU("Friend", friendPage),
+    ITEM_SUBMENU("Europapark", europaparkPage),
     ITEM_SUBMENU("AGT", agtPage),
     ITEM_SUBMENU("Street", streetPage),
     ITEM_SUBMENU("Antwerpen", kelderfestPage),
@@ -280,6 +282,32 @@ MAIN_MENU(
     ITEM_SUBMENU("Hardware", hardwarePage),
     ITEM_SUBMENU("About", aboutPage));
 
+
+
+SUB_MENU(europaparkPage, mainMenu,
+         ITEM_COMMAND("stand",
+                      []()
+                      {
+                        Task task = []()
+                        {
+                          movePlayer.startMove("/pose_stand.csv");
+                        };
+                        xQueueSend(functionQueue, &task,
+                                   portMAX_DELAY);
+                      }),
+         ITEM_COMMAND("Europapark", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/act_europapark.csv", false, false, 50);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }),
+
+         ITEM_COMMAND("walk_normal", []()
+                      {
+           Task task = []() {
+             movePlayer.startMove("/walk_normal.csv", false, true);
+           };
+           xQueueSend(functionQueue, &task, portMAX_DELAY); }));
 
 
 SUB_MENU(leipzigPage, mainMenu,
