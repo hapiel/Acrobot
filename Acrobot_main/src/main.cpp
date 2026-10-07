@@ -209,11 +209,12 @@ bool wifiConnected = false;
 
 extern MenuItem *bootPage[];
 extern MenuItem *streetNewPage[];
+extern MenuItem *streetYogaPage[];
 extern MenuItem *leipzigPage[];
 extern MenuItem *leipzigActPage[];
 extern MenuItem *HGTStrandPage[];
 extern MenuItem *europaparkPage[];
-extern MenuItem *streetPage[];
+// extern MenuItem *streetPage[];
 extern MenuItem *monacoPage[];
 extern MenuItem *friendPage[];
 extern MenuItem *arsPage[];
@@ -252,11 +253,12 @@ MAIN_MENU(
 #endif
     // ITEM_SUBMENU("HGT Strand", HGTStrandPage),
     ITEM_SUBMENU("Monaco", monacoPage),
-    ITEM_SUBMENU("Street NEW", streetNewPage),
+    // ITEM_SUBMENU("Street", streetPage),
+    ITEM_SUBMENU("Street Yoga", streetYogaPage),
     ITEM_SUBMENU("Friend", friendPage),
     ITEM_SUBMENU("Europapark", europaparkPage),
     ITEM_SUBMENU("AGT", agtPage),
-    ITEM_SUBMENU("Street", streetPage),
+    ITEM_SUBMENU("Street NEW", streetNewPage),
     ITEM_SUBMENU("Antwerpen", kelderfestPage),
     ITEM_SUBMENU("Tango", fgtPage),
     ITEM_SUBMENU("Leipzig", leipzigPage),
@@ -466,7 +468,6 @@ SUB_MENU(HGTStrandPage, mainMenu,
                         xQueueSend(functionQueue, &task,
                                    portMAX_DELAY);
                       }),
-         // act_moveyourfeet.csv
          ITEM_COMMAND("HGT strand act", []()
                       {
            Task task = []() {
@@ -506,8 +507,76 @@ SUB_MENU(
 
 );
 
+// SUB_MENU(
+//     streetPage, mainMenu,
+//     ITEM_COMMAND("stand",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/pose_stand.csv", false, false, 70);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//     ITEM_COMMAND("Reveal",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/streetshow_reveal.csv", false, false, 50);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//     ITEM_COMMAND("acroyoga",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//    ITEM_COMMAND("mic PREP",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/street_mic_prep.csv", false, false, 50);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//     ITEM_COMMAND("mic MOVES ACT ",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/street_mic_scene.csv", false, false, 50);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//     ITEM_COMMAND("mic DONE",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      movePlayer.startMove("/street_mic_end.csv", false, false, 50);
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  }),
+//     ITEM_COMMAND("lets dance seq",
+//                  []()
+//                  {
+//                    Task task = []()
+//                    {
+//                      sequencer.startSequence("/routine_street_letsdance.csv");
+//                    };
+//                    xQueueSend(functionQueue, &task, portMAX_DELAY);
+//                  })
+
+// );
+
 SUB_MENU(
-    streetPage, mainMenu,
+    streetYogaPage, mainMenu,
     ITEM_COMMAND("stand",
                  []()
                  {
@@ -517,21 +586,12 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-    ITEM_COMMAND("Reveal",
+    ITEM_COMMAND("NEW REVEAL YOGA",
                  []()
                  {
                    Task task = []()
                    {
-                     movePlayer.startMove("/streetNew_reveal.csv", false, false, 50);
-                   };
-                   xQueueSend(functionQueue, &task, portMAX_DELAY);
-                 }),
-    ITEM_COMMAND("acroyoga",
-                 []()
-                 {
-                   Task task = []()
-                   {
-                     movePlayer.startMove("/street_acroyoga.csv", false, false, 50);
+                     movePlayer.startMove("/streetshow_acroyoga.csv", false, false, 50);
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
@@ -586,16 +646,7 @@ SUB_MENU(
                    };
                    xQueueSend(functionQueue, &task, portMAX_DELAY);
                  }),
-    ITEM_COMMAND("Reveal",
-                 []()
-                 {
-                   Task task = []()
-                   {
-                     movePlayer.startMove("/streetshow_reveal.csv", false, false, 50);
-                   };
-                   xQueueSend(functionQueue, &task, portMAX_DELAY);
-                 }),
-    ITEM_COMMAND("acroyoga TEMP",
+    ITEM_COMMAND("Reveal Acroyoga",
                  []()
                  {
                    Task task = []()
@@ -1157,6 +1208,16 @@ SUB_MENU(moveAcroPage, movesPage,
 
 SUB_MENU(
     moveTravelPage, movesPage,
+        ITEM_COMMAND("stand",
+                 []()
+                 {
+                   Task task = []()
+                   {
+                     movePlayer.startMove("/pose_stand.csv", false, false, 50);
+                   };
+                   xQueueSend(functionQueue, &task, portMAX_DELAY);
+                 }),
+                 
     ITEM_COMMAND("walk_normal",
                  []()
                  {
